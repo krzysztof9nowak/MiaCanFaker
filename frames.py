@@ -36,3 +36,10 @@ class BMS_Imax_EGV(struct):
             ("discharge", c_int16),
             ("charge", c_uint8),
         ]
+
+class BMS_Default_EGV(struct):
+    _fields_ = [
+            ("delta", c_uint8, 1),
+            ("_", c_uint8, 7),
+            ("others", c_uint8)
+            ]

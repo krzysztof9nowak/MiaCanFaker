@@ -23,6 +23,7 @@ class Scheduler(object):
         self.periodics = []
         self.register_periodic(self.send_bms_status, 0.1)
         self.register_periodic(self.send_bms_imax, 0.1)
+        self.register_periodic(self.send_default_bms, 1)
         self.handlers = {}
         self.register_handler(0x630, self.cmd_bms)
         self.tx_queue = queue.Queue()
@@ -94,11 +95,17 @@ class Scheduler(object):
             self.bms_state = BMS_STATE.RUN
         elif target_state == 3:
             self.bms_state = BMS_STATE.READY
+        elif target_state == 4:
+            self.bms_state = BMS_STATE.STOP
         else:
             raise
 
         ack = EGV_Ack_BMS(0x630)
         self.tx_queue.put((0x625, ack))
+
+    def send_default_bms(self):
+        defi = BMS_Default_EGV()
+        self.can.data_send(0x621, bytes(defi))
 
 
 
