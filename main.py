@@ -62,7 +62,7 @@ class Scheduler(object):
         self.handlers[can_id] = func
 
     def send_bms_status(self):
-        print(f"sending {self.bms_state}")
+        #print(f"sending {self.bms_state}")
         bms_sync = BMS_Sync_EGV()
         bms_sync.voltage = 75 * 100
         bms_sync.current = 0
@@ -74,14 +74,17 @@ class Scheduler(object):
         bms_sync.regen = 1
         bms_sync.soc = int(5 * time.time()) % 70 + 10
 
-        self.tx_queue.put((0x620, bms_sync))
+
+        #self.tx_queue.put((0x620, bms_sync))
+        self.can.data_send(0x620, bytes(bms_sync))
 
     def send_bms_imax(self):
-        print("sending imax")
+        #print("sending imax")
         bms_imax = BMS_Imax_EGV()
         bms_imax.discharge = -300
         bms_imax.charge = 100
-        self.tx_queue.put((0x623, bms_imax))
+        self.can.data_send(0x623, bytes(bms_imax))
+        #self.tx_queue.put((0x623, bms_imax))
 
     def cmd_bms(self, frame):
         bms_cmd = EGV_Cmd_BMS.from_buffer_copy(frame.data)
