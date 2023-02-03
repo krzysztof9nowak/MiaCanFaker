@@ -82,9 +82,3 @@ def find_all_frame_classes():
 
 
 mia_frames = find_all_frame_classes()
-
-if __name__ == '__main__':
-    imax = BMS_Imax_EGV()
-    imax.discharge = 500
-    print(imax)
-    print(mia_frames)

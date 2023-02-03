@@ -6,6 +6,7 @@ from collections import namedtuple
 import queue
 from enum import IntEnum
 
+
 class BMS_STATE(IntEnum):
     READY = 0
     RUN = 1
@@ -19,7 +20,9 @@ class BMS_STATE(IntEnum):
 class Scheduler(object):
     def __init__(self, can):
         self.can = can
-        self.recv_thread = threading.Thread(target=self.recv_func)
+        self.rx_thread = threading.Thread(target=self.receiver)
+        self.tx_thread = threading.Thread(target=self.transmitter())
+
         self.periodics = []
         self.register_periodic(self.send_bms_status, 0.1)
         self.register_periodic(self.send_bms_imax, 0.1)
@@ -27,67 +30,67 @@ class Scheduler(object):
         self.handlers = {}
         self.register_handler(0x630, self.cmd_bms)
         self.tx_queue = queue.Queue()
-        self.bms_state = BMS_STATE.INIT
+        self.bms_state = BMS_STATE.READY
 
     def run(self):
-        self.recv_thread.start()
-        while True:
-            while not self.tx_queue.empty():
-                can_id, frame = self.tx_queue.get()
-                self.can.data_send(can_id, bytes(frame))
-                #print(f'queue {hex(can_id)}')
-            
-            for periodic in self.periodics:
-                t = time.time()
-                dt = t - periodic['last']
-                if dt > periodic['period']:
-                    periodic['func']()
-                    periodic['last'] = t
+        self.rx_thread.start()
+        self.tx_thread.start()
+
+        for periodic in self.periodics:
+            t = time.time()
+            dt = t - periodic['last']
+            if dt > periodic['period']:
+                periodic['func']()
+                periodic['last'] = t
             time.sleep(0.01)
 
-    def recv_func(self):
+    def receiver(self):
         while True:
-            frame = self.can.frame_recv()
+            can_frame = self.can.frame_recv()
 
-            ignored = [0x631]
-            vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
-            if frame.frame_id in vfd:
-                print(frame, flush=True)
+            if can_frame.can_id in mia_frames:
+                cls = mia_frames[can_frame.can_id]
+                frame = cls.from_buffer_copy(can_frame.data)
+            else:
+                frame = can_frame
 
-            if frame.frame_id in self.handlers:
-                self.handlers[frame.frame_id](frame)
+            # ignored = [0x631]
+            # vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
+            # if frame.frame_id in vfd:
+            print(frame, flush=True)
 
+            if frame.can_id in self.handlers:
+                self.handlers[frame.can_id](frame)
+
+    def transmitter(self):
+        while True:
+            frame = self.tx_queue.get()
+            self.can.data_send(frame.can_id, bytes(frame))
 
     def register_periodic(self, func, period):
-        self.periodics.append({'func':func, 'period':period, 'last':0})
+        self.periodics.append({'func': func, 'period': period, 'last': 0})
 
     def register_handler(self, can_id, func):
         self.handlers[can_id] = func
 
     def send_bms_status(self):
-        #print(f"sending {self.bms_state}")
         bms_sync = BMS_Sync_EGV()
         bms_sync.voltage = 75 * 100
         bms_sync.current = 0
         bms_sync.temperature = 25
         bms_sync.soc = 80
         bms_sync.soh = 80
-        bms_sync.status = 0
+        bms_sync.status = self.bms_state  # TODO: change state some time after start
         bms_sync.emergency = 0
         bms_sync.regen = 1
-        bms_sync.soc = int(5 * time.time()) % 70 + 10
 
-
-        #self.tx_queue.put((0x620, bms_sync))
-        self.can.data_send(0x620, bytes(bms_sync))
+        self.send(bms_sync)
 
     def send_bms_imax(self):
-        #print("sending imax")
         bms_imax = BMS_Imax_EGV()
         bms_imax.discharge = -300
         bms_imax.charge = 100
-        self.can.data_send(0x623, bytes(bms_imax))
-        #self.tx_queue.put((0x623, bms_imax))
+        self.send(bms_imax)
 
     def cmd_bms(self, frame):
         bms_cmd = EGV_Cmd_BMS.from_buffer_copy(frame.data)
@@ -105,17 +108,17 @@ class Scheduler(object):
             raise
 
         ack = EGV_Ack_BMS(0x630)
-        self.tx_queue.put((0x625, ack))
+        self.send(ack)
 
     def send_default_bms(self):
         defi = BMS_Default_EGV()
-        self.can.data_send(0x621, bytes(defi))
+        self.send(defi)
 
+    def send(self, frame: CanFrame):
+        self.tx_queue.put(frame)
 
 
 if __name__ == "__main__":
     can = CAN('/dev/ttyUSB0')
     sch = Scheduler(can)
     sch.run()
-
-
