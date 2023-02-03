@@ -23,7 +23,7 @@ class Scheduler(object):
         self.periodics = []
         self.register_periodic(self.send_bms_status, 0.1)
         self.register_periodic(self.send_bms_imax, 0.1)
-        self.register_periodic(self.send_default_bms, 1)
+        self.register_periodic(self.send_default_bms, 0.1)
         self.handlers = {}
         self.register_handler(0x630, self.cmd_bms)
         self.tx_queue = queue.Queue()
@@ -49,7 +49,9 @@ class Scheduler(object):
         while True:
             frame = self.can.frame_recv()
 
-            if frame.frame_id & 0xf00 == 0x600 and frame.frame_id != 0x631:
+            ignored = [0x631]
+            vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
+            if frame.frame_id in vfd:
                 print(frame, flush=True)
 
             if frame.frame_id in self.handlers:
@@ -97,6 +99,8 @@ class Scheduler(object):
             self.bms_state = BMS_STATE.READY
         elif target_state == 4:
             self.bms_state = BMS_STATE.STOP
+        elif target_state == 1:
+            self.bms_state = BMS_STATE.CHARGER
         else:
             raise
 
