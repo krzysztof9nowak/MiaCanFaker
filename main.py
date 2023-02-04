@@ -16,34 +16,42 @@ class BMS_STATE(IntEnum):
     INIT = 5
     STOP = 6
 
-# class MetaScheduler(type):
-#     @classmethod
-#     def __prepare__(meta, name, bases):
-#         def _(pattern, *extra):
-#             patterns = [pattern, *extra]
-#             def decorate(func):
-#                 pattern = '|'.join(f'({pat})' for pat in patterns )
-#                 if hasattr(func, 'pattern'):
-#                     func.pattern = pattern + '|' + func.pattern
-#                 else:
-#                     func.pattern = pattern
-#                 return func
-#             return decorate
-#
-#         d['_'] = _
-#         d['before'] = _Before
-#         return d
-class Scheduler:
-    periodics = []
-    handlers = {}
+class MetaScheduler(type):
+    @classmethod
+    def __prepare__(meta, name, bases):
+        d = dict()
+        d['periodics'] = []
+        d['handlers'] = {}
 
+        def periodic(t):
+            def periodic_decorator(func):
+                d['periodics'].append({'func': func, 'period': t, 'last': 0})
+                return func
+
+            return periodic_decorator
+
+        def handle(cls):
+            def handle_decorator(func):
+                d['handlers'][cls] = func
+                return func
+
+            return handle_decorator
+
+        d['periodic'] = periodic
+        d['handle'] = handle
+        return d
+
+class Scheduler(metaclass=MetaScheduler):
     def __init__(self, can):
+        print(self.handlers)
         self.can = can
-        self.rx_thread = threading.Thread(target=self.receiver)
-        self.tx_thread = threading.Thread(target=self.transmitter())
 
         self.tx_queue = queue.Queue()
         self.bms_state = BMS_STATE.READY
+
+        self.rx_thread = threading.Thread(target=self.receiver)
+        self.tx_thread = threading.Thread(target=self.transmitter())
+
 
     def run(self):
         self.rx_thread.start()
@@ -82,20 +90,7 @@ class Scheduler:
             frame = self.tx_queue.get()
             self.can.data_send(frame.can_id, bytes(frame))
 
-    @staticmethod
-    def periodic(t):
-        def periodic_decorator(func):
-            Scheduler.periodics.append({'func': func, 'period': t, 'last': 0})
-            return func
 
-        return periodic_decorator
-
-    @staticmethod
-    def handle(cls):
-        def handle_decorator(func):
-            Scheduler.handlers[cls] = func
-            return func
-        return handle_decorator
 
     @periodic(0.1)
     def send_bms_status(self):
