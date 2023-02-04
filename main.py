@@ -132,7 +132,7 @@ class Scheduler(metaclass=MetaScheduler):
 
         ack = EGV_Ack_BMS(0x630)
         self.send(ack)
-
+        self.send_bms_status()
         self.send_charger()
 
     @periodic(0.1)
