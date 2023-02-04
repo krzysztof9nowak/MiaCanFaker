@@ -10,6 +10,7 @@ struct = ctypes.LittleEndianStructure
 
 
 class CanFrame(ctypes.LittleEndianStructure):
+    _pack_ = 1
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

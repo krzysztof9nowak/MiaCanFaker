@@ -43,14 +43,14 @@ class MetaScheduler(type):
 
 class Scheduler(metaclass=MetaScheduler):
     def __init__(self, can):
-        print(self.handlers)
+        print(self.periodics)
         self.can = can
 
         self.tx_queue = queue.Queue()
         self.bms_state = BMS_STATE.READY
 
         self.rx_thread = threading.Thread(target=self.receiver)
-        self.tx_thread = threading.Thread(target=self.transmitter())
+        self.tx_thread = threading.Thread(target=self.transmitter)
 
 
     def run(self):
@@ -61,7 +61,7 @@ class Scheduler(metaclass=MetaScheduler):
                 t = time.time()
                 dt = t - periodic['last']
                 if dt > periodic['period']:
-                    periodic['func']()
+                    periodic['func'](self)
                     periodic['last'] = t
                 time.sleep(0.01)
 
@@ -71,19 +71,26 @@ class Scheduler(metaclass=MetaScheduler):
 
             if can_frame.can_id in mia_frames:
                 cls = mia_frames[can_frame.can_id]
-                frame = cls.from_buffer_copy(can_frame.data)
+                try:
+                    frame = cls.from_buffer_copy(bytes(can_frame.data))
+                except ValueError as e:
+                    print(cls, can_frame.data)
+                    raise
+                except TypeError as e:
+                    print(can_frame.data)
+                    raise
             else:
                 frame = can_frame
 
             # ignored = [0x631]
             # vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
-            # if frame.frame_id in vfd:
-            print(frame, flush=True)
+            if frame.can_id in [0x630]:
+                print(frame, flush=True)
 
             if frame.__class__ in self.handlers:
-                self.handlers[frame.__class__](frame)
+                self.handlers[frame.__class__](self, frame)
             elif frame.can_id in self.handlers:
-                self.handlers[frame.can_id](frame)
+                self.handlers[frame.can_id](self, frame)
 
     def transmitter(self):
         while True:
@@ -96,8 +103,8 @@ class Scheduler(metaclass=MetaScheduler):
     def send_bms_status(self):
         bms_sync = BMS_Sync_EGV()
         bms_sync.voltage = 75 * 100
-        bms_sync.current = -100
-        bms_sync.temperature = 25
+        bms_sync.current = 0
+        bms_sync.temperature = 10
         bms_sync.soc = 80
         bms_sync.soh = 80
         bms_sync.status = self.bms_state  # TODO: change state some time after start
@@ -106,7 +113,7 @@ class Scheduler(metaclass=MetaScheduler):
 
         self.send(bms_sync)
 
-    @periodic(0.5)
+    @periodic(0.1)
     def send_bms_imax(self):
         bms_imax = BMS_Imax_EGV()
         bms_imax.discharge = -300
@@ -115,6 +122,7 @@ class Scheduler(metaclass=MetaScheduler):
 
     @handle(EGV_Cmd_BMS)
     def cmd_bms(self, cmd: EGV_Cmd_BMS):
+        print(cmd)
         target_state = cmd.state
         print("bms cmd", target_state)
         if target_state == 0:
@@ -142,11 +150,12 @@ class Scheduler(metaclass=MetaScheduler):
 
     @periodic(1)
     def send_charger(self):
-        chg = BMS_Regul_CHA(10 * 10, 80, 0, 0)
+        chg = BMS_Regul_CHA(10 * 10, 90, 0, 0)
         if self.bms_state == BMS_STATE.CHARGER:
             chg.charge = 1
             chg.contactor = 1
 
+        print(chg)
         self.send(chg)
 
 
