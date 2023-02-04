@@ -10,7 +10,7 @@ struct = ctypes.LittleEndianStructure
 
 
 class CanFrame(ctypes.LittleEndianStructure):
-    _pack_ = 1
+   # _pack_ = 1
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -125,19 +125,19 @@ class CHA_Ack_BMS(CanFrame):
         ("contactor", c_uint8, 1),
     ]
 
-class BVS_Sync_EGV(CanFrame):
-    can_id = 0x590
-    _fields_ = [
-        ("right_closed", c_uint8, 1),
-        ("left_locked", c_uint8, 1),
-        ("right_locked", c_uint8, 1),
-        ("trunk_locked", c_uint8, 1),
-        ("plug_locked", c_uint8, 1),
-        ("preheat", c_uint8, 1),
-        ("preheat_request", c_uint8, 1),
-        ("left_closed", c_uint8, 1),
-        ("odometer", ctypes.c_uint32)
-    ]
+# class BVS_Sync_EGV(CanFrame):
+#     can_id = 0x590
+#     _fields_ = [
+#         ("right_closed", c_uint8, 1),
+#         ("left_locked", c_uint8, 1),
+#         ("right_locked", c_uint8, 1),
+#         ("trunk_locked", c_uint8, 1),
+#         ("plug_locked", c_uint8, 1),
+#         ("preheat", c_uint8, 1),
+#         ("preheat_request", c_uint8, 1),
+#         ("left_closed", c_uint8, 1),
+#         ("odometer", ctypes.c_uint32)
+#     ]
 
 
 

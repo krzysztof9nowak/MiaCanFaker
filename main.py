@@ -50,6 +50,7 @@ class Scheduler(metaclass=MetaScheduler):
 
         self.rx_thread = threading.Thread(target=self.receiver)
         self.tx_thread = threading.Thread(target=self.transmitter)
+        self.voltz = 0
 
 
     def run(self):
@@ -102,9 +103,9 @@ class Scheduler(metaclass=MetaScheduler):
     @periodic(0.1)
     def send_bms_status(self):
         bms_sync = BMS_Sync_EGV()
-        bms_sync.voltage = 0 * 100
+        bms_sync.voltage = 70 * 100
         bms_sync.current = 0
-        bms_sync.temperature = 7
+        bms_sync.temperature = 20
         bms_sync.soc = 30
         bms_sync.soh = 100
         bms_sync.status = self.bms_state  # TODO: change state some time after start
@@ -152,10 +153,10 @@ class Scheduler(metaclass=MetaScheduler):
     @periodic(1)
     def send_charger(self):
         chg = BMS_Regul_CHA()
-        chg.current = 30 * 10
-        chg.voltage = 80 * 100
+        chg.current = 20 * 10
+        chg.voltage = 5000
 
-        if self.bms_state == BMS_STATE.CHARGER:
+        if self.bms_state == BMS_STATE.CHARGER or True:
             chg.charge = 1
             chg.contactor = 1
 
