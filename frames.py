@@ -77,6 +77,7 @@ class BMS_Regul_CHA(CanFrame):
         ("voltage", c_uint16),
         ("charge", c_uint8, 1),
         ("contactor", c_uint8, 1),
+        ("_", c_uint8, 6),
     ]
 
 class EGV_SYNC_ALL(CanFrame):
@@ -104,8 +105,15 @@ class CHA_status_EGV(CanFrame):
     can_id = 0x560
     _fields_ = [
         ("status", c_uint8),
-        ("presence", c_uint8),
-        ("error", c_uint8),
+        ("plug", c_uint8,1),
+        ("selector", c_uint8,1),
+        ("_", c_uint8,6),
+        ("temp", c_uint8,1),
+        ("oc", c_uint8,1),
+        ("voltage", c_uint8,1),
+        ("electronic", c_uint8,1),
+        ("cycle", c_uint8,1),
+        ("setpoint", c_uint8,1),
     ]
 
 class CHA_Ack_BMS(CanFrame):

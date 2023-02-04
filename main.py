@@ -43,7 +43,6 @@ class MetaScheduler(type):
 
 class Scheduler(metaclass=MetaScheduler):
     def __init__(self, can):
-        print(self.periodics)
         self.can = can
 
         self.tx_queue = queue.Queue()
@@ -63,11 +62,12 @@ class Scheduler(metaclass=MetaScheduler):
                 if dt > periodic['period']:
                     periodic['func'](self)
                     periodic['last'] = t
-                time.sleep(0.01)
+            time.sleep(0.05)
 
     def receiver(self):
         while True:
             can_frame = self.can.frame_recv()
+            # print(hex(can_frame.can_id), flush=True)
 
             if can_frame.can_id in mia_frames:
                 cls = mia_frames[can_frame.can_id]
@@ -84,7 +84,7 @@ class Scheduler(metaclass=MetaScheduler):
 
             # ignored = [0x631]
             # vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
-            if frame.can_id in [0x630]:
+            if frame.can_id in [0x630, 0x561, 0x560]:
                 print(frame, flush=True)
 
             if frame.__class__ in self.handlers:
@@ -102,15 +102,16 @@ class Scheduler(metaclass=MetaScheduler):
     @periodic(0.1)
     def send_bms_status(self):
         bms_sync = BMS_Sync_EGV()
-        bms_sync.voltage = 75 * 100
+        bms_sync.voltage = 0 * 100
         bms_sync.current = 0
-        bms_sync.temperature = 10
-        bms_sync.soc = 80
-        bms_sync.soh = 80
+        bms_sync.temperature = 7
+        bms_sync.soc = 30
+        bms_sync.soh = 100
         bms_sync.status = self.bms_state  # TODO: change state some time after start
         bms_sync.emergency = 0
         bms_sync.regen = 1
 
+        # print(bms_sync, time.time(), flush=True)
         self.send(bms_sync)
 
     @periodic(0.1)
@@ -150,7 +151,10 @@ class Scheduler(metaclass=MetaScheduler):
 
     @periodic(1)
     def send_charger(self):
-        chg = BMS_Regul_CHA(10 * 10, 90, 0, 0)
+        chg = BMS_Regul_CHA()
+        chg.current = 30 * 10
+        chg.voltage = 80 * 100
+
         if self.bms_state == BMS_STATE.CHARGER:
             chg.charge = 1
             chg.contactor = 1
