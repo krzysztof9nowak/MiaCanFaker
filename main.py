@@ -16,33 +16,46 @@ class BMS_STATE(IntEnum):
     INIT = 5
     STOP = 6
 
+# class MetaScheduler(type):
+#     @classmethod
+#     def __prepare__(meta, name, bases):
+#         def _(pattern, *extra):
+#             patterns = [pattern, *extra]
+#             def decorate(func):
+#                 pattern = '|'.join(f'({pat})' for pat in patterns )
+#                 if hasattr(func, 'pattern'):
+#                     func.pattern = pattern + '|' + func.pattern
+#                 else:
+#                     func.pattern = pattern
+#                 return func
+#             return decorate
+#
+#         d['_'] = _
+#         d['before'] = _Before
+#         return d
+class Scheduler:
+    periodics = []
+    handlers = {}
 
-class Scheduler(object):
     def __init__(self, can):
         self.can = can
         self.rx_thread = threading.Thread(target=self.receiver)
         self.tx_thread = threading.Thread(target=self.transmitter())
 
-        self.periodics = []
-        self.register_periodic(self.send_bms_status, 0.1)
-        self.register_periodic(self.send_bms_imax, 0.1)
-        self.register_periodic(self.send_default_bms, 0.1)
-        self.handlers = {}
-        self.register_handler(0x630, self.cmd_bms)
         self.tx_queue = queue.Queue()
         self.bms_state = BMS_STATE.READY
 
     def run(self):
         self.rx_thread.start()
         self.tx_thread.start()
-
-        for periodic in self.periodics:
-            t = time.time()
-            dt = t - periodic['last']
-            if dt > periodic['period']:
-                periodic['func']()
-                periodic['last'] = t
-            time.sleep(0.01)
+        while True:
+            for periodic in self.periodics:
+                t = time.time()
+                dt = t - periodic['last']
+                if dt > periodic['period']:
+                    periodic['func']()
+                    periodic['last'] = t
+                time.sleep(0.01)
 
     def receiver(self):
         while True:
@@ -59,7 +72,9 @@ class Scheduler(object):
             # if frame.frame_id in vfd:
             print(frame, flush=True)
 
-            if frame.can_id in self.handlers:
+            if frame.__class__ in self.handlers:
+                self.handlers[frame.__class__](frame)
+            elif frame.can_id in self.handlers:
                 self.handlers[frame.can_id](frame)
 
     def transmitter(self):
@@ -67,16 +82,26 @@ class Scheduler(object):
             frame = self.tx_queue.get()
             self.can.data_send(frame.can_id, bytes(frame))
 
-    def register_periodic(self, func, period):
-        self.periodics.append({'func': func, 'period': period, 'last': 0})
+    @staticmethod
+    def periodic(t):
+        def periodic_decorator(func):
+            Scheduler.periodics.append({'func': func, 'period': t, 'last': 0})
+            return func
 
-    def register_handler(self, can_id, func):
-        self.handlers[can_id] = func
+        return periodic_decorator
 
+    @staticmethod
+    def handle(cls):
+        def handle_decorator(func):
+            Scheduler.handlers[cls] = func
+            return func
+        return handle_decorator
+
+    @periodic(0.1)
     def send_bms_status(self):
         bms_sync = BMS_Sync_EGV()
         bms_sync.voltage = 75 * 100
-        bms_sync.current = 0
+        bms_sync.current = -100
         bms_sync.temperature = 25
         bms_sync.soc = 80
         bms_sync.soh = 80
@@ -86,33 +111,49 @@ class Scheduler(object):
 
         self.send(bms_sync)
 
+    @periodic(0.5)
     def send_bms_imax(self):
         bms_imax = BMS_Imax_EGV()
         bms_imax.discharge = -300
         bms_imax.charge = 100
         self.send(bms_imax)
 
-    def cmd_bms(self, frame):
-        bms_cmd = EGV_Cmd_BMS.from_buffer_copy(frame.data)
-        target_state = bms_cmd.state
+    @handle(EGV_Cmd_BMS)
+    def cmd_bms(self, cmd: EGV_Cmd_BMS):
+        target_state = cmd.state
         print("bms cmd", target_state)
         if target_state == 0:
             self.bms_state = BMS_STATE.RUN
-        elif target_state == 3:
-            self.bms_state = BMS_STATE.READY
-        elif target_state == 4:
-            self.bms_state = BMS_STATE.STOP
         elif target_state == 1:
             self.bms_state = BMS_STATE.CHARGER
+        elif target_state == 2:
+            self.bms_state = BMS_STATE.READY
+        elif target_state == 3:
+            self.bms_state = BMS_STATE.READY  # should be shutdown
+        elif target_state == 4:
+            self.bms_state = BMS_STATE.STOP
         else:
             raise
 
         ack = EGV_Ack_BMS(0x630)
         self.send(ack)
 
+        self.send_charger()
+
+    @periodic(0.1)
     def send_default_bms(self):
         defi = BMS_Default_EGV()
         self.send(defi)
+
+    @periodic(1)
+    def send_charger(self):
+        chg = BMS_Regul_CHA(10 * 10, 80, 0, 0)
+        if self.bms_state == BMS_STATE.CHARGER:
+            chg.charge = 1
+            chg.contactor = 1
+
+        self.send(chg)
+
 
     def send(self, frame: CanFrame):
         self.tx_queue.put(frame)

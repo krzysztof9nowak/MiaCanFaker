@@ -69,6 +69,70 @@ class BMS_Default_EGV(CanFrame):
         ("others", c_uint8)
     ]
 
+class BMS_Regul_CHA(CanFrame):
+    can_id = 0x622
+    _fields_ = [
+        ("current", c_int16),
+        ("voltage", c_uint16),
+        ("charge", c_uint8, 1),
+        ("contactor", c_uint8, 1),
+    ]
+
+class EGV_SYNC_ALL(CanFrame):
+    can_id = 0x080
+    _fields_ = [
+        ("bms", c_uint8, 1),
+        ("var", c_uint8, 1),
+        ("abs", c_uint8, 1),
+        ("immo", c_uint8, 1),
+        ("charger", c_uint8, 1),
+        ("bvs", c_uint8, 1),
+        ("_", c_uint8, 1),
+        ("diag", c_uint8, 1),
+    ]
+
+class VAR_Stat1_EGV(CanFrame):
+    can_id = 0x181
+    _fields_ = [
+        ("rpm", ctypes.c_int32),
+        ("torque", c_int16),
+        ("status", c_uint16)
+    ]
+
+class CHA_status_EGV(CanFrame):
+    can_id = 0x560
+    _fields_ = [
+        ("status", c_uint8),
+        ("presence", c_uint8),
+        ("error", c_uint8),
+    ]
+
+class CHA_Ack_BMS(CanFrame):
+    can_id = 0x561
+    _fields_ = [
+        ("can_id", c_uint16),
+        ("status", c_uint8, 2),
+        ("power", c_uint8, 2),
+        ("contactor", c_uint8, 1),
+    ]
+
+class BVS_Sync_EGV(CanFrame):
+    can_id = 0x590
+    _fields_ = [
+        ("right_closed", c_uint8, 1),
+        ("left_locked", c_uint8, 1),
+        ("right_locked", c_uint8, 1),
+        ("trunk_locked", c_uint8, 1),
+        ("plug_locked", c_uint8, 1),
+        ("preheat", c_uint8, 1),
+        ("preheat_request", c_uint8, 1),
+        ("left_closed", c_uint8, 1),
+        ("odometer", ctypes.c_uint32)
+    ]
+
+
+
+
 
 def find_all_frame_classes():
     frames = {}
