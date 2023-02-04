@@ -105,7 +105,6 @@ class CAN:
             frame += byte
 
             if frame[0] != 0xaa:
-                print("skip")
                 frame = []  # skip
                 continue
             elif len(frame) < 2:

@@ -84,8 +84,8 @@ class Scheduler(metaclass=MetaScheduler):
                 frame = can_frame
 
             # ignored = [0x631]
-            # vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
-            if frame.can_id in [0x630, 0x561, 0x560]:
+            vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
+            if frame.can_id in [0x660]: 
                 print(frame, flush=True)
 
             if frame.__class__ in self.handlers:
@@ -108,7 +108,7 @@ class Scheduler(metaclass=MetaScheduler):
         bms_sync.temperature = 20
         bms_sync.soc = 30
         bms_sync.soh = 100
-        bms_sync.status = self.bms_state  # TODO: change state some time after start
+        bms_sync.state = self.bms_state  # TODO: change state some time after start
         bms_sync.emergency = 0
         bms_sync.regen = 1
 
@@ -121,6 +121,24 @@ class Scheduler(metaclass=MetaScheduler):
         bms_imax.discharge = -300
         bms_imax.charge = 100
         self.send(bms_imax)
+
+    #@handle(EGV_SYNC_ALL)
+    def fake_vfd1(self, heartbeat):
+        if self.bms_state == BMS_STATE.RUN:
+            vfd = VAR_Stat1_EGV()
+            vfd.status = 0x0033
+            print(vfd)
+            self.send(vfd)
+
+            vfd = VAR_Stat2_EGV()
+            vfd.voltage = 16 * 70
+            print(vfd)
+
+            vfd = VAR_Current_EGV()
+            print(vfd)
+
+        
+
 
     @handle(EGV_Cmd_BMS)
     def cmd_bms(self, cmd: EGV_Cmd_BMS):
@@ -153,15 +171,26 @@ class Scheduler(metaclass=MetaScheduler):
     @periodic(1)
     def send_charger(self):
         chg = BMS_Regul_CHA()
-        chg.current = 20 * 10
+        chg.current = 30 * 10
         chg.voltage = 5000
 
-        if self.bms_state == BMS_STATE.CHARGER or True:
+        if self.bms_state == BMS_STATE.CHARGER:
             chg.charge = 1
             chg.contactor = 1
 
-        print(chg)
         self.send(chg)
+
+
+    @periodic(1)
+    def diagnostic(self):
+        diag = Diag_req_EGV()
+        diag.type = 0
+        diag.size = 2
+        diag.sid = 0x10
+        diag.did = 0x01
+
+        print(diag)
+        self.send(diag)
 
 
     def send(self, frame: CanFrame):

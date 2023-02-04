@@ -101,6 +101,34 @@ class VAR_Stat1_EGV(CanFrame):
         ("status", c_uint16)
     ]
 
+
+class VAR_Stat2_EGV(CanFrame):
+    can_id = 0x281
+    _fields_ = [
+        ("voltage", c_uint16), # 1/16V
+        ("motor_temp", c_int16),
+        ("controler_temp", c_int8),
+        ("change_state", c_uint8),
+        ("cmd_feedback", c_uint8),
+    ]
+
+class VAR_Current_EGV(CanFrame):
+    can_id = 0x481
+    _fields_ = [
+        ("controller_current", c_int16), # 1/16A
+        ("motor_current", c_int16), # 1A
+        ("curr_limit", c_int16), # 1A
+        ("regen_limt", c_int16), # 1A
+    ]
+
+
+class VAR_hbeat_EGV(CanFrame):
+    can_id = 0x701
+    _fields_ = [
+            ("_", c_uint8),
+        ]
+
+
 class CHA_status_EGV(CanFrame):
     can_id = 0x560
     _fields_ = [
@@ -138,6 +166,54 @@ class CHA_Ack_BMS(CanFrame):
 #         ("left_closed", c_uint8, 1),
 #         ("odometer", ctypes.c_uint32)
 #     ]
+
+
+class Diag_req_EGV(CanFrame):
+    can_id = 0x260
+    _fields_ = [
+            ("type", c_uint8, 4),
+            ("size", c_uint8, 4),
+            ("sid", c_uint8),
+            ("did", c_uint8),
+            ("a0", ctypes.c_uint8),
+            ("a1", ctypes.c_uint8),
+            ("a2", ctypes.c_uint8),
+            ("a3", ctypes.c_uint8),
+            ("a4", ctypes.c_uint8),
+        ]
+
+    def __str__(self):
+        s = self.__class__.__name__ + '('
+        for field in self._fields_:
+            name = field[0]
+            value = getattr(self, name)
+            s += f'{name}={hex(value)}, '
+        s += ')'
+
+        return s
+
+class Diag_res_EGV(CanFrame):
+    can_id = 0x660
+    _fields_ = [
+            ("type", c_uint8, 4),
+            ("size", c_uint8, 4),
+            ("sid", c_uint8),
+            ("a0", ctypes.c_uint8),
+            ("a1", ctypes.c_uint8),
+            ("a2", ctypes.c_uint8),
+            ("a3", ctypes.c_uint8),
+            ("a4", ctypes.c_uint8),
+        ]
+
+    def __str__(self):
+        s = self.__class__.__name__ + '('
+        for field in self._fields_:
+            name = field[0]
+            value = getattr(self, name)
+            s += f'{name}={hex(value)}, '
+        s += ')'
+
+        return s
 
 
 
