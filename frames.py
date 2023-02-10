@@ -245,7 +245,7 @@ class Diag_res_EGV(CanFrameLittle):
 def find_all_frame_classes():
     frames = {}
     for name, obj in inspect.getmembers(sys.modules[__name__]):
-        if inspect.isclass(obj) and issubclass(obj, CanFrame) and obj != CanFrame:
+        if inspect.isclass(obj) and (issubclass(obj, CanFrameBig) or issubclass(obj, CanFrameLittle)) and (obj != CanFrameLittle and obj != CanFrameBig) :
             if not hasattr(obj, 'can_id'):
                 raise AttributeError(f'{obj.__name__} has no can_id')
             frames[obj.can_id] = obj
