@@ -179,18 +179,27 @@ class Scheduler(metaclass=MetaScheduler):
 
         self.send(chg)
 
-    # @periodic(0.05)
-    # def heartbeat_fake(self):
-    #     hb = EGV_SYNC_ALL()
-    #     hb.bms = 1
-    #     hb.var = 1
-    #     hb.abs = 1
-    #     hb.immo = 1
-    #     hb.charger = 0
-    #     hb.bvs = 1
-    #     hb.diag=0
-        
-    #     self.send(hb)
+    @periodic(0.05)
+    def heartbeat_fake(self):
+        hb = EGV_SYNC_ALL()
+        hb.bms = 1
+        hb.var = 1
+        hb.abs = 1
+        hb.immo = 1
+        hb.charger = 0
+        hb.bvs = 1
+        hb.diag=0
+
+        self.send(hb)
+
+   # @periodic(0.05)
+    def EGV_Cmd_send(self):
+        cm= EGV_Cmd_VAR()
+        cm.curr_limit =264
+        cm.regen_limit=-20
+        cm.max_torque =100
+        cm.fan=12288
+        self.send(cm)
 
 
     # @periodic(1)

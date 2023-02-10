@@ -124,7 +124,7 @@ class VAR_Stat2_EGV(CanFrameLittle):
         ("motor_temp", c_int16),
         ("controler_temp", c_int8),
         ("change_state", c_uint8),
-        ("cmd_feedback", c_uint8),
+       # ("cmd_feedback", c_uint8),
     ]
 
 class VAR_Current_EGV(CanFrameLittle):
@@ -169,13 +169,16 @@ class CHA_Ack_BMS(CanFrameBig):
     ]
 
 
-class EGV_Cmd_VAR(CanFrameBig):
+class EGV_Cmd_VAR(CanFrameLittle):
     can_id = 0x301
     _fields_ = [
         ("curr_limit", c_int16),
         ("regen_limit", c_int16),
+        ("max_torque", c_uint16),
+        ("fan", c_uint16)
 
     ]
+
 # class BVS_Sync_EGV(CanFrameBig):
 #     can_id = 0x590
 #     _fields_ = [
