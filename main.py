@@ -75,8 +75,7 @@ class Scheduler(metaclass=MetaScheduler):
                 try:
                     frame = cls.from_buffer_copy(bytes(can_frame.data))
                 except ValueError as e:
-                    print(cls, can_frame.data)
-                    raise
+                    print(f"Failed parsing {cls} data: {can_frame.data} len: {len(can_frame.data)}")
                 except TypeError as e:
                     print(can_frame.data)
                     raise
@@ -181,16 +180,16 @@ class Scheduler(metaclass=MetaScheduler):
         self.send(chg)
 
 
-    @periodic(1)
-    def diagnostic(self):
-        diag = Diag_req_EGV()
-        diag.type = 0
-        diag.size = 2
-        diag.sid = 0x10
-        diag.did = 0x01
+    # @periodic(1)
+    # def diagnostic(self):
+    #     diag = Diag_req_EGV()
+    #     diag.type = 0
+    #     diag.size = 2
+    #     diag.sid = 0x10
+    #     diag.did = 0x01
 
-        print(diag)
-        self.send(diag)
+    #     print(diag)
+    #     self.send(diag)
 
 
     def send(self, frame: CanFrame):
