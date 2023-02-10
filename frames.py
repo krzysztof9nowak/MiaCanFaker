@@ -6,9 +6,10 @@ c_uint8 = ctypes.c_uint8
 c_int8 = ctypes.c_int8
 c_uint16 = ctypes.c_uint16
 c_int16 = ctypes.c_int16
+struct = ctypes.LittleEndianStructure
 
 
-class CanFrameBig(ctypes.BigEndianStructure):
+class CanFrame(ctypes.LittleEndianStructure):
    # _pack_ = 1
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,23 +25,7 @@ class CanFrameBig(ctypes.BigEndianStructure):
         return s
 
 
-class CanFrameLittle(ctypes.LittleEndianStructure):
-   # _pack_ = 1
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def __str__(self):
-        s = self.__class__.__name__ + '('
-        for field in self._fields_:
-            name = field[0]
-            value = getattr(self, name)
-            s += f'{name}={value}, '
-        s += ')'
-
-        return s
-
-
-class BMS_Sync_EGV(CanFrameBig):
+class BMS_Sync_EGV(CanFrame):
     can_id = 0x620
     _fields_ = [
         ("current", c_int16),
@@ -54,14 +39,14 @@ class BMS_Sync_EGV(CanFrameBig):
     ]
 
 
-class EGV_Ack_BMS(CanFrameBig):
+class EGV_Ack_BMS(CanFrame):
     can_id = 0x631
     _fields_ = [
         ("can_id", c_uint16)
     ]
 
 
-class EGV_Cmd_BMS(CanFrameBig):
+class EGV_Cmd_BMS(CanFrame):
     can_id = 0x630
     _fields_ = [
         ("_", c_uint8, 1),
@@ -69,7 +54,7 @@ class EGV_Cmd_BMS(CanFrameBig):
     ]
 
 
-class BMS_Imax_EGV(CanFrameBig):
+class BMS_Imax_EGV(CanFrame):
     can_id = 0x623
     _fields_ = [
         ("discharge", c_int16),
@@ -77,7 +62,7 @@ class BMS_Imax_EGV(CanFrameBig):
     ]
 
 
-class BMS_Default_EGV(CanFrameBig):
+class BMS_Default_EGV(CanFrame):
     can_id = 0x621
     _fields_ = [
         ("delta", c_uint8, 1),
@@ -85,7 +70,7 @@ class BMS_Default_EGV(CanFrameBig):
         ("others", c_uint8)
     ]
 
-class BMS_Regul_CHA(CanFrameBig):
+class BMS_Regul_CHA(CanFrame):
     can_id = 0x622
     _fields_ = [
         ("current", c_int16),
@@ -95,7 +80,7 @@ class BMS_Regul_CHA(CanFrameBig):
         ("_", c_uint8, 6),
     ]
 
-class EGV_SYNC_ALL(CanFrameBig):
+class EGV_SYNC_ALL(CanFrame):
     can_id = 0x080
     _fields_ = [
         ("bms", c_uint8, 1),
@@ -108,7 +93,7 @@ class EGV_SYNC_ALL(CanFrameBig):
         ("diag", c_uint8, 1),
     ]
 
-class VAR_Stat1_EGV(CanFrameLittle):
+class VAR_Stat1_EGV(CanFrame):
     can_id = 0x181
     _fields_ = [
         ("rpm", ctypes.c_int32),
@@ -117,7 +102,7 @@ class VAR_Stat1_EGV(CanFrameLittle):
     ]
 
 
-class VAR_Stat2_EGV(CanFrameLittle):
+class VAR_Stat2_EGV(CanFrame):
     can_id = 0x281
     _fields_ = [
         ("voltage", c_uint16), # 1/16V
@@ -127,7 +112,7 @@ class VAR_Stat2_EGV(CanFrameLittle):
         ("cmd_feedback", c_uint8),
     ]
 
-class VAR_Current_EGV(CanFrameLittle):
+class VAR_Current_EGV(CanFrame):
     can_id = 0x481
     _fields_ = [
         ("controller_current", c_int16), # 1/16A
@@ -137,14 +122,14 @@ class VAR_Current_EGV(CanFrameLittle):
     ]
 
 
-class VAR_hbeat_EGV(CanFrameLittle):
+class VAR_hbeat_EGV(CanFrame):
     can_id = 0x701
     _fields_ = [
             ("_", c_uint8),
         ]
 
 
-class CHA_status_EGV(CanFrameBig):
+class CHA_status_EGV(CanFrame):
     can_id = 0x560
     _fields_ = [
         ("status", c_uint8),
@@ -159,7 +144,7 @@ class CHA_status_EGV(CanFrameBig):
         ("setpoint", c_uint8,1),
     ]
 
-class CHA_Ack_BMS(CanFrameBig):
+class CHA_Ack_BMS(CanFrame):
     can_id = 0x561
     _fields_ = [
         ("can_id", c_uint16),
@@ -168,15 +153,7 @@ class CHA_Ack_BMS(CanFrameBig):
         ("contactor", c_uint8, 1),
     ]
 
-
-class EGV_Cmd_VAR(CanFrameBig):
-    can_id = 0x301
-    _fields_ = [
-        ("curr_limit", c_int16),
-        ("regen_limit", c_int16),
-
-    ]
-# class BVS_Sync_EGV(CanFrameBig):
+# class BVS_Sync_EGV(CanFrame):
 #     can_id = 0x590
 #     _fields_ = [
 #         ("right_closed", c_uint8, 1),
@@ -191,7 +168,7 @@ class EGV_Cmd_VAR(CanFrameBig):
 #     ]
 
 
-class Diag_req_EGV(CanFrameLittle):
+class Diag_req_EGV(CanFrame):
     can_id = 0x260
     _fields_ = [
             ("type", c_uint8, 4),
@@ -215,7 +192,7 @@ class Diag_req_EGV(CanFrameLittle):
 
         return s
 
-class Diag_res_EGV(CanFrameLittle):
+class Diag_res_EGV(CanFrame):
     can_id = 0x660
     _fields_ = [
             ("type", c_uint8, 4),
