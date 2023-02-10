@@ -84,7 +84,7 @@ class Scheduler(metaclass=MetaScheduler):
 
             # ignored = [0x631]
             vfd = [0x181, 0x281, 0x481, 0x201, 0x301, 0x701, 0x081, 0x663, 0x263, 0x80]
-            if frame.can_id in [0x660]: 
+            if frame.can_id in [0x660] or True: 
                 print(frame, flush=True)
 
             if frame.__class__ in self.handlers:
