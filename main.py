@@ -205,7 +205,7 @@ class Scheduler(metaclass=MetaScheduler):
     #     self.send(diag)
 
 
-    def send(self, frame: CanFrame):
+    def send(self, frame):
         self.tx_queue.put(frame)
 
 
