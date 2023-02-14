@@ -178,7 +178,22 @@ class EGV_Cmd_VAR(CanFrameLittle):
         ("fan", c_uint16)
 
     ]
+class EGV_Accel_VAR(CanFrameLittle):
+    can_id = 0x201
+    _fields_ = [
+        ("accel_set_point", c_uint16),
+        ("regen_limit", c_uint16),
+        ("crap", c_uint8),
 
+        ("F", c_uint8, 1),
+        ("R", c_uint8, 1),
+        ("footbrake", c_uint8, 1),
+        ("DS1", c_uint8, 1),
+        ("FS1", c_uint8, 1),
+        ("DS2", c_uint8, 1),
+        ("unused", c_uint8, 1),
+        ("unused", c_uint8, 1),
+    ]
 # class BVS_Sync_EGV(CanFrameBig):
 #     can_id = 0x590
 #     _fields_ = [

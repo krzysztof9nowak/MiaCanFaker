@@ -6,6 +6,7 @@ from collections import namedtuple
 import queue
 from enum import IntEnum
 
+test = False
 
 class BMS_STATE(IntEnum):
     READY = 0
@@ -192,14 +193,30 @@ class Scheduler(metaclass=MetaScheduler):
 
         self.send(hb)
 
-   # @periodic(0.05)
+    @periodic(0.05)
     def EGV_Cmd_send(self):
         cm= EGV_Cmd_VAR()
-        cm.curr_limit =264
+        cm.curr_limit =2640
         cm.regen_limit=-20
-        cm.max_torque =100
+        cm.max_torque =0
         cm.fan=12288
         self.send(cm)
+
+    @periodic(0.05)
+    def EGV_kill_all(self):
+        ap = EGV_Accel_VAR()
+        ap.accel_set_point = 10
+        ap.regen_limit = 0
+        ap.F= not ap.F
+        ap.R=0
+        ap.footbrake = 1;
+        ap.DS1=1
+        ap.DS2=1
+        ap.FS1=1
+        self.send(ap)
+
+
+
 
 
     # @periodic(1)
