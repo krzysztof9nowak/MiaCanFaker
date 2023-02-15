@@ -38,7 +38,7 @@ LSS_Supported=0
 [DeviceComissioning]
 NodeID=1
 NodeName=
-Baudrate=500
+BaudRate=500
 NetNumber=
 NetworkName=
 CANopenManager=
