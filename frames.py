@@ -47,9 +47,9 @@ class BMS_Sync_EGV(CanFrameBig):
         ("voltage", c_uint16),
         ("temperature", c_int8),
         ("soc", c_uint8),
-        ("state", c_uint8, 6),
-        ("emergency", c_uint8, 1),
         ("regen", c_uint8, 1),
+        ("emergency", c_uint8, 1),
+        ("state", c_uint8, 6),
         ("soh", c_uint8),
     ]
 
@@ -272,3 +272,7 @@ def find_all_frame_classes():
 
 
 mia_frames = find_all_frame_classes()
+
+if __name__ == "__main__":
+    sync = BMS_Sync_EGV.from_buffer_copy(b'\x00\x00\x00\x00\x17\x09\x04\x24')
+    print(sync)
