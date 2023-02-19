@@ -156,6 +156,7 @@ class WaveshareSerialBus(BusABC):
         self._ser.close()
 
     def send(self, msg: Message, timeout: Optional[float] = None) -> None:
+        print(msg)
         """
         Send a message over the serial device.
 
