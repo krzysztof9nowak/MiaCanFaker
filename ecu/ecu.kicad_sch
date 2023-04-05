@@ -7297,10 +7297,6 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 88e031d1-1170-43e1-ac06-bbd7cb6f9eda)
   )
-  (text "polakierować PCB" (at 323.85 254 0)
-    (effects (font (size 5 5)) (justify left bottom))
-    (uuid af9c46ad-dc5e-4dd6-a771-70a2992fb06a)
-  )
 
   (label "IN_KEY2" (at 213.995 316.23 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
