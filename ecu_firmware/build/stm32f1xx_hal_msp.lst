@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc69rhxu.s 			page 1
+ARM GAS  /tmp/cc1jXsl6.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
   30:Core/Src/stm32f1xx_hal_msp.c **** /* USER CODE END TD */
   31:Core/Src/stm32f1xx_hal_msp.c **** 
   32:Core/Src/stm32f1xx_hal_msp.c **** /* Private define ------------------------------------------------------------*/
-ARM GAS  /tmp/cc69rhxu.s 			page 2
+ARM GAS  /tmp/cc1jXsl6.s 			page 2
 
 
   33:Core/Src/stm32f1xx_hal_msp.c **** /* USER CODE BEGIN Define */
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
   44 0008 42F00102 		orr	r2, r2, #1
   45 000c 9A61     		str	r2, [r3, #24]
   46              		.loc 1 69 3 view .LVU4
-ARM GAS  /tmp/cc69rhxu.s 			page 3
+ARM GAS  /tmp/cc1jXsl6.s 			page 3
 
 
   47 000e 9A69     		ldr	r2, [r3, #24]
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
   92              		.thumb
   93              		.thumb_func
   95              	HAL_CAN_MspInit:
-ARM GAS  /tmp/cc69rhxu.s 			page 4
+ARM GAS  /tmp/cc1jXsl6.s 			page 4
 
 
   96              	.LVL1:
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  103:Core/Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pin = GPIO_PIN_11;
  104:Core/Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
  105:Core/Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
-ARM GAS  /tmp/cc69rhxu.s 			page 5
+ARM GAS  /tmp/cc1jXsl6.s 			page 5
 
 
  106:Core/Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  159 0032 42F00402 		orr	r2, r2, #4
  160 0036 9A61     		str	r2, [r3, #24]
   98:Core/Src/stm32f1xx_hal_msp.c ****     /**CAN GPIO Configuration
-ARM GAS  /tmp/cc69rhxu.s 			page 6
+ARM GAS  /tmp/cc1jXsl6.s 			page 6
 
 
  161              		.loc 1 98 5 view .LVU32
@@ -358,7 +358,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  200              		.loc 1 118 1 is_stmt 0 view .LVU48
  201 0068 D5E7     		b	.L5
  202              	.L10:
-ARM GAS  /tmp/cc69rhxu.s 			page 7
+ARM GAS  /tmp/cc1jXsl6.s 			page 7
 
 
  203 006a 00BF     		.align	2
@@ -418,7 +418,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  139:Core/Src/stm32f1xx_hal_msp.c ****     */
  140:Core/Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_11|GPIO_PIN_12);
  141:Core/Src/stm32f1xx_hal_msp.c **** 
-ARM GAS  /tmp/cc69rhxu.s 			page 8
+ARM GAS  /tmp/cc1jXsl6.s 			page 8
 
 
  142:Core/Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN CAN1_MspDeInit 1 */
@@ -478,7 +478,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  277              		.cfi_startproc
  278              		@ args = 0, pretend = 0, frame = 24
  279              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/cc69rhxu.s 			page 9
+ARM GAS  /tmp/cc1jXsl6.s 			page 9
 
 
  280              		.loc 1 156 1 is_stmt 0 view .LVU60
@@ -538,7 +538,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  309              		.cfi_def_cfa_offset 8
  310              		@ sp needed
  311 0018 10BD     		pop	{r4, pc}
-ARM GAS  /tmp/cc69rhxu.s 			page 10
+ARM GAS  /tmp/cc1jXsl6.s 			page 10
 
 
  312              	.LVL14:
@@ -598,7 +598,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  351              		.loc 1 175 5 is_stmt 1 view .LVU81
  352              	.LBB7:
  175:Core/Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN I2C1_MspInit 1 */
-ARM GAS  /tmp/cc69rhxu.s 			page 11
+ARM GAS  /tmp/cc1jXsl6.s 			page 11
 
 
  353              		.loc 1 175 5 view .LVU82
@@ -658,7 +658,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  395 0002 0A4B     		ldr	r3, .L30
  396 0004 9A42     		cmp	r2, r3
  397 0006 00D0     		beq	.L29
-ARM GAS  /tmp/cc69rhxu.s 			page 12
+ARM GAS  /tmp/cc1jXsl6.s 			page 12
 
 
  398 0008 7047     		bx	lr
@@ -718,7 +718,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  430 0030 00100240 		.word	1073876992
  431 0034 000C0140 		.word	1073810432
  432              		.cfi_endproc
-ARM GAS  /tmp/cc69rhxu.s 			page 13
+ARM GAS  /tmp/cc1jXsl6.s 			page 13
 
 
  433              	.LFE69:
@@ -778,7 +778,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  229:Core/Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_SPI1_CLK_ENABLE();
  230:Core/Src/stm32f1xx_hal_msp.c **** 
  231:Core/Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
-ARM GAS  /tmp/cc69rhxu.s 			page 14
+ARM GAS  /tmp/cc1jXsl6.s 			page 14
 
 
  232:Core/Src/stm32f1xx_hal_msp.c ****     /**SPI1 GPIO Configuration
@@ -838,7 +838,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  503              		.loc 1 231 5 view .LVU114
  504 0032 9A69     		ldr	r2, [r3, #24]
  505 0034 42F00402 		orr	r2, r2, #4
-ARM GAS  /tmp/cc69rhxu.s 			page 15
+ARM GAS  /tmp/cc1jXsl6.s 			page 15
 
 
  506 0038 9A61     		str	r2, [r3, #24]
@@ -898,7 +898,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  551              	HAL_SPI_MspDeInit:
  552              	.LVL26:
  553              	.LFB71:
-ARM GAS  /tmp/cc69rhxu.s 			page 16
+ARM GAS  /tmp/cc1jXsl6.s 			page 16
 
 
  247:Core/Src/stm32f1xx_hal_msp.c **** 
@@ -958,7 +958,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  578 000c 054A     		ldr	r2, .L42+4
  579 000e 9369     		ldr	r3, [r2, #24]
  580 0010 23F48053 		bic	r3, r3, #4096
-ARM GAS  /tmp/cc69rhxu.s 			page 17
+ARM GAS  /tmp/cc1jXsl6.s 			page 17
 
 
  581 0014 9361     		str	r3, [r2, #24]
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  625 0004 0023     		movs	r3, #0
  626 0006 0293     		str	r3, [sp, #8]
  627 0008 0393     		str	r3, [sp, #12]
-ARM GAS  /tmp/cc69rhxu.s 			page 18
+ARM GAS  /tmp/cc1jXsl6.s 			page 18
 
 
  628 000a 0493     		str	r3, [sp, #16]
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  292:Core/Src/stm32f1xx_hal_msp.c **** 
  652              		.loc 1 292 5 view .LVU146
  292:Core/Src/stm32f1xx_hal_msp.c **** 
-ARM GAS  /tmp/cc69rhxu.s 			page 19
+ARM GAS  /tmp/cc1jXsl6.s 			page 19
 
 
  653              		.loc 1 292 5 view .LVU147
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  692 004e 0593     		str	r3, [sp, #20]
  302:Core/Src/stm32f1xx_hal_msp.c **** 
  693              		.loc 1 302 5 is_stmt 1 view .LVU163
-ARM GAS  /tmp/cc69rhxu.s 			page 20
+ARM GAS  /tmp/cc1jXsl6.s 			page 20
 
 
  694 0050 084C     		ldr	r4, .L48+4
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  320:Core/Src/stm32f1xx_hal_msp.c **** * @retval None
  321:Core/Src/stm32f1xx_hal_msp.c **** */
  322:Core/Src/stm32f1xx_hal_msp.c **** void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
-ARM GAS  /tmp/cc69rhxu.s 			page 21
+ARM GAS  /tmp/cc1jXsl6.s 			page 21
 
 
  323:Core/Src/stm32f1xx_hal_msp.c **** {
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  768              	.LVL40:
  336:Core/Src/stm32f1xx_hal_msp.c **** 
  769              		.loc 1 336 5 is_stmt 0 view .LVU181
-ARM GAS  /tmp/cc69rhxu.s 			page 22
+ARM GAS  /tmp/cc1jXsl6.s 			page 22
 
 
  770 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
@@ -1287,38 +1287,38 @@ ARM GAS  /tmp/cc69rhxu.s 			page 1
  794              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h"
  795              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
  796              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
-ARM GAS  /tmp/cc69rhxu.s 			page 23
+ARM GAS  /tmp/cc1jXsl6.s 			page 23
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f1xx_hal_msp.c
-     /tmp/cc69rhxu.s:19     .text.HAL_MspInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:25     .text.HAL_MspInit:0000000000000000 HAL_MspInit
-     /tmp/cc69rhxu.s:84     .text.HAL_MspInit:000000000000003c $d
-     /tmp/cc69rhxu.s:89     .text.HAL_CAN_MspInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:95     .text.HAL_CAN_MspInit:0000000000000000 HAL_CAN_MspInit
-     /tmp/cc69rhxu.s:205    .text.HAL_CAN_MspInit:000000000000006c $d
-     /tmp/cc69rhxu.s:211    .text.HAL_CAN_MspDeInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:217    .text.HAL_CAN_MspDeInit:0000000000000000 HAL_CAN_MspDeInit
-     /tmp/cc69rhxu.s:260    .text.HAL_CAN_MspDeInit:0000000000000024 $d
-     /tmp/cc69rhxu.s:267    .text.HAL_I2C_MspInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:273    .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
-     /tmp/cc69rhxu.s:371    .text.HAL_I2C_MspInit:0000000000000058 $d
-     /tmp/cc69rhxu.s:378    .text.HAL_I2C_MspDeInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:384    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
-     /tmp/cc69rhxu.s:429    .text.HAL_I2C_MspDeInit:000000000000002c $d
-     /tmp/cc69rhxu.s:436    .text.HAL_SPI_MspInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:442    .text.HAL_SPI_MspInit:0000000000000000 HAL_SPI_MspInit
-     /tmp/cc69rhxu.s:539    .text.HAL_SPI_MspInit:000000000000005c $d
-     /tmp/cc69rhxu.s:545    .text.HAL_SPI_MspDeInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:551    .text.HAL_SPI_MspDeInit:0000000000000000 HAL_SPI_MspDeInit
-     /tmp/cc69rhxu.s:594    .text.HAL_SPI_MspDeInit:0000000000000020 $d
-     /tmp/cc69rhxu.s:601    .text.HAL_UART_MspInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:607    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
-     /tmp/cc69rhxu.s:722    .text.HAL_UART_MspInit:0000000000000070 $d
-     /tmp/cc69rhxu.s:728    .text.HAL_UART_MspDeInit:0000000000000000 $t
-     /tmp/cc69rhxu.s:734    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
-     /tmp/cc69rhxu.s:777    .text.HAL_UART_MspDeInit:0000000000000024 $d
+     /tmp/cc1jXsl6.s:19     .text.HAL_MspInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:25     .text.HAL_MspInit:0000000000000000 HAL_MspInit
+     /tmp/cc1jXsl6.s:84     .text.HAL_MspInit:000000000000003c $d
+     /tmp/cc1jXsl6.s:89     .text.HAL_CAN_MspInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:95     .text.HAL_CAN_MspInit:0000000000000000 HAL_CAN_MspInit
+     /tmp/cc1jXsl6.s:205    .text.HAL_CAN_MspInit:000000000000006c $d
+     /tmp/cc1jXsl6.s:211    .text.HAL_CAN_MspDeInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:217    .text.HAL_CAN_MspDeInit:0000000000000000 HAL_CAN_MspDeInit
+     /tmp/cc1jXsl6.s:260    .text.HAL_CAN_MspDeInit:0000000000000024 $d
+     /tmp/cc1jXsl6.s:267    .text.HAL_I2C_MspInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:273    .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
+     /tmp/cc1jXsl6.s:371    .text.HAL_I2C_MspInit:0000000000000058 $d
+     /tmp/cc1jXsl6.s:378    .text.HAL_I2C_MspDeInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:384    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
+     /tmp/cc1jXsl6.s:429    .text.HAL_I2C_MspDeInit:000000000000002c $d
+     /tmp/cc1jXsl6.s:436    .text.HAL_SPI_MspInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:442    .text.HAL_SPI_MspInit:0000000000000000 HAL_SPI_MspInit
+     /tmp/cc1jXsl6.s:539    .text.HAL_SPI_MspInit:000000000000005c $d
+     /tmp/cc1jXsl6.s:545    .text.HAL_SPI_MspDeInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:551    .text.HAL_SPI_MspDeInit:0000000000000000 HAL_SPI_MspDeInit
+     /tmp/cc1jXsl6.s:594    .text.HAL_SPI_MspDeInit:0000000000000020 $d
+     /tmp/cc1jXsl6.s:601    .text.HAL_UART_MspInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:607    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
+     /tmp/cc1jXsl6.s:722    .text.HAL_UART_MspInit:0000000000000070 $d
+     /tmp/cc1jXsl6.s:728    .text.HAL_UART_MspDeInit:0000000000000000 $t
+     /tmp/cc1jXsl6.s:734    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
+     /tmp/cc1jXsl6.s:777    .text.HAL_UART_MspDeInit:0000000000000024 $d
 
 UNDEFINED SYMBOLS
 HAL_NVIC_SetPriority

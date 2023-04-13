@@ -55,6 +55,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for dashboardTask */
+osThreadId_t dashboardTaskHandle;
+const osThreadAttr_t dashboardTask_attributes = {
+  .name = "dashboardTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -67,6 +74,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 void StartDefaultTask(void *argument);
+extern void DashboardTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -135,6 +143,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of dashboardTask */
+  dashboardTaskHandle = osThreadNew(DashboardTask, NULL, &dashboardTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
