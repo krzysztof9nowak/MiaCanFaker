@@ -163,6 +163,7 @@ void Error_Handler(void);
 #define LED_FOG_GPIO_Port GPIOE
 #define LED_BATTERY_Pin GPIO_PIN_1
 #define LED_BATTERY_GPIO_Port GPIOE
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

@@ -62,6 +62,13 @@ const osThreadAttr_t dashboardTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for Throttle */
+osThreadId_t ThrottleHandle;
+const osThreadAttr_t Throttle_attributes = {
+  .name = "Throttle",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -75,6 +82,7 @@ static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 void StartDefaultTask(void *argument);
 extern void DashboardTask(void *argument);
+extern void throttle_task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -147,6 +155,9 @@ int main(void)
   /* creation of dashboardTask */
   dashboardTaskHandle = osThreadNew(DashboardTask, NULL, &dashboardTask_attributes);
 
+  /* creation of Throttle */
+  ThrottleHandle = osThreadNew(throttle_task, NULL, &Throttle_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -157,7 +168,6 @@ int main(void)
 
   /* Start scheduler */
   osKernelStart();
-
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -359,6 +369,8 @@ static void MX_USART1_UART_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
@@ -458,6 +470,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -478,6 +492,22 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     HAL_GPIO_TogglePin(LED_TEMP_GPIO_Port, LED_TEMP_Pin);
+    HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
+    HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
+    HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
+    HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
+    HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
+    HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
+    HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
+      HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
+      HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
+      HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
+      HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
+      HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
+      HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
+      HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
+
+
     osDelay(1000);
   }
   /* USER CODE END 5 */
