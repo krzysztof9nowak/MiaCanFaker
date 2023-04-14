@@ -2,5 +2,8 @@
 
 void throttle_task(void *argument)
 {
-    while (1);
+    while (1)
+    {
+        HAL_
+    }
 }
