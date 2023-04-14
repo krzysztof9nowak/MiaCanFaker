@@ -611,8 +611,8 @@ void StartDefaultTask(void *argument)
   {
 
      // can_send_egv_sync_all(&egv_sync_frame);
-      can_send_egv_sync_all(&egv_sync_frame);
-    osDelay(10);
+      osDelay(1000);
+      HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
   }
   /* USER CODE END 5 */
 }

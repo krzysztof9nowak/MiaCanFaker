@@ -35,7 +35,7 @@ void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t * frame)
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_ACCEL_VAR_ID;
     carrier.DLC = sizeof (CAN_EGV_Accel_VAR_t);
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame,NULL);
+    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame,CAN_TX_MAILBOX1);
 }
 
 void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t * frame)
@@ -43,7 +43,7 @@ void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t * frame)
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_CMD_VAR_ID;
     carrier.DLC = sizeof (CAN_EGV_Cmd_VAR_t);
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame,NULL);
+    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame,CAN_TX_MAILBOX1);
 
 }
 
@@ -56,7 +56,7 @@ uint16_t get_throttle()
 
 void update_accel_pedal(CAN_EGV_Accel_VAR_t * frame)
 {
-    int direction_forward = (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)== GPIO_PIN_RESET);
+    int direction_forward = 1;
 
     frame->accelerator_set_point = get_throttle();
     if(var_ready && frame->accelerator_set_point > 70) {

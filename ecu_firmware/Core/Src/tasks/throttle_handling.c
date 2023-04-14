@@ -15,6 +15,7 @@ extern volatile CAN_EGV_Cmd_VAR_t egv_var_frame;
 
 void throttle_task(void *argument)
 {
+    osDelay(100);
 
     while (1)
     {
@@ -24,7 +25,7 @@ void throttle_task(void *argument)
         display_value = raw_analog;
 
         //update_accel_pedal(&egv_accel_frame);
-       // can_send_egv_sync_all(&egv_sync_frame);
+        can_send_egv_sync_all(&egv_sync_frame);
         //can_send_egv_accel_var(&egv_accel_frame);
         //can_send_egv_cmd_var(&can_send_egv_cmd_var);
         HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
