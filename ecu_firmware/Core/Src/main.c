@@ -70,14 +70,14 @@ osThreadId_t dashboardTaskHandle;
 const osThreadAttr_t dashboardTask_attributes = {
   .name = "dashboardTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for Throttle */
 osThreadId_t ThrottleHandle;
 const osThreadAttr_t Throttle_attributes = {
   .name = "Throttle",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityBelowNormal3,
 };
 /* USER CODE BEGIN PV */
 
@@ -602,15 +602,17 @@ void StartDefaultTask(void *argument)
     HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
 
 
+    //HAL_CAN_AddTxMHAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);essage()
+
 
 
     /* Infinite loop */
   for(;;)
   {
 
-
-
-    osDelay(1000);
+     // can_send_egv_sync_all(&egv_sync_frame);
+      can_send_egv_sync_all(&egv_sync_frame);
+    osDelay(10);
   }
   /* USER CODE END 5 */
 }

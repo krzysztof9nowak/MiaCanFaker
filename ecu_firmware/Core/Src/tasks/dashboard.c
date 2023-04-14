@@ -95,7 +95,7 @@ void DashboardTask(void *argument){
         snprintf(buf, sizeof(buf), "%d",  display_value);
         u8g2_DrawStr(&u8g2, 100, 50, buf);
         u8g2_SendBuffer(&u8g2);
-        //osDelay(50);
+        osDelay(50);
     }
 }
 
