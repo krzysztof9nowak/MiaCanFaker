@@ -39,6 +39,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+extern CAN_HandleTypeDef hcan;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -53,6 +54,21 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void CAN1_RX0_IRQHandler(void)
+{
+    /* USER CODE BEGIN CAN1_RX0_IRQn 0 */
+    //HAL_GPIO_TogglePin(LD3_GPIO_Port,LD3_Pin);
+
+    if(HAL_CAN_GetRxFifoFillLevel(&hcan,CAN_RX_FIFO0)!=0)
+    {
+        HAL_CAN_GetRxMessage(&hcan,0,0,0);
+    }
+    /* USER CODE END CAN1_RX0_IRQn 0 */
+    HAL_CAN_IRQHandler(&hcan);
+    /* USER CODE BEGIN CAN1_RX0_IRQn 1 */
+
+    /* USER CODE END CAN1_RX0_IRQn 1 */
+}
 
 /* USER CODE END 0 */
 

@@ -11,6 +11,11 @@
   },
   {
     "directory": ".",
+    "command": "arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb   -DUSE_HAL_DRIVER -DSTM32F103xE -ICore/Inc -ICore/Inc/tasks -IDrivers/STM32F1xx_HAL_Driver/Inc -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy -IDrivers/u8g2/csrc -IMiddlewares/Third_Party/FreeRTOS/Source/include -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include -IDrivers/CMSIS/Include -Og -Wall -fdata-sections -ffunction-sections -g -gdwarf-2 -MMD -MP -MF\"build/sevcon.d\" -Wa,-a,-ad,-alms=build/sevcon.lst -o build/sevcon.o Core/Src/sevcon.c",
+    "file": "Core/Src/sevcon.c"
+  },
+  {
+    "directory": ".",
     "command": "arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb   -DUSE_HAL_DRIVER -DSTM32F103xE -ICore/Inc -ICore/Inc/tasks -IDrivers/STM32F1xx_HAL_Driver/Inc -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy -IDrivers/u8g2/csrc -IMiddlewares/Third_Party/FreeRTOS/Source/include -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include -IDrivers/CMSIS/Include -Og -Wall -fdata-sections -ffunction-sections -g -gdwarf-2 -MMD -MP -MF\"build/stm32f1xx_hal_msp.d\" -Wa,-a,-ad,-alms=build/stm32f1xx_hal_msp.lst -o build/stm32f1xx_hal_msp.o Core/Src/stm32f1xx_hal_msp.c",
     "file": "Core/Src/stm32f1xx_hal_msp.c"
   },
