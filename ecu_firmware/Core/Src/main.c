@@ -28,6 +28,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -150,6 +151,8 @@ int main(void)
     sFilterConfig.FilterScale=CAN_FILTERSCALE_32BIT; //set filter scale
     sFilterConfig.FilterActivation=ENABLE;
 
+    HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
+    HAL_NVIC_SetPriority(CAN1_RX0_IRQn,5,5);
     HAL_CAN_ConfigFilter(&hcan, &sFilterConfig); //configure CAN filter
 
 //

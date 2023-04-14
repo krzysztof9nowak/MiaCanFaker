@@ -24,10 +24,10 @@ void throttle_task(void *argument)
         uint32_t raw_analog = HAL_ADC_GetValue(&hadc1);
         display_value = raw_analog;
 
-        //update_accel_pedal(&egv_accel_frame);
+        update_accel_pedal(&egv_accel_frame);
         can_send_egv_sync_all(&egv_sync_frame);
-        //can_send_egv_accel_var(&egv_accel_frame);
-        //can_send_egv_cmd_var(&can_send_egv_cmd_var);
+        can_send_egv_accel_var(&egv_accel_frame);
+        can_send_egv_cmd_var(&can_send_egv_cmd_var);
         HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
         osDelay(100);
 
