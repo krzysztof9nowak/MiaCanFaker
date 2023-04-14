@@ -10,7 +10,7 @@ uint16_t swap_endianness(uint16_t value);
 #define CAN_EGV_SYNC_ALL_ID 0x80
 
 
-volatile uint8_t var_ready;
+
 
 typedef struct CAN_EGV_Accel_VAR
 {
@@ -47,6 +47,8 @@ typedef struct CAN_EGV_SYNC_ALL
     int diag:1;
 
 } CAN_EGV_SYNC_ALL_t;
+
+
 
 void can_send_egv_sync_all(CAN_EGV_SYNC_ALL_t * frame);
 

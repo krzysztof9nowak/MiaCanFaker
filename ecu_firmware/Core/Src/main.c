@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include <sevcon.h>
+#include <sevcon.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,6 +32,14 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+volatile uint8_t var_ready = 1;
+
+volatile CAN_EGV_Accel_VAR_t egv_accel_frame ={0};
+
+volatile CAN_EGV_SYNC_ALL_t egv_sync_frame ={0};
+
+volatile CAN_EGV_Cmd_VAR_t egv_var_frame ={0};
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -69,7 +77,7 @@ osThreadId_t ThrottleHandle;
 const osThreadAttr_t Throttle_attributes = {
   .name = "Throttle",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityHigh,
 };
 /* USER CODE BEGIN PV */
 
@@ -132,7 +140,21 @@ int main(void)
   MX_SPI1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+    CAN_FilterTypeDef sFilterConfig;
 
+    sFilterConfig.FilterFIFOAssignment=CAN_FILTER_FIFO0; //set fifo assignment
+    sFilterConfig.FilterIdHigh=0x245<<5; //the ID that the filter looks for (switch this for the other microcontroller)
+    sFilterConfig.FilterIdLow=0;
+    sFilterConfig.FilterMaskIdHigh=0;
+    sFilterConfig.FilterMaskIdLow=0;
+    sFilterConfig.FilterScale=CAN_FILTERSCALE_32BIT; //set filter scale
+    sFilterConfig.FilterActivation=ENABLE;
+
+    HAL_CAN_ConfigFilter(&hcan, &sFilterConfig); //configure CAN filter
+
+//
+    HAL_CAN_Start(&hcan);
+    HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -578,6 +600,9 @@ void StartDefaultTask(void *argument)
     HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
     HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
     HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
+
+
+
 
     /* Infinite loop */
   for(;;)
