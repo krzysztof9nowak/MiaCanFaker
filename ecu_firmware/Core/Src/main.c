@@ -615,7 +615,21 @@ void StartDefaultTask(void *argument)
 
      // can_send_egv_sync_all(&egv_sync_frame);
       osDelay(1000);
+      HAL_GPIO_TogglePin(LED_TEMP_GPIO_Port, LED_TEMP_Pin);
+      HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
+      HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
+      HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
+      HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
+      HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
+      HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
+      HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
+      HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
+      HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
+      HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
       HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
+      HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
+      HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
+      HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
   }
   /* USER CODE END 5 */
 }

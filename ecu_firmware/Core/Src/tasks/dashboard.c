@@ -92,7 +92,7 @@ void DashboardTask(void *argument){
         speed += 1;
         u8g2_ClearBuffer(&u8g2);
         u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
-        snprintf(buf, sizeof(buf), "%d",  display_value);
+        snprintf(buf, sizeof(buf), "%d",  (int)(speed));
         u8g2_DrawStr(&u8g2, 100, 50, buf);
         u8g2_SendBuffer(&u8g2);
         //osDelay(50);
