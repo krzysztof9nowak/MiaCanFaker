@@ -115,6 +115,7 @@ void Error_Handler(void);
 #define OLED_POWER_EN_GPIO_Port GPIOE
 #define IN_DISP_Pin GPIO_PIN_13
 #define IN_DISP_GPIO_Port GPIOE
+#define IN_DISP_EXTI_IRQn EXTI15_10_IRQn
 #define IN_CEINT_Pin GPIO_PIN_14
 #define IN_CEINT_GPIO_Port GPIOE
 #define IN_CTL_APC_Pin GPIO_PIN_15

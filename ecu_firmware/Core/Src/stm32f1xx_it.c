@@ -190,7 +190,6 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
   /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
 
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
-    HAL_NVIC_ClearPendingIRQ(CAN1_RX0_IRQn);
   HAL_CAN_IRQHandler(&hcan);
   /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
 //    if(HAL_CAN_GetRxFifoFillLevel(&hcan,CAN_RX_FIFO0)!=0)
@@ -200,6 +199,20 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
     /* USER CODE END CAN1_RX0_IRQn 0 */
 
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line[15:10] interrupts.
+  */
+void EXTI15_10_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(IN_DISP_Pin);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+    HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
+  /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
