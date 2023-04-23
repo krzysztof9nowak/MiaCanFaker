@@ -26,7 +26,8 @@ void can_send_egv_sync_all(CAN_EGV_SYNC_ALL_t * frame)
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_SYNC_ALL_ID;
     carrier.DLC = sizeof (CAN_EGV_SYNC_ALL_t);
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(char*)frame,CAN_TX_MAILBOX1);
+    uint32_t mailbox;
+    HAL_CAN_AddTxMessage(&hcan,&carrier,(char*)frame, &mailbox);
 
 }
 
@@ -35,7 +36,9 @@ void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t * frame)
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_ACCEL_VAR_ID;
     carrier.DLC = sizeof (CAN_EGV_Accel_VAR_t);
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame,CAN_TX_MAILBOX1);
+    uint32_t mailbox;
+
+    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame, &mailbox);
 }
 
 void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t * frame)
@@ -43,7 +46,9 @@ void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t * frame)
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_CMD_VAR_ID;
     carrier.DLC = sizeof (CAN_EGV_Cmd_VAR_t);
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame,CAN_TX_MAILBOX1);
+    uint32_t mailbox;
+
+    HAL_CAN_AddTxMessage(&hcan,&carrier,(char *)frame, &mailbox);
 
 }
 

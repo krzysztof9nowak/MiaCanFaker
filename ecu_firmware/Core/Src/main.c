@@ -141,19 +141,18 @@ int main(void)
   MX_SPI1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-    CAN_FilterTypeDef sFilterConfig;
+  CAN_FilterTypeDef sFilterConfig;
 
-    sFilterConfig.FilterFIFOAssignment=CAN_FILTER_FIFO0; //set fifo assignment
-    sFilterConfig.FilterIdHigh=0x245<<5; //the ID that the filter looks for (switch this for the other microcontroller)
-    sFilterConfig.FilterIdLow=0;
-    sFilterConfig.FilterMaskIdHigh=0;
-    sFilterConfig.FilterMaskIdLow=0;
-    sFilterConfig.FilterScale=CAN_FILTERSCALE_32BIT; //set filter scale
-    sFilterConfig.FilterActivation=ENABLE;
+  sFilterConfig.FilterFIFOAssignment=CAN_FILTER_FIFO0; //set fifo assignment
+  sFilterConfig.FilterIdHigh=0x245<<5; //the ID that the filter looks for (switch this for the other microcontroller)
+  sFilterConfig.FilterIdLow=0;
+  sFilterConfig.FilterMaskIdHigh=0;
+  sFilterConfig.FilterMaskIdLow=0;
+  sFilterConfig.FilterScale=CAN_FILTERSCALE_32BIT; //set filter scale
+  sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+  sFilterConfig.FilterActivation=ENABLE;
 
-    HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
-    HAL_NVIC_SetPriority(CAN1_RX0_IRQn,5,5);
-    HAL_CAN_ConfigFilter(&hcan, &sFilterConfig); //configure CAN filter
+  HAL_CAN_ConfigFilter(&hcan, &sFilterConfig); //configure CAN filter
 
 //
     HAL_CAN_Start(&hcan);
@@ -184,7 +183,7 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of dashboardTask */
-  dashboardTaskHandle = osThreadNew(DashboardTask, NULL, &dashboardTask_attributes);
+  // dashboardTaskHandle = osThreadNew(DashboardTask, NULL, &dashboardTask_attributes);
 
   /* creation of Throttle */
   ThrottleHandle = osThreadNew(throttle_task, NULL, &Throttle_attributes);
@@ -570,6 +569,11 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+int _write(int fd, const void *buffer, unsigned int count){
+  HAL_UART_Transmit(&huart1, buffer, count, 1000);
+  return count;
+}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -582,50 +586,15 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-    HAL_GPIO_TogglePin(LED_TEMP_GPIO_Port, LED_TEMP_Pin);
-    HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
-    HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
-    HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
-    HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
-    HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
-    HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
-    HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
-    HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
-    HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
-    HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
-    HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
-    HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
-    HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
-    HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
-    osDelay(10000);
-    HAL_GPIO_TogglePin(LED_TEMP_GPIO_Port, LED_TEMP_Pin);
-    HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
-    HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
-    HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
-    HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
-    HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
-    HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
-    HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
-    HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
-    HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
-    HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
-    HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
-    HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
-    HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
-    HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
-
-
     //HAL_CAN_AddTxMHAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);essage()
 
 
 
-    /* Infinite loop */
+  printf("Witaj Mio!\r\n");
   for(;;)
   {
-
      // can_send_egv_sync_all(&egv_sync_frame);
       osDelay(1000);
-      HAL_GPIO_TogglePin(LED_TEMP_GPIO_Port, LED_TEMP_Pin);
       HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
       HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
       HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
