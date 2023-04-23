@@ -6,7 +6,6 @@
 
 u8g2_t u8g2;
 extern SPI_HandleTypeDef hspi1;
-extern volatile uint32_t display_value;
 
 uint8_t u8x8_stm32_gpio_and_delay(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
@@ -95,7 +94,7 @@ void DashboardTask(void *argument){
         snprintf(buf, sizeof(buf), "%d",  (int)(speed));
         u8g2_DrawStr(&u8g2, 100, 50, buf);
         u8g2_SendBuffer(&u8g2);
-        //osDelay(50);
+        osDelay(50);
     }
 }
 

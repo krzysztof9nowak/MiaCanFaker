@@ -190,18 +190,10 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
   /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
 
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
-    // HAL_CAN_IRQHandler(&hcan);
-    hcan.Instance->RF0R = 0;
-    HAL_GPIO_TogglePin(LED_TEMP_GPIO_Port, LED_TEMP_Pin);
-
-
-
+  HAL_CAN_IRQHandler(&hcan);
   /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
-//    if(HAL_CAN_GetRxFifoFillLevel(&hcan,CAN_RX_FIFO0)!=0)
-//    {
-//        //HAL_CAN_GetRxMessage(&hcan,0,0,0);
-//    }
-    /* USER CODE END CAN1_RX0_IRQn 0 */
+
+  /* USER CODE END CAN1_RX0_IRQn 0 */
 
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
 }

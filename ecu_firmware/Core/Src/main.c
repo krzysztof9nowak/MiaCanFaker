@@ -34,13 +34,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-volatile uint8_t var_ready = 1;
-
-volatile CAN_EGV_Accel_VAR_t egv_accel_frame ={0};
-
-volatile CAN_EGV_SYNC_ALL_t egv_sync_frame ={0};
-
-volatile CAN_EGV_Cmd_VAR_t egv_var_frame ={0};
+volatile inverter_t inverter = {0};
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -78,11 +72,16 @@ osThreadId_t ThrottleHandle;
 const osThreadAttr_t Throttle_attributes = {
   .name = "Throttle",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityBelowNormal3,
+  .priority = (osPriority_t) osPriorityHigh,
+};
+/* Definitions for Inverter */
+osThreadId_t InverterHandle;
+const osThreadAttr_t Inverter_attributes = {
+  .name = "Inverter",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
-
-volatile uint32_t display_value;
 
 /* USER CODE END PV */
 
@@ -97,6 +96,7 @@ static void MX_ADC1_Init(void);
 void StartDefaultTask(void *argument);
 extern void DashboardTask(void *argument);
 extern void throttle_task(void *argument);
+extern void inverter_task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -183,10 +183,13 @@ int main(void)
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of dashboardTask */
-  // dashboardTaskHandle = osThreadNew(DashboardTask, NULL, &dashboardTask_attributes);
+  dashboardTaskHandle = osThreadNew(DashboardTask, NULL, &dashboardTask_attributes);
 
   /* creation of Throttle */
   ThrottleHandle = osThreadNew(throttle_task, NULL, &Throttle_attributes);
+
+  /* creation of Inverter */
+  InverterHandle = osThreadNew(inverter_task, NULL, &Inverter_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -595,20 +598,20 @@ void StartDefaultTask(void *argument)
   {
      // can_send_egv_sync_all(&egv_sync_frame);
       osDelay(1000);
-      HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
-      HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
-      HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
-      HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
-      HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
-      HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
-      HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
-      HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
-      HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
-      HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
-      HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
-      HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
-      HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
-      HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
+      // HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
+      // HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
+      // HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
+      // HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
+      // HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
+      // HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
+      // HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
+      // HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
+      // HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
+      // HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
+      // HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
+      // HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
+      // HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
+      // HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
   }
   /* USER CODE END 5 */
 }
