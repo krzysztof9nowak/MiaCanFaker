@@ -7,6 +7,9 @@
 #define CAN_EGV_ACCEL_VAR_ID (0x201)
 #define CAN_EGV_CMD_VAR_ID (0x301)
 #define CAN_EGV_SYNC_ALL_ID (0x80)
+#define CAN_VAR_STAT1_EGV (0x181)
+#define CAN_VAR_STAT2_EGV (0x281)
+#define CAN_VAR_CURRENT_EGV (0x481)
 #define INVERTER_STATUS_OK (1075)
 
 typedef enum{
@@ -22,14 +25,39 @@ typedef struct{
     uint16_t speed;
     bool forward;
     bool enabled;
+    float voltage;
+    float current;
+    float motor_current;
+    int16_t motor_temp;
+    int16_t controller_temp;
 } inverter_t;
 
 typedef struct __attribute__((__packed__))
 {
-    int32_t motor_speed;
+    int16_t motor_speed;
+    int16_t nothing;
     int16_t motor_torque;
     int16_t status_word;
 } VAR_Stat1_EGV_t;
+
+
+typedef struct __attribute__((__packed__))
+{
+    uint16_t capacitor_voltage;
+    int16_t motor_temperature;
+    int16_t controler_temperature;
+    uint8_t command;
+    uint8_t direction;
+} VAR_Stat2_EGV_t;
+
+typedef struct __attribute__((__packed__))
+{
+    int16_t current;
+    int16_t motor_current;
+    int16_t drive_limit;
+    int16_t regen_limit;
+} VAR_Current_EGV_t;
+
 typedef struct  __attribute__((__packed__))
 {
     uint16_t accelerator_set_point;//little endian

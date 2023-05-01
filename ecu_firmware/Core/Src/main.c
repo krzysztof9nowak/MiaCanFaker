@@ -65,14 +65,14 @@ osThreadId_t dashboardTaskHandle;
 const osThreadAttr_t dashboardTask_attributes = {
   .name = "dashboardTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for Throttle */
 osThreadId_t ThrottleHandle;
 const osThreadAttr_t Throttle_attributes = {
   .name = "Throttle",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for Inverter */
 osThreadId_t InverterHandle;
@@ -81,7 +81,16 @@ const osThreadAttr_t Inverter_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for BlinkenLights */
+osThreadId_t BlinkenLightsHandle;
+const osThreadAttr_t BlinkenLights_attributes = {
+  .name = "BlinkenLights",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
+
+bool run = false;
 
 /* USER CODE END PV */
 
@@ -97,6 +106,7 @@ void StartDefaultTask(void *argument);
 extern void DashboardTask(void *argument);
 extern void throttle_task(void *argument);
 extern void inverter_task(void *argument);
+extern void blinkenTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -190,6 +200,9 @@ int main(void)
 
   /* creation of Inverter */
   InverterHandle = osThreadNew(inverter_task, NULL, &Inverter_attributes);
+
+  /* creation of BlinkenLights */
+  BlinkenLightsHandle = osThreadNew(blinkenTask, NULL, &BlinkenLights_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -596,22 +609,25 @@ void StartDefaultTask(void *argument)
   printf("Witaj Mio!\r\n");
   for(;;)
   {
-     // can_send_egv_sync_all(&egv_sync_frame);
-      osDelay(1000);
-      // HAL_GPIO_TogglePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin);
-      // HAL_GPIO_TogglePin(LED_AIRBAG_GPIO_Port,LED_AIRBAG_Pin);
-      // HAL_GPIO_TogglePin(LED_BATTERY_GPIO_Port,LED_BATTERY_Pin);
-      // HAL_GPIO_TogglePin(LED_INDICATOR_GPIO_Port,LED_INDICATOR_Pin);
-      // HAL_GPIO_TogglePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin);
-      // HAL_GPIO_TogglePin(LED_ABS_GPIO_Port,LED_ABS_Pin);
-      // HAL_GPIO_TogglePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin);
-      // HAL_GPIO_TogglePin(LED_STOP_GPIO_Port,LED_STOP_Pin);
-      // HAL_GPIO_TogglePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin);
-      // HAL_GPIO_TogglePin(LED_BELT_GPIO_Port,LED_BELT_Pin);
-      // HAL_GPIO_TogglePin(LED_FOG_GPIO_Port,LED_FOG_Pin);
-      // HAL_GPIO_TogglePin(LED_HEATER_GPIO_Port,LED_HEATER_Pin);
-      // HAL_GPIO_TogglePin(LED_ELECTR_GPIO_Port,LED_ELECTR_Pin);
-      // HAL_GPIO_TogglePin(LED_BATTERY_HV_GPIO_Port,LED_BATTERY_HV_Pin);
+    run = HAL_GPIO_ReadPin(IN_KEY1_GPIO_Port, IN_KEY1_Pin);
+    HAL_GPIO_WritePin(APC_GPIO_Port, APC_Pin, run);
+    HAL_GPIO_WritePin(HEATING_GPIO_Port, HEATING_Pin, run);
+    if(true){
+      static int i = 0;
+
+      if(i % 10 == 0){
+        #define SWAP_UINT16(x) (((x) >> 8) | ((x) << 8))
+        static CAN_BMS_CHA_t bms_cha = {
+            .max_voltage = 8000,
+            .charging_current = 500,
+            .status = 0b1 | 0b10,
+        };
+        can_bms_cha(&bms_cha);
+      }
+
+      i++;
+    }
+    osDelay(100);
   }
   /* USER CODE END 5 */
 }

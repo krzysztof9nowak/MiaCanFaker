@@ -6,6 +6,12 @@
 
 u8g2_t u8g2;
 extern SPI_HandleTypeDef hspi1;
+extern volatile inverter_t inverter;
+
+int16_t abs(int16_t x){
+	if(x < 0) return -x;
+	return x;
+}
 
 uint8_t u8x8_stm32_gpio_and_delay(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
@@ -53,7 +59,7 @@ uint8_t u8x8_byte_stm32_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void 
 	case U8X8_MSG_BYTE_START_TRANSFER:
 		/* Select slave, U8X8_MSG_GPIO_CS will be called */
 		u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);
-		HAL_Delay(1);
+		osDelay(1);
 		break;
 	case U8X8_MSG_BYTE_END_TRANSFER:
 		HAL_Delay(1);
@@ -82,19 +88,50 @@ void DashboardTask(void *argument){
     u8g2_DrawStr(&u8g2, 40, 40, "Wilczyckie zaklady przemyslowe");
     u8g2_SendBuffer(&u8g2);
 
-    osDelay(2000);
+    osDelay(1000);
 
-    float speed = 0.0;
     char buf[64];
 
     while(1){
-        speed += 1;
         u8g2_ClearBuffer(&u8g2);
         u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
-        snprintf(buf, sizeof(buf), "%d",  (int)(speed));
+		const float kmh_per_rpm = 24.0 / 2000.0;
+		float kmh = abs((int16_t)inverter.speed) * kmh_per_rpm;
+        snprintf(buf, sizeof(buf), "%hd",  (int16_t)kmh);
         u8g2_DrawStr(&u8g2, 100, 50, buf);
+
+
+
+		snprintf(buf, sizeof(buf), "%d.%dV", (int)(inverter.voltage), (int)(inverter.voltage * 10) % 10);
+		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+		u8g2_DrawStr(&u8g2, 0, 50, buf);
+
+
+		snprintf(buf, sizeof(buf), "%dA", (int)(inverter.current));
+		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+		u8g2_DrawStr(&u8g2, 0, 40, buf);
+
+		snprintf(buf, sizeof(buf), "M %dA", (int)(inverter.motor_current));
+		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+		u8g2_DrawStr(&u8g2, 0, 30, buf);
+
+		uint32_t odometer = 40163400;
+
+		snprintf(buf, sizeof(buf), "%d.%dkm", odometer / 1000, (odometer / 100)%10);
+		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+		u8g2_DrawStr(&u8g2, 0, 10, buf);
+
+		snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp);
+		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+		u8g2_DrawStr(&u8g2, 200, 30, buf);
+
+		snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
+		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+		u8g2_DrawStr(&u8g2, 200, 40, buf);
+
+
         u8g2_SendBuffer(&u8g2);
-        osDelay(50);
+        osDelay(75);
     }
 }
 

@@ -31,6 +31,11 @@
   },
   {
     "directory": ".",
+    "command": "arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb   -DUSE_HAL_DRIVER -DSTM32F103xE -ICore/Inc -ICore/Inc/tasks -IDrivers/STM32F1xx_HAL_Driver/Inc -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy -IDrivers/u8g2/csrc -IMiddlewares/Third_Party/FreeRTOS/Source/include -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include -IDrivers/CMSIS/Include -Og -Wall -fdata-sections -ffunction-sections -g -gdwarf-2 -MMD -MP -MF\"build/blinkenlights.d\" -Wa,-a,-ad,-alms=build/blinkenlights.lst -o build/blinkenlights.o Core/Src/tasks/blinkenlights.c",
+    "file": "Core/Src/tasks/blinkenlights.c"
+  },
+  {
+    "directory": ".",
     "command": "arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb   -DUSE_HAL_DRIVER -DSTM32F103xE -ICore/Inc -ICore/Inc/tasks -IDrivers/STM32F1xx_HAL_Driver/Inc -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy -IDrivers/u8g2/csrc -IMiddlewares/Third_Party/FreeRTOS/Source/include -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include -IDrivers/CMSIS/Include -Og -Wall -fdata-sections -ffunction-sections -g -gdwarf-2 -MMD -MP -MF\"build/dashboard.d\" -Wa,-a,-ad,-alms=build/dashboard.lst -o build/dashboard.o Core/Src/tasks/dashboard.c",
     "file": "Core/Src/tasks/dashboard.c"
   },

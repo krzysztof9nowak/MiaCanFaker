@@ -13,13 +13,18 @@ CAN_EGV_SYNC_ALL_t egv_sync = {
     .status = 0xff
 };
 
+int can_error_count = 0;
+
 void can_send_egv_sync_all(CAN_EGV_SYNC_ALL_t *frame)
 {
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_SYNC_ALL_ID;
     carrier.DLC = sizeof(CAN_EGV_SYNC_ALL_t);
     uint32_t mailbox;
-    HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox);
+    if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
+        can_error_count++;
+    } 
+    
 }
 
 void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t *frame)
@@ -28,7 +33,9 @@ void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t *frame)
     carrier.StdId = CAN_EGV_ACCEL_VAR_ID;
     carrier.DLC = sizeof(CAN_EGV_Accel_VAR_t);
     uint32_t mailbox;
-    HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox);
+    if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
+        can_error_count++;
+    } 
 }
 
 void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t *frame)
@@ -37,13 +44,23 @@ void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t *frame)
     carrier.StdId = CAN_EGV_CMD_VAR_ID;
     carrier.DLC = sizeof(CAN_EGV_Cmd_VAR_t);
     uint32_t mailbox;
-    HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox);
+    if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
+        can_error_count++;
+    } 
 }
+
+extern bool run;
 
 void throttle_task(void *argument)
 {
+
+    static int count = 0;
+
     while (1)
     {
+        HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, run);
+        HAL_GPIO_WritePin(BMS_GPIO_Port, BMS_Pin, run);
+
         HAL_ADC_Start(&hadc1);
         HAL_ADC_PollForConversion(&hadc1, 10);
         uint32_t raw_analog = HAL_ADC_GetValue(&hadc1);
@@ -52,7 +69,9 @@ void throttle_task(void *argument)
         if(throttle > 255) throttle = 255;
         inverter.throttle = throttle;
 
-        can_send_egv_sync_all(&egv_sync);
+        if(count % 5 == 0){
+            can_send_egv_sync_all(&egv_sync);
+        }
 
         if(inverter.status == INVERTER_STATUS_RUN){
             egv_accel_var.accelerator_set_point = inverter.throttle;
@@ -71,13 +90,21 @@ void throttle_task(void *argument)
             egv_cmd_var.current_limit = 400; // 2640
             egv_cmd_var.regen_limit = -20;
             egv_cmd_var.max_torque_ratio = 1000;
+            egv_cmd_var.motor_command = 0x12000;
         } else {
             egv_cmd_var.current_limit = 0;
             egv_cmd_var.regen_limit = 0;
             egv_cmd_var.max_torque_ratio = 0;
+            egv_cmd_var.motor_command = 0x12000;
+
         }
-        can_send_egv_cmd_var(&egv_cmd_var);
+        if(count % 20 == 0){
+            printf("Can error count: %d\r\n", can_error_count);
+            can_send_egv_cmd_var(&egv_cmd_var);
+        }
 
         osDelay(10);
+
+        count ++;
     }
 }

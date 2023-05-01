@@ -170,6 +170,10 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 flash: all
 	openocd -f openocd.cfg -c 'init' -c 'targets' -c 'reset init' -c 'flash write_image erase $(BUILD_DIR)/$(TARGET).hex' -c 'reset run' -c shutdown
 
+flashesp: all
+	arm-none-eabi-gdb -ex "target extended-remote 192.168.4.1:2022" -ex "set mem inaccessible-by-default off" -ex "load $(BUILD_DIR)/$(TARGET).hex" -ex "monitor reset halt" -ex "detach" -ex "quit"
+
+
 debug:
 	openocd -f openocd.cfg -c 'init' -c 'targets' -c 'reset halt'
 
