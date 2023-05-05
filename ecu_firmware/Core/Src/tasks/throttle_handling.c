@@ -98,12 +98,12 @@ void throttle_task(void *argument)
             egv_cmd_var.current_limit = 400; // 2640
             egv_cmd_var.regen_limit = -20;
             egv_cmd_var.max_torque_ratio = 1000;
-            egv_cmd_var.motor_command = 0x12000;
+            egv_cmd_var.motor_command = 6000;
         } else {
             egv_cmd_var.current_limit = 0;
             egv_cmd_var.regen_limit = 0;
             egv_cmd_var.max_torque_ratio = 0;
-            egv_cmd_var.motor_command = 0x12000;
+            egv_cmd_var.motor_command = 6000;
 
         }
         if(count % 20 == 0){
