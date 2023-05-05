@@ -46,8 +46,8 @@ void can_egv_cmd_cha(uint8_t msg){
 void chargingTask(void *arg){
         #define SWAP_UINT16(x) (((x) >> 8) | ((x) << 8))
         static CAN_BMS_CHA_t bms_cha = {
-            .max_voltage = SWAP_UINT16(8500),
-            .charging_current = SWAP_UINT16(300),
+            .max_voltage = SWAP_UINT16(9200),
+            .charging_current = SWAP_UINT16(350),
             .status = 0,
         };
 
@@ -101,6 +101,8 @@ void chargingTask(void *arg){
                 chg_state = CHG_OFF;
                 bms_cha.status = 0;
                 can_bms_cha(&bms_cha);
+            } else if(!(charger.presence & 0b10)){
+                chg_state = CHG_OFF;
             }
         }
     }
