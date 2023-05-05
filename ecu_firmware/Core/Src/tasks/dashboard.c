@@ -62,7 +62,7 @@ uint8_t u8x8_byte_stm32_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void 
 		osDelay(1);
 		break;
 	case U8X8_MSG_BYTE_END_TRANSFER:
-		HAL_Delay(1);
+		osDelay(1);
 		/* Insert codes to end SPI transmission */
 		u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
 		break;

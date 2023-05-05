@@ -88,6 +88,13 @@ const osThreadAttr_t BlinkenLights_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for ChargingTask */
+osThreadId_t ChargingTaskHandle;
+const osThreadAttr_t ChargingTask_attributes = {
+  .name = "ChargingTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* USER CODE BEGIN PV */
 
 bool run = false;
@@ -107,6 +114,7 @@ extern void DashboardTask(void *argument);
 extern void throttle_task(void *argument);
 extern void inverter_task(void *argument);
 extern void blinkenTask(void *argument);
+extern void chargingTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -203,6 +211,9 @@ int main(void)
 
   /* creation of BlinkenLights */
   BlinkenLightsHandle = osThreadNew(blinkenTask, NULL, &BlinkenLights_attributes);
+
+  /* creation of ChargingTask */
+  ChargingTaskHandle = osThreadNew(chargingTask, NULL, &ChargingTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
