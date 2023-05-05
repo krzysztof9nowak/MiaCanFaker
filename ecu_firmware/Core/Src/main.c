@@ -26,6 +26,7 @@
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
+typedef StaticSemaphore_t osStaticSemaphoreDef_t;
 /* USER CODE BEGIN PTD */
 
 
@@ -36,6 +37,7 @@
 
 volatile inverter_t inverter = {0};
 volatile charger_t charger = {0};
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -95,6 +97,14 @@ const osThreadAttr_t ChargingTask_attributes = {
   .name = "ChargingTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for canSemaphore */
+osSemaphoreId_t canSemaphoreHandle;
+osStaticSemaphoreDef_t canSemaphoreControlBlock;
+const osSemaphoreAttr_t canSemaphore_attributes = {
+  .name = "canSemaphore",
+  .cb_mem = &canSemaphoreControlBlock,
+  .cb_size = sizeof(canSemaphoreControlBlock),
 };
 /* USER CODE BEGIN PV */
 
@@ -184,6 +194,10 @@ int main(void)
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* creation of canSemaphore */
+  canSemaphoreHandle = osSemaphoreNew(1, 1, &canSemaphore_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */

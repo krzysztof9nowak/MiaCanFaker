@@ -6,6 +6,9 @@
 extern ADC_HandleTypeDef hadc1;
 extern CAN_HandleTypeDef hcan;
 extern inverter_t inverter;
+extern osSemaphoreId_t canSemaphoreHandle;
+
+
 
 CAN_EGV_Accel_VAR_t egv_accel_var = {0};
 CAN_EGV_Cmd_VAR_t egv_cmd_var = {0};
@@ -21,10 +24,11 @@ void can_send_egv_sync_all(CAN_EGV_SYNC_ALL_t *frame)
     carrier.StdId = CAN_EGV_SYNC_ALL_ID;
     carrier.DLC = sizeof(CAN_EGV_SYNC_ALL_t);
     uint32_t mailbox;
+    osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
     if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
         can_error_count++;
     } 
-    
+    osSemaphoreRelease(canSemaphoreHandle);
 }
 
 void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t *frame)
@@ -33,9 +37,13 @@ void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t *frame)
     carrier.StdId = CAN_EGV_ACCEL_VAR_ID;
     carrier.DLC = sizeof(CAN_EGV_Accel_VAR_t);
     uint32_t mailbox;
+    osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
+
     if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
         can_error_count++;
     } 
+    osSemaphoreRelease(canSemaphoreHandle);
+
 }
 
 void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t *frame)
@@ -44,9 +52,12 @@ void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t *frame)
     carrier.StdId = CAN_EGV_CMD_VAR_ID;
     carrier.DLC = sizeof(CAN_EGV_Cmd_VAR_t);
     uint32_t mailbox;
+    osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
+
     if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
         can_error_count++;
-    } 
+    }
+    osSemaphoreRelease(canSemaphoreHandle);
 }
 
 extern bool run;

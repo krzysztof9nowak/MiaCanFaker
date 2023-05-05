@@ -5,6 +5,8 @@
 extern volatile charger_t charger;
 extern CAN_HandleTypeDef hcan;
 extern volatile bool run;
+extern osSemaphoreId_t canSemaphoreHandle;
+
 
 enum charging_state{
     CHG_OFF =0 ,
@@ -30,7 +32,11 @@ void can_bms_cha(CAN_BMS_CHA_t * frame)
     carrier.StdId = CAN_BMS_CHA_ID;
     carrier.DLC = 6;
     uint32_t mailbox;
+    osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
+
     HAL_CAN_AddTxMessage(&hcan,&carrier,(uint8_t *)frame, &mailbox);
+    osSemaphoreRelease(canSemaphoreHandle);
+
 }
 
 #define EGV_CMD_CHA_ID 0x570
@@ -40,7 +46,10 @@ void can_egv_cmd_cha(uint8_t msg){
     carrier.StdId = EGV_CMD_CHA_ID;
     carrier.DLC = 1;
     uint32_t mailbox;
+    osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
+
     HAL_CAN_AddTxMessage(&hcan,&carrier,(uint8_t *)&msg, &mailbox);
+    osSemaphoreRelease(canSemaphoreHandle);
 }
 
 void chargingTask(void *arg){
