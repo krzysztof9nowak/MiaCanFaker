@@ -35,6 +35,7 @@
 /* USER CODE BEGIN PD */
 
 volatile inverter_t inverter = {0};
+volatile charger_t charger = {0};
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -615,29 +616,15 @@ void StartDefaultTask(void *argument)
   /* USER CODE BEGIN 5 */
     //HAL_CAN_AddTxMHAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);essage()
 
-
-
   printf("Witaj Mio!\r\n");
   for(;;)
   {
     run = HAL_GPIO_ReadPin(IN_KEY1_GPIO_Port, IN_KEY1_Pin);
     HAL_GPIO_WritePin(APC_GPIO_Port, APC_Pin, run);
     HAL_GPIO_WritePin(HEATING_GPIO_Port, HEATING_Pin, run);
-    if(true){
-      static int i = 0;
+    HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, run);
+    HAL_GPIO_WritePin(BMS_GPIO_Port, BMS_Pin, run || charger.request_battery);
 
-      if(i % 10 == 0){
-        #define SWAP_UINT16(x) (((x) >> 8) | ((x) << 8))
-        static CAN_BMS_CHA_t bms_cha = {
-            .max_voltage = 8000,
-            .charging_current = 500,
-            .status = 0b1 | 0b10,
-        };
-        can_bms_cha(&bms_cha);
-      }
-
-      i++;
-    }
     osDelay(100);
   }
   /* USER CODE END 5 */

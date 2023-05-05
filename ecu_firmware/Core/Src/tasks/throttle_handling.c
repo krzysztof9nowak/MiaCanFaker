@@ -58,9 +58,6 @@ void throttle_task(void *argument)
 
     while (1)
     {
-        HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, run);
-        HAL_GPIO_WritePin(BMS_GPIO_Port, BMS_Pin, run);
-
         HAL_ADC_Start(&hadc1);
         HAL_ADC_PollForConversion(&hadc1, 10);
         uint32_t raw_analog = HAL_ADC_GetValue(&hadc1);
@@ -99,7 +96,8 @@ void throttle_task(void *argument)
 
         }
         if(count % 20 == 0){
-            printf("Can error count: %d\r\n", can_error_count);
+            // printf("Can error count: %d\r\n", can_error_count);
+            osDelay(1);
             can_send_egv_cmd_var(&egv_cmd_var);
         }
 

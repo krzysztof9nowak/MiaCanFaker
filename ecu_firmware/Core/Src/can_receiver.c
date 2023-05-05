@@ -1,5 +1,6 @@
 #include "main.h"
 extern volatile inverter_t inverter;
+extern volatile charger_t charger;
 
 CAN_RxHeaderTypeDef   RxHeader;
 uint8_t               RxData[8];
@@ -34,6 +35,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan){
     VAR_Current_EGV_t *stat = RxData;
     inverter.current = stat->current / 16.0;
     inverter.motor_current = stat->motor_current;
+  }
+
+  if(RxHeader.StdId == CAN_CHA_STATUS_EGV){
+    CAN_CHA_Status_EGV_t *stat = RxData;
+    charger.status = stat->status;
+    charger.presence = stat->presence;
+    charger.error = stat->error;
   }
 
 }

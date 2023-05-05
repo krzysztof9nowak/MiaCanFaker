@@ -11,6 +11,7 @@
 #define CAN_VAR_STAT2_EGV (0x281)
 #define CAN_VAR_CURRENT_EGV (0x481)
 #define INVERTER_STATUS_OK (1075)
+#define CAN_CHA_STATUS_EGV (0x560)
 
 typedef enum{
     INVERTER_STATUS_OFF = 0,
@@ -94,3 +95,17 @@ typedef struct CAN_EGV_SYNC_ALL
 {
     uint8_t status;
 } CAN_EGV_SYNC_ALL_t;
+
+typedef struct {
+    uint8_t status;
+    uint8_t presence;
+    uint8_t error;
+} CAN_CHA_Status_EGV_t;
+
+
+typedef struct {
+    uint8_t status;
+    uint8_t presence;
+    uint8_t error;
+    bool request_battery;
+} charger_t;
