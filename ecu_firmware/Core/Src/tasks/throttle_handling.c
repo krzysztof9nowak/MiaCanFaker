@@ -67,9 +67,13 @@ void throttle_task(void *argument)
 
     static int count = 0;
 
+    HAL_ADC_Start(&hadc1);
+    can_send_egv_sync_all(&egv_sync);
+    can_send_egv_accel_var(&egv_accel_var);
+    can_send_egv_cmd_var(&egv_cmd_var);
+
     while (1)
     {
-        HAL_ADC_Start(&hadc1);
         HAL_ADC_PollForConversion(&hadc1, 10);
         uint32_t raw_analog = HAL_ADC_GetValue(&hadc1);
         uint32_t throttle = (raw_analog * 255) / 2800;
@@ -105,7 +109,7 @@ void throttle_task(void *argument)
             egv_cmd_var.current_limit = 0;
             egv_cmd_var.regen_limit = 0;
             egv_cmd_var.max_torque_ratio = 0;
-            egv_cmd_var.motor_command = 6000;
+            egv_cmd_var.motor_command = 0;
 
         }
         if(inverter.motor_temp < 60 )
@@ -114,7 +118,7 @@ void throttle_task(void *argument)
         }
         if(count % 20 == 0){
             // printf("Can error count: %d\r\n", can_error_count);
-            osDelay(3);
+            //        osDelay(3);
             can_send_egv_cmd_var(&egv_cmd_var);
         }
 
