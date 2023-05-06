@@ -786,6 +786,11 @@
   },
   {
     "directory": ".",
+    "command": "arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb   -DUSE_HAL_DRIVER -DSTM32F103xE -ICore/Inc -ICore/Inc/tasks -IDrivers/STM32F1xx_HAL_Driver/Inc -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy -IDrivers/u8g2/csrc -IMiddlewares/Third_Party/FreeRTOS/Source/include -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include -IDrivers/CMSIS/Include -Og -Wall -fdata-sections -ffunction-sections -g -gdwarf-2 -MMD -MP -MF\"build/stm32f1xx_hal_iwdg.d\" -Wa,-a,-ad,-alms=build/stm32f1xx_hal_iwdg.lst -o build/stm32f1xx_hal_iwdg.o Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_iwdg.c",
+    "file": "Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_iwdg.c"
+  },
+  {
+    "directory": ".",
     "command": "arm-none-eabi-gcc -x assembler-with-cpp -c -mcpu=cortex-m3 -mthumb   -DUSE_HAL_DRIVER -DSTM32F103xE -ICore/Inc -ICore/Inc/tasks -IDrivers/STM32F1xx_HAL_Driver/Inc -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy -IDrivers/u8g2/csrc -IMiddlewares/Third_Party/FreeRTOS/Source/include -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include -IDrivers/CMSIS/Include -Og -Wall -fdata-sections -ffunction-sections -g -gdwarf-2 -MMD -MP -MF\"build/startup_stm32f103xe.d\" -o build/startup_stm32f103xe.o startup_stm32f103xe.s",
     "file": "startup_stm32f103xe.s"
   }
