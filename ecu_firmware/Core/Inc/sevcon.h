@@ -31,6 +31,7 @@ typedef struct{
     float motor_current;
     int16_t motor_temp;
     int16_t controller_temp;
+    bool
 } inverter_t;
 
 typedef struct __attribute__((__packed__))

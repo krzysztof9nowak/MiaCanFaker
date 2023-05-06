@@ -92,6 +92,7 @@ void throttle_task(void *argument)
             egv_accel_var.forward = 0;
             egv_accel_var.reverse = 0;
         }
+        osDelay(1);
         can_send_egv_accel_var(&egv_accel_var);
 
         if(inverter.status == INVERTER_STATUS_RUN){
@@ -113,7 +114,7 @@ void throttle_task(void *argument)
         }
         if(count % 20 == 0){
             // printf("Can error count: %d\r\n", can_error_count);
-            osDelay(1);
+            osDelay(3);
             can_send_egv_cmd_var(&egv_cmd_var);
         }
 
