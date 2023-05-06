@@ -67,13 +67,12 @@ void throttle_task(void *argument)
 
     static int count = 0;
 
-    HAL_ADC_Start(&hadc1);
     can_send_egv_sync_all(&egv_sync);
-    can_send_egv_accel_var(&egv_accel_var);
     can_send_egv_cmd_var(&egv_cmd_var);
 
     while (1)
     {
+        HAL_ADC_Start(&hadc1);
         HAL_ADC_PollForConversion(&hadc1, 10);
         uint32_t raw_analog = HAL_ADC_GetValue(&hadc1);
         uint32_t throttle = (raw_analog * 255) / 2800;
@@ -81,7 +80,7 @@ void throttle_task(void *argument)
         if(throttle > 255) throttle = 255;
         inverter.throttle = throttle;
 
-        if(count % 5 == 0){
+        if(count % 1 == 0){
             can_send_egv_sync_all(&egv_sync);
         }
 
@@ -116,7 +115,7 @@ void throttle_task(void *argument)
         {
             egv_cmd_var.motor_command = 0;
         }
-        if(count % 20 == 0){
+        if(count % 1 == 0){        //zmien na kazdy obrot petli
             // printf("Can error count: %d\r\n", can_error_count);
             //        osDelay(3);
             can_send_egv_cmd_var(&egv_cmd_var);

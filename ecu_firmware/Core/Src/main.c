@@ -653,6 +653,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+    HAL_GPIO_WritePin(GPIOB, BMS_Pin|INDIC_LEFT_Pin|INDIC_RIGHT_Pin|LED_HEATER_Pin, GPIO_PIN_SET);
   while (1)
   {
   }
