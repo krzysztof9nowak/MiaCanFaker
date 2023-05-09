@@ -69,7 +69,7 @@ const osThreadAttr_t defaultTask_attributes = {
 osThreadId_t dashboardTaskHandle;
 const osThreadAttr_t dashboardTask_attributes = {
   .name = "dashboardTask",
-  .stack_size = 128 * 4,
+  .stack_size = 2048 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for Throttle */
