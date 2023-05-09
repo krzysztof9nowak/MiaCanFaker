@@ -675,7 +675,8 @@ void StartDefaultTask(void *argument)
     HAL_GPIO_WritePin(HEATING_GPIO_Port, HEATING_Pin, run);
     HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, run);
     HAL_GPIO_WritePin(BMS_GPIO_Port, BMS_Pin, run || charger.request_battery);
-
+    HAL_GPIO_WritePin(LIGHT_STOP_GPIO_Port,LIGHT_STOP_Pin, inverter.throttle==0 && !inverter.speed==0 ||
+    HAL_GPIO_ReadPin(IN_PARK_GPIO_Port,IN_PARK_Pin));
     osDelay(100);
       HAL_IWDG_Refresh(&hiwdg);
   }
