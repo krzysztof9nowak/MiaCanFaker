@@ -7,6 +7,14 @@
 u8g2_t u8g2;
 extern SPI_HandleTypeDef hspi1;
 extern volatile inverter_t inverter;
+extern volatile bool run;
+
+
+//uint32_t odometer = 40163400;
+uint32_t odometer = 40000000;
+
+float meters_in_pontiff = 0;
+float trip = 0;
 
 int16_t abs(int16_t x){
 	if(x < 0) return -x;
@@ -94,42 +102,55 @@ void DashboardTask(void *argument){
 
     while(1){
         u8g2_ClearBuffer(&u8g2);
-        u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
-		const float kmh_per_rpm = 24.0 / 2000.0;
-		float kmh = abs((int16_t)inverter.speed) * kmh_per_rpm;
-        snprintf(buf, sizeof(buf), "%hd",  (int16_t)kmh);
-        u8g2_DrawStr(&u8g2, 100, 50, buf);
+        const float kmh_per_rpm = 24.0 / 2000.0;
+        float kmh = abs((int16_t) inverter.speed) * kmh_per_rpm;
+        if (run) {
+            u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
+            snprintf(buf, sizeof(buf), "%hd", (int16_t) kmh);
+            u8g2_DrawStr(&u8g2, 100, 50, buf);
 
 
-
-		snprintf(buf, sizeof(buf), "%d.%dV", (int)(inverter.voltage), (int)(inverter.voltage * 10) % 10);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 50, buf);
-
-
-		snprintf(buf, sizeof(buf), "%dA", (int)(inverter.current));
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 40, buf);
-
-		snprintf(buf, sizeof(buf), "M %dA", (int)(inverter.motor_current));
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 30, buf);
-
-		uint32_t odometer = 40163400;
-
-		snprintf(buf, sizeof(buf), "%d.%dkm", odometer / 1000, (odometer / 100)%10);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 10, buf);
-
-		snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 200, 30, buf);
-
-		snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 200, 40, buf);
+            snprintf(buf, sizeof(buf), "%d.%dV", (int) (inverter.voltage), (int) (inverter.voltage * 10) % 10);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 50, buf);
 
 
+            snprintf(buf, sizeof(buf), "%dA", (int) (inverter.current));
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 40, buf);
+
+            snprintf(buf, sizeof(buf), "M %dA", (int) (inverter.motor_current));
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 30, buf);
+
+
+            snprintf(buf, sizeof(buf), "%d.%dkm", odometer / 1000, (odometer / 100) % 10);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 10, buf);
+
+            snprintf(buf, sizeof(buf), "%dm", (int)trip);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 20, buf);
+
+            snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 200, 30, buf);
+
+            snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 200, 40, buf);
+        } else {
+            trip = 0;
+        }
+
+        meters_in_pontiff+= kmh/3.6f*0.075f;
+        trip += kmh/3.6f*0.075f;
+
+        if(meters_in_pontiff > 100.f) {
+            meters_in_pontiff -= 100;
+            odometer += 100;
+
+        }
         u8g2_SendBuffer(&u8g2);
         osDelay(75);
     }
