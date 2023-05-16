@@ -111,10 +111,28 @@ void throttle_task(void *argument)
             egv_cmd_var.motor_command = 0;
 
         }
-        if(inverter.motor_temp < 60 )
+        if(inverter.fan_enabled)
         {
-            egv_cmd_var.motor_command = 0;
+            if(inverter.motor_temp < 60)
+            {
+                inverter.fan_enabled = 0;
+            } else
+            {
+                egv_cmd_var.motor_command = 6000;            }
+        } else
+        {
+            if(inverter.motor_temp > 65)
+            {
+                inverter.fan_enabled = 1;
+                egv_cmd_var.motor_command = 6000;
+
+            } else
+            {
+                egv_cmd_var.motor_command = 0;
+            }
+
         }
+
         if(count % 1 == 0){        //zmien na kazdy obrot petli
             // printf("Can error count: %d\r\n", can_error_count);
             //        osDelay(3);

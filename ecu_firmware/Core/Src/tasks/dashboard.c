@@ -132,7 +132,7 @@ void DashboardTask(void *argument){
             u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
             u8g2_DrawStr(&u8g2, 0, 20, buf);
 
-            snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp);
+            snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp&0xFF);
             u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
             u8g2_DrawStr(&u8g2, 200, 30, buf);
 

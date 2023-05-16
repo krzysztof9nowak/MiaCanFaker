@@ -677,6 +677,12 @@ void StartDefaultTask(void *argument)
     HAL_GPIO_WritePin(BMS_GPIO_Port, BMS_Pin, run || charger.request_battery);
     HAL_GPIO_WritePin(LIGHT_STOP_GPIO_Port,LIGHT_STOP_Pin, inverter.throttle==0 && !inverter.speed==0 ||
     HAL_GPIO_ReadPin(IN_PARK_GPIO_Port,IN_PARK_Pin));
+    HAL_GPIO_WritePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin, HAL_GPIO_ReadPin(IN_HIGHBEAM_GPIO_Port,IN_HIGHBEAM_Pin));
+    HAL_GPIO_WritePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin, HAL_GPIO_ReadPin(IN_SIDELIGHT_GPIO_Port,IN_SIDELIGHT_Pin));
+    HAL_GPIO_WritePin(LED_FOG_GPIO_Port,LED_FOG_Pin, HAL_GPIO_ReadPin(IN_FOG_LIGHT_GPIO_Port,IN_FOG_LIGHT_Pin));
+
+    HAL_GPIO_WritePin(LED_TEMP_GPIO_Port,LED_TEMP_Pin,inverter.voltage < 66.0);
+
     osDelay(100);
       HAL_IWDG_Refresh(&hiwdg);
   }
