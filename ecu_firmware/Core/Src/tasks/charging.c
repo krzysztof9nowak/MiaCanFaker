@@ -64,6 +64,8 @@ void chargingTask(void *arg){
     while(true){
         osDelay(1000);
 
+        HAL_GPIO_WritePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin, charger.status == CHG_CHARGING);
+
         printf("CHG Status %2d Error %2x Presence %2x\r\n", charger.status, charger.error, charger.presence);
         printf("CHG state %d\r\n", chg_state);
 
