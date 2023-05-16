@@ -2,7 +2,7 @@
 #include "main.h"
 #include "u8g2.h"
 #include "cmsis_os.h"
-
+#include <task.h>
 
 u8g2_t u8g2;
 extern SPI_HandleTypeDef hspi1;
@@ -11,7 +11,7 @@ extern volatile bool run;
 
 
 //uint32_t odometer = 40163400;
-uint32_t odometer = 40000000;
+uint32_t odometer = 40100000;
 
 float meters_in_pontiff = 0;
 float trip = 0;
@@ -142,15 +142,18 @@ void DashboardTask(void *argument){
         } else {
             trip = 0;
         }
-
-        meters_in_pontiff+= kmh/3.6f*0.075f;
-        trip += kmh/3.6f*0.075f;
+    static TickType_t time = 0;
+        time;
+        TickType_t new_time = xTaskGetTickCount();
+        meters_in_pontiff+= kmh/3.6f*(new_time-time)/1000;
+        trip += kmh/3.6f*(new_time-time)/1000;
 
         if(meters_in_pontiff > 100.f) {
             meters_in_pontiff -= 100;
             odometer += 100;
 
         }
+        time = new_time;
         u8g2_SendBuffer(&u8g2);
         osDelay(75);
     }
