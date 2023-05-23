@@ -47,7 +47,7 @@ typedef struct __attribute__((__packed__))
 {
     uint16_t capacitor_voltage;
     int16_t motor_temperature;
-    int16_t controler_temperature;
+    int8_t controler_temperature;
     uint8_t command;
     uint8_t direction;
 } VAR_Stat2_EGV_t;
