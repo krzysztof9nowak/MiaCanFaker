@@ -84,6 +84,8 @@ void throttle_task(void *argument)
             can_send_egv_sync_all(&egv_sync);
         }
 
+        egv_accel_var.DS1 = 1;
+        egv_accel_var.DS2 = 1;
         if(inverter.status == INVERTER_STATUS_RUN){
             egv_accel_var.accelerator_set_point = inverter.throttle;
             egv_accel_var.footswitch = inverter.throttle > 0;
@@ -99,8 +101,8 @@ void throttle_task(void *argument)
         can_send_egv_accel_var(&egv_accel_var);
 
         if(inverter.status == INVERTER_STATUS_RUN){
-            egv_cmd_var.current_limit = 400; // 2640
-            egv_cmd_var.regen_limit = -1000;
+            egv_cmd_var.current_limit = 500; // 2640
+            egv_cmd_var.regen_limit = -250;
             egv_cmd_var.max_torque_ratio = 1000;
             egv_cmd_var.motor_command = 6000;
 

@@ -688,6 +688,8 @@ void StartDefaultTask(void *argument)
     HAL_GPIO_WritePin(LED_FOG_GPIO_Port,LED_FOG_Pin, HAL_GPIO_ReadPin(IN_FOG_LIGHT_GPIO_Port,IN_FOG_LIGHT_Pin));
 
     HAL_GPIO_WritePin(LED_TEMP_GPIO_Port,LED_TEMP_Pin,inverter.voltage < 66.0);
+    uint8_t read;
+//      HAL_I2C_Mem_Read(&hi2c1,0b10100001,0,1,&read,);
 
     osDelay(100);
       HAL_IWDG_Refresh(&hiwdg);

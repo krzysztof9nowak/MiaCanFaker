@@ -6,12 +6,12 @@
 
 u8g2_t u8g2;
 extern SPI_HandleTypeDef hspi1;
+extern I2C_HandleTypeDef hi2c1;
 extern volatile inverter_t inverter;
 extern volatile bool run;
 
 
-//uint32_t odometer = 40163400;
-uint32_t odometer = 40100000;
+uint32_t odometer = 0;
 
 float meters_in_pontiff = 0;
 float trip = 0;
@@ -96,6 +96,9 @@ void DashboardTask(void *argument){
     u8g2_DrawStr(&u8g2, 40, 40, "Wilczyckie zaklady przemyslowe");
     u8g2_SendBuffer(&u8g2);
 
+    // Read odometer
+    HAL_I2C_Mem_Read(&hi2c1,0b10100001,0,2,&odometer,sizeof(uint32_t),10000);
+
     osDelay(1000);
 
     char buf[64];
@@ -139,6 +142,9 @@ void DashboardTask(void *argument){
             snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
             u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
             u8g2_DrawStr(&u8g2, 200, 40, buf);
+            snprintf(buf, sizeof(buf), "Bat %d.%dV", (int) (inverter.voltage)/22,(int) (inverter.voltage)*100/22%100 );
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 190, 50, buf);
         } else {
             trip = 0;
         }
@@ -151,7 +157,7 @@ void DashboardTask(void *argument){
         if(meters_in_pontiff > 100.f) {
             meters_in_pontiff -= 100;
             odometer += 100;
-
+            HAL_I2C_Mem_Write(&hi2c1,0b10100000,0,2, (uint8_t*)&odometer,sizeof(uint32_t),100);
         }
         time = new_time;
         u8g2_SendBuffer(&u8g2);
