@@ -92,5 +92,13 @@ void mui_RenderGlTest(miagl_ptr gl)
     mgl_SetColor(gl, 15);
     mgl_DrawLineAA(gl, 80, 30, 70, 0);
 
+    mgl_SetColor(gl, 9);
+    mgl_FillTriangle(gl, 115, 5, 136, 8, 127, 34);
+
+    mgl_SetColor(gl, MIAGL_COLOR_WHITE);
+    static uint8_t yyyy = 0;
+    yyyy++;
+    mgl_FillTriangleAA(gl, 118, 56, 140, 40, 125, yyyy);
+
     mgl_FlushScreen(gl);
 }

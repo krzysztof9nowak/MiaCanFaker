@@ -9,5 +9,9 @@ void mgl_StrokeRect(miagl_ptr instance, uint16_t x1, uint16_t y1, uint16_t x2, u
 void mgl_FillRect(miagl_ptr instance, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void mgl_DrawLine(miagl_ptr instance, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void mgl_DrawLineAA(miagl_ptr instance, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+void mgl_FillTriangle(miagl_ptr instance, uint16_t x1, uint16_t y1, 
+                      uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3);
+void mgl_FillTriangleAA(miagl_ptr instance, uint16_t x1, uint16_t y1, 
+                      uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3);
 
 #endif

@@ -6,9 +6,9 @@
 
 /* Helper table for faster horizontal line drawing */
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-uint32_t MASKS[] = { 0x00000000, 0x000000F0, 0x000000FF, 0x0000F0FF, 0x0000FFFF, 0x00F0FFFF, 0x00FFFFFF, 0xF0FFFFFF, 0xFFFFFFFF };
+const uint32_t MASKS[] = { 0x00000000, 0x000000F0, 0x000000FF, 0x0000F0FF, 0x0000FFFF, 0x00F0FFFF, 0x00FFFFFF, 0xF0FFFFFF, 0xFFFFFFFF };
 #elif __BYTE_ORDER == __BIG_ENDIAN
-uint32_t MASKS[] = { 0x00000000, 0xF0000000, 0xFF000000, 0xFFF00000, 0xFFFF0000, 0xFFFFF000, 0xFFFFFF00, 0xFFFFFFF0, 0xFFFFFFFF };
+const uint32_t MASKS[] = { 0x00000000, 0xF0000000, 0xFF000000, 0xFFF00000, 0xFFFF0000, 0xFFFFF000, 0xFFFFFF00, 0xFFFFFFF0, 0xFFFFFFFF };
 #endif
 
 static void mgl_SwapBuffers(miagl_ptr instance)
@@ -82,6 +82,7 @@ bool mgl_InitLibrary(miagl_ptr instance, uint16_t display_width,
     instance->frame_buffer1 = instance->static_buffer;
     instance->frame_buffer2 = instance->static_buffer + fboSize;
     instance->dma_buffer = (uint32_t*)(instance->static_buffer + fboSize * 2);
+    instance->triangle_buffer = (uint32_t*)(instance->static_buffer + fboSize * 3);
     instance->current_buffer = instance->frame_buffer1;
     instance->previous_buffer = instance->frame_buffer2;
     instance->bgcolor = MIAGL_COLOR_BLACK;
@@ -90,6 +91,7 @@ bool mgl_InitLibrary(miagl_ptr instance, uint16_t display_width,
     memset(instance->frame_buffer1, 0, fboSize);
     memset(instance->frame_buffer2, 0, fboSize);
     memset(instance->dma_buffer, 0, fboSize);
+    memset(instance->triangle_buffer, 0, display_height * 4);
 
     if (driver_impl->fn_init_driver) {
         driver_impl->fn_init_driver();

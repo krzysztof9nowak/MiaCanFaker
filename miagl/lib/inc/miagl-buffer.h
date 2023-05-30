@@ -16,10 +16,11 @@
         uint32_t* dma_buffer; \
         uint8_t* current_buffer; \
         uint8_t* previous_buffer; \
+        uint32_t* triangle_buffer; \
         uint8_t bgcolor; \
         uint8_t color; \
         miagl_driver_ptr driver_data; \
-        uint8_t static_buffer[(width) * (height) / 2 * 3]; \
+        uint8_t static_buffer[(width) * (height) / 2 * 3 + height * sizeof(uint16_t) * 2]; \
     } miagl_t
 
 #ifdef MIAGL_IMPL
@@ -29,7 +30,7 @@ typedef miagl_t *miagl_ptr;
 #define PIX(ins, x, y) ((y) * (ins)->stride + (x >> 1))
 #define HIMSK 0xF0
 #define LOMSK 0x0F
-extern uint32_t MASKS[9];
+extern const uint32_t MASKS[9];
 #else
 typedef void *miagl_ptr;
 #endif
