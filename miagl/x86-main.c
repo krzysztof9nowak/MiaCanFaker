@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 void process_event(SDL_Event* event);
 void lib_task();
@@ -90,6 +91,11 @@ miagl_driver_t driver = {
     .fn_flush_part_screen = driver_flush_part_screen
 };
 
+static uint64_t get_diff(struct timespec t1, struct timespec t2)
+{
+    return (t2.tv_sec - t1.tv_sec) * 1000000000ULL + (t2.tv_nsec - t1.tv_nsec);
+}
+
 int main(int argc, char **argv) 
 {
     int scale = 7;
@@ -136,6 +142,9 @@ int main(int argc, char **argv)
 
     printf("Entering main loop...\n");
     bool running = true;
+    uint64_t perf[300];
+    int perf_idx = 0;
+
     while (running) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -146,9 +155,31 @@ int main(int argc, char **argv)
 
             process_event(&event);
         }
-        
+
+        struct timespec time1, time2;
+        clock_gettime(CLOCK_THREAD_CPUTIME_ID, &time1);
         lib_task();
+        clock_gettime(CLOCK_THREAD_CPUTIME_ID, &time2);
         draw_screen(renderer, scale);
+
+        perf[perf_idx++] = get_diff(time1, time2);
+
+        if (perf_idx == 300) {
+            perf_idx = 0;
+            uint64_t min = -1ULL;
+            uint64_t max = 0;
+            uint64_t sum = 0;
+
+            for (size_t i = 0; i < 300; i++) {
+                if (perf[i] < min) min = perf[i];
+                if (perf[i] > max) max = perf[i];
+                sum += perf[i];
+            }
+
+            sum /= 300;
+
+            printf("[Performance]: best=%" PRIu64 "ns worst=%" PRIu64 "ns avg=%" PRIu64 "ns.\n", min, max, sum);
+        }
     }
 
     SDL_DestroyRenderer(renderer);

@@ -273,8 +273,8 @@ void mgl_DrawHLine(miagl_ptr instance, uint16_t x1, uint16_t x2, uint16_t y)
         x1 = temp;
     }
 
-    if (x2 > instance->display_x) x2 = instance->display_x - 1;
-    if (x1 > instance->display_x || y > instance->display_y) return;
+    if (x2 >= instance->display_x) x2 = instance->display_x - 1;
+    if (x1 >= instance->display_x || y >= instance->display_y) return;
 
     uint32_t firstCell = y * instance->stride32 + x1 / 8;
     uint32_t lastCell = y * instance->stride32 + x2 / 8;

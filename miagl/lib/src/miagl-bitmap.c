@@ -1,17 +1,7 @@
 #include <miagl-bitmap.h>
+#include <miagl-helpers.h>
 
 #include <miagl.h>
-
-static inline void mgl_SetPixelUnchecked(miagl_ptr instance, uint16_t x, uint16_t y, uint8_t brightness)
-{
-    if (x % 2 == 1) {
-        instance->current_buffer[PIX(instance, x, y)] &= HIMSK;
-        instance->current_buffer[PIX(instance, x, y)] |= brightness;
-    } else {
-        instance->current_buffer[PIX(instance, x, y)] &= LOMSK;
-        instance->current_buffer[PIX(instance, x, y)] |= (brightness << 4);
-    }
-}
 
 void mgl_DrawBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap)
 {
@@ -19,20 +9,60 @@ void mgl_DrawBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* 
     uint16_t height = (*bitmap) & 0xFFFF;
     ++bitmap;
 
-    for (uint16_t y1 = 0; y1 < height; y1++) {
-        uint32_t current_word = *bitmap;
-        for (uint16_t x1 = 0; x1 < width; x1++) {
-            mgl_SetPixel(instance, x1 + x, y1 + y, current_word & LOMSK);
-            current_word >>= 4;
+    uint16_t real_x2 = ((x + width) > instance->display_x) ? (instance->display_x) : x + width;
+    uint16_t bmp_stride = width / 8 + ((width % 8) ? 1 : 0);
 
-            if (x1 % 8 == 7) {
-                ++bitmap;
-                current_word = *bitmap;
+    while (height-- > 0) {
+        if (y >= instance->display_y) { 
+            bitmap += bmp_stride;
+            y++; 
+            continue; 
+        }
+
+        uint32_t firstCell = y * instance->stride32 + x / 8;
+        uint32_t lastCell = y * instance->stride32 + (real_x2 - 1) / 8;
+        const uint32_t* row_bitmap = bitmap;
+        uint32_t* buffer = (uint32_t*)instance->current_buffer;
+
+        uint16_t mod_offset = x & 7;
+        uint16_t mod_shift = mod_offset* 4;
+ 
+        if (firstCell == lastCell) {
+            register uint32_t left_mask = MASKS_BE[mod_offset];
+            register uint32_t right_mask = MASKS_BE[(mod_offset + width > 8) ? (8) : (mod_offset + width)];
+            buffer[firstCell] = fix_endianess(
+                (left_mask & (~right_mask) & fix_endianess(buffer[firstCell]))
+                | ((*bitmap >> mod_shift) & (~left_mask) & right_mask)
+            );
+        } else {
+            // Optimized drawing that aligns to words
+            uint16_t row_width = width;
+            uint32_t remaining = mod_offset ? ((*row_bitmap) << (32 - mod_shift)) : 0;
+
+            buffer[firstCell] = fix_endianess(
+                (MASKS_BE[mod_offset] & fix_endianess(buffer[firstCell])) 
+                | ((*row_bitmap >> mod_shift) & (~MASKS_BE[mod_offset]))
+            );
+
+            ++firstCell;
+            row_width -= 8 - mod_offset;
+            while (firstCell < lastCell) {
+                buffer[firstCell++] = fix_endianess(
+                    remaining | ((*(++row_bitmap) >> mod_shift) & (~MASKS_BE[mod_offset]))
+                );
+                remaining = mod_offset ? ((*row_bitmap) << (32 - mod_shift)) : 0;
+                row_width -= 8;
             }
+
+            if (row_width > 8) row_width = 8;
+
+            buffer[lastCell] = fix_endianess(
+                ((~MASKS_BE[row_width]) & fix_endianess(buffer[lastCell])) 
+                | ((remaining | ((*(++row_bitmap) >> mod_shift) & (~MASKS_BE[mod_offset]))) & MASKS_BE[row_width])
+            );
         }
 
-        if (width % 8) {
-            ++bitmap;
-        }
+        bitmap += bmp_stride;
+        y++;
     }
 }

@@ -36,20 +36,22 @@ for file in sorted(listdir(IMAGES_DIR)):
 
     for y in range(height):
         word = 0
-        factor = 1
+        counter = 0
         for x in range(width):
             brightness = img.getpixel((x, y))
             truncated = brightness // 16
-            word += truncated * factor
-            factor <<= 4
-            if factor == (1 << 32):
+            word <<= 4
+            word += truncated
+            counter += 1
+            if counter == 8:
                 c_array_content.append(hex(word))
                 word = 0
-                factor = 1
+                counter = 0
 
-        if factor > 1:
-            c_array_content.append(hex(word))
+        if counter > 0:
+            c_array_content.append(hex(word << (32 - counter * 4)))
 
+    c_array_content.append(hex(0)) # add padding
     c_array += str(c_array_content).replace('[', '{').replace(']', '}').replace("'", '')
     c_array += ';\n'
 

@@ -100,10 +100,16 @@ void mui_RenderGlTest(miagl_ptr gl)
     mgl_SetColor(gl, MIAGL_COLOR_WHITE);
     mgl_FillTriangleAA(gl, 118, 56, 140, 40, 125, 20);
 
-    mgl_DrawBitmap(gl, 200, 32, IMG_KOT);
-    mgl_DrawBitmap(gl, 190, -5, IMG_TEST);
-    mgl_DrawBitmap(gl, 190, 12, IMG_TEST);
-    mgl_DrawBitmap(gl, 190, 56, IMG_TEST);
+    mgl_DrawBitmap(gl, 160, -4, IMG_TEST);
+    mgl_DrawBitmap(gl, 160, 50, IMG_TEST);
+    static uint8_t xoff = 0;
+    xoff++;
+    mgl_DrawBitmap(gl, 161 + (xoff >> 4), 30, IMG_SMALL);
+
+    mgl_SetColor(gl, 3);
+    mgl_FillRect(gl, 200, 0, 255, 63);
+    mgl_DrawBitmap(gl, 200, 0, IMG_GLPATTERN);
+    mgl_DrawBitmap(gl, 220, 16, IMG_GLPATTERN);
 
     mgl_FlushScreen(gl);
 }

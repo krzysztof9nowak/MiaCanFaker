@@ -32,6 +32,7 @@ typedef miagl_t *miagl_ptr;
 #define HIMSK 0xF0
 #define LOMSK 0x0F
 extern const uint32_t MASKS[9];
+extern const uint32_t MASKS_BE[9];
 #else
 typedef void *miagl_ptr;
 #endif
