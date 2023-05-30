@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJECT_NAME "miaui")
+project("miaui")
 set(X86_NAME "x86-miagl-tests")
 
-project(${PROJECT_NAME})
-
-find_package(SDL2 REQUIRED)
+option(NO_X86_TARGET "Explicitly disable x86 target" OFF)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED true)
@@ -16,8 +14,10 @@ set(C_SOURCES
     "src/miaui-test.c"
 )
 
-if (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+if ((CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64") AND NOT NO_X86_TARGET)
     # x86 target for development without MCU
+
+    find_package(SDL2 REQUIRED)
 
     add_executable(${X86_NAME} x86-main.c ${C_SOURCES})
     target_include_directories(${X86_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
