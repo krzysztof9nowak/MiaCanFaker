@@ -8,6 +8,7 @@
 void mgl_DrawBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap);
 void mgl_DrawTintedBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap);
 void mgl_DrawXorBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap);
+void mgl_DrawXorTintedBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap);
 
 inline uint16_t mgl_GetBitmapWidth(const uint32_t* bitmap)
 {

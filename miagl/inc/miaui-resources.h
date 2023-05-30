@@ -10,9 +10,11 @@
 extern const uint32_t IMG_ABS[];
 extern const uint32_t IMG_GLPATTERN[];
 extern const uint32_t IMG_KOT[];
+extern const uint32_t IMG_SCALE_VOLTS[];
 extern const uint32_t IMG_SMALL[];
 extern const uint32_t IMG_TEST[];
 
 extern const mgl_glyph_t FNT_DIGITS[];
+extern const mgl_glyph_t FNT_DIGITS_4X7[];
 
 #endif

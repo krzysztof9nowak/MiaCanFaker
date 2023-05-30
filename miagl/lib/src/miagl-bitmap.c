@@ -34,7 +34,7 @@ static inline ALWAYS_INLINE void mgl_DrawBitmapImpl(miagl_ptr instance, uint16_t
  
         if (firstCell == lastCell) {
             if (xor) {
-                buffer[firstCell] = mgl_FixEndianess(mgl_FixEndianess(buffer[firstCell]) ^ (*bitmap >> mod_shift));
+                buffer[firstCell] = mgl_FixEndianess(mgl_FixEndianess(buffer[firstCell]) ^ ((*bitmap >> mod_shift) & tint));
             } else {
                 register uint32_t left_mask = MASKS_BE[mod_offset];
                 register uint32_t right_mask = MASKS_BE[(mod_offset + width > 8) ? (8) : (mod_offset + width)];
@@ -49,7 +49,7 @@ static inline ALWAYS_INLINE void mgl_DrawBitmapImpl(miagl_ptr instance, uint16_t
             uint32_t remaining = mod_offset ? ((*row_bitmap) << (32 - mod_shift)) : 0;
 
             if (xor) {
-                buffer[firstCell] = mgl_FixEndianess(mgl_FixEndianess(buffer[firstCell]) ^ (*bitmap >> mod_shift));
+                buffer[firstCell] = mgl_FixEndianess(mgl_FixEndianess(buffer[firstCell]) ^ ((*bitmap >> mod_shift) & tint));
             } else {
                 buffer[firstCell] = mgl_FixEndianess(
                     (MASKS_BE[mod_offset] & mgl_FixEndianess(buffer[firstCell])) 
@@ -62,7 +62,7 @@ static inline ALWAYS_INLINE void mgl_DrawBitmapImpl(miagl_ptr instance, uint16_t
             while (firstCell < lastCell) {
                 if (xor) {
                     buffer[firstCell] = mgl_FixEndianess(
-                        (remaining | ((*(++row_bitmap) >> mod_shift) & (~MASKS_BE[mod_offset]))) ^ mgl_FixEndianess(buffer[firstCell])
+                        ((remaining | ((*(++row_bitmap) >> mod_shift) & (~MASKS_BE[mod_offset]))) & tint) ^ mgl_FixEndianess(buffer[firstCell])
                     );
                     ++firstCell;
                 } else {
@@ -78,7 +78,7 @@ static inline ALWAYS_INLINE void mgl_DrawBitmapImpl(miagl_ptr instance, uint16_t
 
             if (xor) {
                 buffer[lastCell] = mgl_FixEndianess(
-                    ((remaining | ((*(++row_bitmap) >> mod_shift) & (~MASKS_BE[mod_offset]))) & MASKS_BE[row_width]) 
+                    ((remaining | ((*(++row_bitmap) >> mod_shift) & (~MASKS_BE[mod_offset]))) & MASKS_BE[row_width] & tint) 
                     ^ mgl_FixEndianess(buffer[lastCell])
                 );
             }
@@ -108,4 +108,9 @@ void mgl_DrawTintedBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint
 void mgl_DrawXorBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap)
 {
     mgl_DrawBitmapImpl(instance, x, y, bitmap, 0xFFFFFFFF, true);
+}
+
+void mgl_DrawXorTintedBitmap(miagl_ptr instance, uint16_t x, uint16_t y, const uint32_t* bitmap)
+{
+    mgl_DrawBitmapImpl(instance, x, y, bitmap, mgl_ColorNibbleToWord(instance->color), true);
 }

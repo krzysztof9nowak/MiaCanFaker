@@ -4,7 +4,7 @@
 
 #include <miagl.h>
 #include <miagl-driver.h>
-#include <miaui-test.h>
+#include <miaui.h>
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -90,6 +90,12 @@ miagl_driver_t driver = {
     .fn_flush_full_screen = driver_flush_full_screen,
     .fn_flush_part_screen = driver_flush_part_screen
 };
+mui_state_t ui_state = {
+    .debug_text = NULL,
+    .capacitor_voltage = 800,
+    .cell_count = 22,
+    .motor_current = 0,
+};
 
 static uint64_t get_diff(struct timespec t1, struct timespec t2)
 {
@@ -103,7 +109,7 @@ int main(int argc, char **argv)
         scale = atoi(argv[1]);
 
         if (scale < 1) scale = 1;
-        if (scale > 8) scale = 8;
+        if (scale > 10) scale = 10;
     }
 
     const int SCREEN_WIDTH = DISPLAY_WIDTH * scale;
@@ -192,11 +198,26 @@ int main(int argc, char **argv)
 
 void process_event(SDL_Event* event)
 {
+    if (event->type == SDL_KEYDOWN) {
+        switch(event->key.keysym.sym) {
+        case SDLK_q: ++ui_state.capacitor_voltage; break;
+        case SDLK_a: --ui_state.capacitor_voltage; break;
+        case SDLK_w: ui_state.motor_current += 5; break;
+        case SDLK_s: ui_state.motor_current -= 5; break;
+        }
+    }
 }
 
 void lib_task()
 {
-    mui_RenderGlTest(&gl);
+    static uint32_t ticks = 0;
+    uint32_t current_ticks = SDL_GetTicks();
+
+    mui_Update(&ui_state, current_ticks - ticks);
+    mui_Draw(&ui_state, &gl);
+    mgl_FlushScreen(&gl);
+
+    ticks = current_ticks;
 }
 
 void draw_screen(SDL_Renderer* renderer, int pixelSize)

@@ -9,5 +9,6 @@
     { "glyph": "7", "x": 38, "y": 0, "w": 5, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "8", "x": 44, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "9", "x": 51, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
-    { "glyph": "0", "x": 58, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 }
+    { "glyph": "0", "x": 58, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
+    { "glyph": ".", "x": 65, "y": 7, "w": 2, "h": 2, "left": 0, "right": 1, "baseline": 1 }
 ]

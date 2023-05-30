@@ -86,7 +86,7 @@ void mgl_DrawXorText(miagl_ptr instance, const char* text,
             register const uint32_t* current_bitmap = font[index].bitmap;
 
             x += font[index].left_spacing;
-            mgl_DrawXorBitmap(instance, x, y - font[index].baseline, current_bitmap);
+            mgl_DrawXorTintedBitmap(instance, x, y - font[index].baseline, current_bitmap);
             x += mgl_GetBitmapWidth(current_bitmap) + font[index].right_spacing;
         }
 
