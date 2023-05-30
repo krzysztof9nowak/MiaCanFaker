@@ -16,6 +16,7 @@ const uint32_t IMG_LIGHT_BLINKER_R[] = {0x12000d, 0x0, 0x0, 0x0, 0x0, 0xf00000, 
 const uint32_t IMG_LIGHT_DOOR_L[] = {0x12000d, 0x0, 0x0, 0x0, 0x0, 0xfffffff0, 0x0, 0xf00, 0xf00000f0, 0x0, 0xf000, 0xf00000f0, 0x0, 0xffff0, 0xf00000f0, 0x0, 0xf000, 0xf00000f0, 0x0, 0xf00, 0xfffffff0, 0x0, 0x0, 0xff0ffff0, 0x0, 0x0, 0xff0ffff0, 0x0, 0x0, 0xff0ffff0, 0x0, 0xfffff, 0xff000ff0, 0x0, 0x0, 0xfffffff0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const uint32_t IMG_LIGHT_DOOR_R[] = {0x12000d, 0x0, 0x0, 0x0, 0xfffff, 0xff000000, 0x0, 0xf0000, 0xf00f000, 0x0, 0xf0000, 0xf000f00, 0x0, 0xf0000, 0xf0ffff0, 0x0, 0xf0000, 0xf000f00, 0x0, 0xfffff, 0xff00f000, 0x0, 0xff00f, 0xff000000, 0x0, 0xff0f0, 0xff000000, 0x0, 0xff00f, 0xff000000, 0x0, 0xff0f0, 0xfffffff0, 0x0, 0xfffff, 0xff000000, 0x0, 0x0, 0x0, 0x0, 0x0};
 const uint32_t IMG_LIGHT_MOTOR_FAN[] = {0x13000d, 0x0, 0x0, 0x0, 0xff, 0x0, 0x0, 0xff, 0xf0f0f0f0, 0xf0000000, 0xff, 0xf00f0f0f, 0xf000000, 0xfff0ff, 0xf0000000, 0x0, 0xfffffff, 0x0, 0x0, 0xfffff0f, 0xffff0f0f, 0xf000000, 0xfff, 0xffff00f0, 0xf0000000, 0xfff0, 0xfff00000, 0x0, 0xfff0, 0x0, 0x0, 0xfff0, 0xf0f0f0f0, 0xf0000000, 0xff0, 0xf0f0f0f, 0xf000000, 0x0, 0x0, 0x0, 0x0};
+const uint32_t IMG_LIGHT_PBRAKE[] = {0x12000d, 0x0, 0x0, 0x0, 0xf, 0xff000000, 0x0, 0xf0ff0, 0xff0f00, 0x0, 0xf0f000, 0xf000f0f0, 0x0, 0xf0f000, 0xf000f0f0, 0x0, 0xf0f0000, 0xf0000f0f, 0x0, 0xf0f0000, 0xf0000f0f, 0x0, 0xf0f0000, 0xf0000f0f, 0x0, 0xf0f000, 0xf0f0, 0x0, 0xf0f000, 0xf000f0f0, 0x0, 0xf0ff0, 0xff0f00, 0x0, 0xf, 0xff000000, 0x0, 0x0, 0x0, 0x0, 0x0};
 const uint32_t IMG_SCALE_VOLTS[] = {0x15000a, 0x1effffff, 0xffffffff, 0xffe10000, 0xefffffff, 0xffffffff, 0xfffe0000, 0xffffffff, 0xffffffff, 0xffff8000, 0xffffffff, 0xffffffff, 0xffff8000, 0xffffffff, 0xffffffff, 0xffff8000, 0xffffffff, 0xffffffff, 0xffff8000, 0xffffffff, 0xffffffff, 0xffff8000, 0xefffffff, 0xffffffff, 0xfffe8000, 0x1effffff, 0xffffffff, 0xffe80000, 0x888888, 0x88888888, 0x88800000, 0x0};
 const uint32_t IMG_SMALL[] = {0x50005, 0xfff0000, 0xfddff000, 0xfdfff000, 0xfffff000, 0xfff0000, 0x0};
 const uint32_t IMG_TEST[] = {0x100010, 0xfffff, 0xffff0000, 0xff7777, 0x777fff00, 0xff77777, 0x77777ff0, 0xff7777f7, 0x7f7777ff, 0xf77777f7, 0x7f77777f, 0xf77777f7, 0x7f77777f, 0xf7777777, 0x7777777f, 0xf77f7777, 0x77777f7f, 0xf77f7777, 0x77777f7f, 0xff7ff777, 0x77777f7f, 0xf77f777, 0x7777ff7f, 0xff7ff77, 0x777ff77f, 0xf77fff, 0xffff77ff, 0xf7777, 0x77777ff0, 0xfff77, 0x77777f00, 0xfff, 0xfffff000, 0x0};
@@ -80,6 +81,429 @@ const mgl_glyph_t FNT_DIGITS_4X7[] = {
     { GLYPH_FNT_DIGITS_4X7_55, 0, 1, 6, 55 },
     { GLYPH_FNT_DIGITS_4X7_56, 0, 1, 6, 56 },
     { GLYPH_FNT_DIGITS_4X7_57, 0, 1, 6, 57 },
+};
+
+// FONT helvetica_bold8 //
+
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_1[] = {0x7000a, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0xff00, 0xff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_2[] = {0x7000b, 0xff00, 0xff000, 0x0, 0xffff00, 0xff00ff0, 0xff0000f0, 0xff000000, 0xff000000, 0xff0000f0, 0xff00ff0, 0xffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_3[] = {0x5000a, 0xfffff000, 0xff000000, 0xff000000, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0xff0000, 0xff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_4[] = {0x60008, 0xff00000, 0xff00000, 0xff0f000, 0xfff0000, 0xfff00000, 0xff00000, 0xff00000, 0xfffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_5[] = {0x7000b, 0xff00, 0xff000, 0x0, 0xff000ff0, 0xfff00ff0, 0xfff00ff0, 0xff0f0ff0, 0xff0f0ff0, 0xff00fff0, 0xff00fff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_6[] = {0x7000b, 0xff00, 0xff000, 0x0, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_7[] = {0x6000b, 0xff000, 0xff0000, 0x0, 0xffff000, 0xff00ff00, 0xfff00000, 0xffff000, 0xfff00, 0xf000ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_8[] = {0x6000b, 0xff000, 0xff0000, 0x0, 0xffffff00, 0xff00, 0xff000, 0xff0000, 0xfff0000, 0xff00000, 0xff000000, 0xffffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_9[] = {0x6000b, 0xff0000, 0xff0000, 0x0, 0xffffff00, 0xff00, 0xff000, 0xff0000, 0xfff0000, 0xff00000, 0xff000000, 0xffffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_17[] = {0x60008, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0xf000, 0xff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_18[] = {0x50009, 0xff000, 0xff0000, 0x0, 0xfff0000, 0xff0f0000, 0xff000000, 0xff000000, 0xff0f0000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_19[] = {0x50008, 0xfff0000, 0xff0ff000, 0xfffff000, 0xff000000, 0xff0ff000, 0xfff0000, 0xff0000, 0xff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_20[] = {0x50008, 0xff00000, 0xff00000, 0xff0f000, 0xfff0000, 0xfff00000, 0xff00000, 0xff00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_21[] = {0x50009, 0xff000, 0xff0000, 0x0, 0xf0ff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_22[] = {0x50009, 0xff000, 0xff0000, 0x0, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_23[] = {0x50009, 0xff000, 0xff0000, 0x0, 0xfff0000, 0xff0ff000, 0xfff0000, 0xff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_24[] = {0x50009, 0xff000, 0xff0000, 0x0, 0xfffff000, 0xff000, 0xff0000, 0xff00000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_25[] = {0x50009, 0xff0000, 0xff0000, 0x0, 0xfffff000, 0xff000, 0xff0000, 0xff00000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_32[] = {0x10001, 0x0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_33[] = {0x20008, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xf0000000, 0xf0000000, 0x0, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_34[] = {0x30003, 0xf0f00000, 0xf0f00000, 0xf0f00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_35[] = {0x70007, 0xf0f000, 0xf0f000, 0xffffff0, 0xf0f000, 0xffffff00, 0xf0f0000, 0xf0f0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_36[] = {0x5000a, 0xf00000, 0xfff0000, 0xf0f0f000, 0xfff00000, 0xfff0000, 0xfff000, 0xf0f000, 0xf0f0f000, 0xfff0000, 0xf00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_37[] = {0x70008, 0xff000f0, 0xf0ff0f00, 0xff0f000, 0xf0000, 0xf0000, 0xf0ff00, 0xf0f0ff0, 0xf000ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_38[] = {0x70008, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0xff0ffff0, 0xff00ff00, 0xff0fff00, 0xfff0ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_39[] = {0x10003, 0xf0000000, 0xf0000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_40[] = {0x3000a, 0xf00000, 0xff00000, 0xf000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xf000000, 0xff00000, 0xf00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_41[] = {0x3000a, 0xf0000000, 0xff000000, 0xf000000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xf000000, 0xff000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_42[] = {0x30003, 0xf0f00000, 0xf000000, 0xf0f00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_43[] = {0x60005, 0xff0000, 0xff0000, 0xffffff00, 0xff0000, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_44[] = {0x20004, 0xff000000, 0xff000000, 0xf000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_45[] = {0x40001, 0xffff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_46[] = {0x20002, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_47[] = {0x40008, 0xf0000, 0xf0000, 0xf00000, 0xf00000, 0xf000000, 0xf000000, 0xf0000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_48[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_49[] = {0x30008, 0xff00000, 0xfff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_50[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff000, 0xff000, 0xff0000, 0xff00000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_51[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff000, 0xff0000, 0xff000, 0xff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_52[] = {0x60008, 0xf000, 0xff000, 0xfff000, 0xf0ff000, 0xf00ff000, 0xffffff00, 0xff000, 0xff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_53[] = {0x50008, 0xfffff000, 0xff000000, 0xff000000, 0xffff0000, 0xff000, 0xf00ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_54[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff000000, 0xffff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_55[] = {0x50008, 0xfffff000, 0xff000, 0xff000, 0xff0000, 0xff0000, 0xff00000, 0xff00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_56[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_57[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0xff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_58[] = {0x20006, 0xff000000, 0xff000000, 0x0, 0x0, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_59[] = {0x20008, 0xff000000, 0xff000000, 0x0, 0x0, 0xff000000, 0xff000000, 0xf000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_60[] = {0x40005, 0xff0000, 0xff00000, 0xff000000, 0xff00000, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_61[] = {0x50003, 0xfffff000, 0x0, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_62[] = {0x40005, 0xff000000, 0xff00000, 0xff0000, 0xff00000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_63[] = {0x50008, 0xfff0000, 0xff0ff000, 0xff000, 0xff0000, 0xff00000, 0xff00000, 0x0, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_64[] = {0xa0009, 0xfffff, 0x0, 0xff00000, 0xf0000000, 0xf00ff0f, 0xf000000, 0xf00f00f0, 0xf000000, 0xf0f000f0, 0xf000000, 0xf0f00f00, 0xf0000000, 0xf00ff0ff, 0x0, 0xf000000, 0x0, 0xfffff0, 0x0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_65[] = {0x70008, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_66[] = {0x60008, 0xfffff000, 0xff00ff00, 0xff00ff00, 0xfffff000, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_67[] = {0x70008, 0xffff00, 0xff00ff0, 0xff0000f0, 0xff000000, 0xff000000, 0xff0000f0, 0xff00ff0, 0xffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_68[] = {0x60008, 0xffff0000, 0xff0ff000, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff0ff000, 0xffff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_69[] = {0x50008, 0xfffff000, 0xff000000, 0xff000000, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_70[] = {0x50008, 0xfffff000, 0xff000000, 0xff000000, 0xffff0000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_71[] = {0x70008, 0xffff00, 0xff00ff0, 0xff0000f0, 0xff000000, 0xff00fff0, 0xff000ff0, 0xff00ff0, 0xfff0f0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_72[] = {0x60008, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xffffff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_73[] = {0x20008, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_74[] = {0x50008, 0xff000, 0xff000, 0xff000, 0xff000, 0xff000, 0xff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_75[] = {0x70008, 0xff00ff00, 0xff0ff000, 0xffff0000, 0xfff00000, 0xffff0000, 0xff0ff000, 0xff00ff00, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_76[] = {0x50008, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_77[] = {0x90008, 0xff00000f, 0xf0000000, 0xfff000ff, 0xf0000000, 0xfff000ff, 0xf0000000, 0xffff0fff, 0xf0000000, 0xff0f0f0f, 0xf0000000, 0xff0fff0f, 0xf0000000, 0xff00f00f, 0xf0000000, 0xff00f00f, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_78[] = {0x70008, 0xff000ff0, 0xfff00ff0, 0xfff00ff0, 0xff0f0ff0, 0xff0f0ff0, 0xff00fff0, 0xff00fff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_79[] = {0x70008, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_80[] = {0x60008, 0xfffff000, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_81[] = {0x70009, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0f0ff0, 0xff0ff00, 0xffff00, 0xf0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_82[] = {0x60008, 0xfffff000, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xfffff000, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_83[] = {0x60008, 0xffff000, 0xff00ff00, 0xfff00000, 0xffff000, 0xfff00, 0xf000ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_84[] = {0x60008, 0xffffff00, 0xff0000, 0xff0000, 0xff0000, 0xff0000, 0xff0000, 0xff0000, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_85[] = {0x60008, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_86[] = {0x70008, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfff000, 0xfff000, 0xf0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_87[] = {0xa0008, 0xff00ff00, 0xff000000, 0xff00ff00, 0xff000000, 0xff00ff00, 0xff000000, 0xff0ff0f, 0xf0000000, 0xff0ff0f, 0xf0000000, 0xfffffff, 0xf0000000, 0xff00ff, 0x0, 0xff00ff, 0x0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_88[] = {0x70008, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_89[] = {0x80008, 0xff0000ff, 0xff0000ff, 0xff00ff0, 0xff00ff0, 0xffff00, 0xff000, 0xff000, 0xff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_90[] = {0x60008, 0xffffff00, 0xff00, 0xff000, 0xff0000, 0xfff0000, 0xff00000, 0xff000000, 0xffffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_91[] = {0x3000a, 0xfff00000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xfff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_92[] = {0x40008, 0xf0000000, 0xf0000000, 0xf000000, 0xf000000, 0xf00000, 0xf00000, 0xf0000, 0xf0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_93[] = {0x3000a, 0xfff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xfff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_94[] = {0x40004, 0xff00000, 0xffff0000, 0xf00f0000, 0xf00f0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_95[] = {0x60001, 0xffffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_96[] = {0x20002, 0xf0000000, 0xf000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_97[] = {0x60006, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_98[] = {0x50008, 0xff000000, 0xff000000, 0xffff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_99[] = {0x40006, 0xfff0000, 0xff0f0000, 0xff000000, 0xff000000, 0xff0f0000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_100[] = {0x50008, 0xff000, 0xff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_101[] = {0x50006, 0xfff0000, 0xff0ff000, 0xfffff000, 0xff000000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_102[] = {0x50008, 0xfff000, 0xff00000, 0xffff0000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_103[] = {0x50008, 0xff0f000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0xff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_104[] = {0x50008, 0xff000000, 0xff000000, 0xffff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_105[] = {0x20008, 0xff000000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_106[] = {0x3000a, 0xff00000, 0x0, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_107[] = {0x60008, 0xff000000, 0xff000000, 0xff0ff000, 0xffff0000, 0xfff00000, 0xffff0000, 0xff0ff000, 0xff00ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_108[] = {0x20008, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_109[] = {0x80006, 0xf0ff0ff0, 0xff0ff0ff, 0xff0ff0ff, 0xff0ff0ff, 0xff0ff0ff, 0xff0ff0ff, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_110[] = {0x50006, 0xf0ff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_111[] = {0x50006, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_112[] = {0x50008, 0xf0ff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff0000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_113[] = {0x50008, 0xff0f000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0xff000, 0xff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_114[] = {0x40006, 0xf0ff0000, 0xfff00000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_115[] = {0x50006, 0xfff0000, 0xff0ff000, 0xfff0000, 0xff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_116[] = {0x40008, 0xff00000, 0xff00000, 0xffff0000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_117[] = {0x50006, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0f000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_118[] = {0x50006, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xf0f0000, 0xfff0000, 0xf00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_119[] = {0x70006, 0xff0f0ff0, 0xff0f0ff0, 0xff0f0ff0, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_120[] = {0x60006, 0xff00ff00, 0xffff000, 0xff0000, 0xffff000, 0xff00ff00, 0xff00ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_121[] = {0x50008, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0xff0000, 0xff0000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_122[] = {0x50006, 0xfffff000, 0xff000, 0xff0000, 0xff00000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_123[] = {0x4000a, 0xff0000, 0xff00000, 0xff00000, 0xff00000, 0xff000000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_124[] = {0x1000a, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_125[] = {0x4000a, 0xff000000, 0xff00000, 0xff00000, 0xff00000, 0xff0000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_126[] = {0x50002, 0xff0f000, 0xf0ff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_161[] = {0x20008, 0xff000000, 0x0, 0xf000000, 0xf000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_162[] = {0x50008, 0xf0000, 0xfff0000, 0xff0ff000, 0xf0f00000, 0xf0f00000, 0xff0ff000, 0xfff0000, 0xf000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_163[] = {0x50008, 0xfff000, 0xff0f000, 0xff00000, 0xffff0000, 0xff00000, 0xff00000, 0xff0f000, 0xff0ff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_164[] = {0x60006, 0xf0000f00, 0xffff000, 0xf00f000, 0xf00f000, 0xffff000, 0xf0000f00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_165[] = {0x60008, 0xf0000f00, 0xf0000f00, 0xff00ff00, 0xf00f000, 0xffffff00, 0xff0000, 0xffffff00, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_166[] = {0x1000a, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0x0, 0x0, 0xf0000000, 0xf0000000, 0xf0000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_167[] = {0x5000a, 0xfff0000, 0xff00f000, 0xfff00000, 0xfff0000, 0xf00ff000, 0xff00f000, 0xfff0000, 0xfff000, 0xf00ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_168[] = {0x30001, 0xf0f00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_169[] = {0x80008, 0xffff00, 0xf0000f0, 0xf00ff00f, 0xf0f00f0f, 0xf0f0000f, 0xf00fff0f, 0xf0000f0, 0xffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_170[] = {0x30005, 0xfff00000, 0xf00000, 0xf0f00000, 0x0, 0xfff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_171[] = {0x60003, 0xff0ff00, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_172[] = {0x50003, 0xfffff000, 0xf000, 0xf000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_173[] = {0x40001, 0xffff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_174[] = {0x80008, 0xffff00, 0xf0000f0, 0xf0ffff0f, 0xf0f00f0f, 0xf0fff00f, 0xf0f00f0f, 0xf0000f0, 0xffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_175[] = {0x30001, 0xfff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_176[] = {0x30003, 0xff00000, 0xf0f00000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_177[] = {0x60007, 0xff0000, 0xff0000, 0xffffff00, 0xff0000, 0xff0000, 0x0, 0xffffff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_178[] = {0x30004, 0xff00000, 0xf0f00000, 0xf000000, 0xfff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_179[] = {0x30004, 0xfff00000, 0xf000000, 0xf00000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_180[] = {0x20002, 0xf000000, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_181[] = {0x50008, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0f000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_182[] = {0x6000a, 0xfffff00, 0xfff0f000, 0xfff0f000, 0xfff0f000, 0xff0f000, 0xf0f000, 0xf0f000, 0xf0f000, 0xf0f000, 0xf0f000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_183[] = {0x20001, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_184[] = {0x20002, 0xf000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_185[] = {0x20004, 0xf000000, 0xff000000, 0xf000000, 0xf000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_186[] = {0x30005, 0xfff00000, 0xf0f00000, 0xfff00000, 0x0, 0xfff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_187[] = {0x60003, 0xff0ff000, 0xff0ff00, 0xff0ff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_188[] = {0x80008, 0xf000f00, 0xff000f00, 0xf00f000, 0xf00f000, 0xf00f0, 0xf00ff0, 0xf0ffff, 0xf0000f0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_189[] = {0x70008, 0xf000f00, 0xff000f00, 0xf00f000, 0xf00f000, 0xf0ff0, 0xf0f0f0, 0xf00f00, 0xf00fff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_190[] = {0x80008, 0xfff00f00, 0xf000f00, 0xf0f000, 0xff00f000, 0xf00f0, 0xf00ff0, 0xf0ffff, 0xf0000f0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_191[] = {0x50008, 0xff0000, 0x0, 0xff0000, 0xff0000, 0xff00000, 0xff000000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_192[] = {0x7000b, 0xf00000, 0xf0000, 0x0, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_193[] = {0x7000b, 0xf000, 0xf0000, 0x0, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_194[] = {0x7000b, 0xf0000, 0xf0f000, 0x0, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_195[] = {0x7000b, 0xf0f00, 0xf0f000, 0x0, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_196[] = {0x7000a, 0xf0f000, 0x0, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_197[] = {0x7000b, 0xf0000, 0xf0f000, 0xf0000, 0xfff000, 0xfff000, 0xff0ff00, 0xff0ff00, 0xff0ff00, 0xfffffff0, 0xff000ff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_198[] = {0x90008, 0xffffff, 0xf0000000, 0xffff00, 0x0, 0xff0ff00, 0x0, 0xff0ffff, 0xf0000000, 0xff0ff00, 0x0, 0xffffff00, 0x0, 0xff00ff00, 0x0, 0xff00ffff, 0xf0000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_199[] = {0x7000a, 0xffff00, 0xff00ff0, 0xff0000f0, 0xff000000, 0xff000000, 0xff0000f0, 0xff00ff0, 0xffff00, 0xf0000, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_200[] = {0x5000b, 0xf000000, 0xf00000, 0x0, 0xfffff000, 0xff000000, 0xff000000, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_201[] = {0x5000b, 0xf0000, 0xf00000, 0x0, 0xfffff000, 0xff000000, 0xff000000, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_202[] = {0x5000b, 0xf00000, 0xf0f0000, 0x0, 0xfffff000, 0xff000000, 0xff000000, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_203[] = {0x5000a, 0xf0f0000, 0x0, 0xfffff000, 0xff000000, 0xff000000, 0xfffff000, 0xff000000, 0xff000000, 0xff000000, 0xfffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_204[] = {0x2000b, 0xf0000000, 0xf000000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_205[] = {0x2000b, 0xf000000, 0xf0000000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_206[] = {0x3000b, 0xf000000, 0xf0f00000, 0x0, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_207[] = {0x4000a, 0xf00f0000, 0x0, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_208[] = {0x70008, 0xffff000, 0xff0ff00, 0xff00ff0, 0xffff0ff0, 0xff00ff0, 0xff00ff0, 0xff0ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_209[] = {0x7000b, 0xf0f00, 0xf0f000, 0x0, 0xff000ff0, 0xfff00ff0, 0xfff00ff0, 0xff0f0ff0, 0xff0f0ff0, 0xff00fff0, 0xff00fff0, 0xff000ff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_210[] = {0x7000b, 0xf0000, 0xf000, 0x0, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_211[] = {0x7000b, 0xf000, 0xf0000, 0x0, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_212[] = {0x7000b, 0xf0000, 0xf0f000, 0x0, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_213[] = {0x7000b, 0xf0f00, 0xf0f000, 0x0, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_214[] = {0x7000a, 0xf0f000, 0x0, 0xfff000, 0xff0ff00, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff000ff0, 0xff0ff00, 0xfff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_215[] = {0x60005, 0xff00ff00, 0xffff000, 0xff0000, 0xffff000, 0xff00ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_216[] = {0x70008, 0xfff0f0, 0xff0ff00, 0xff00fff0, 0xff0f0ff0, 0xff0f0ff0, 0xfff00ff0, 0xff0ff00, 0xf0fff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_217[] = {0x6000b, 0xf00000, 0xf0000, 0x0, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_218[] = {0x6000b, 0xf000, 0xf0000, 0x0, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_219[] = {0x6000b, 0xf00000, 0xf0f0000, 0x0, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_220[] = {0x6000a, 0xf00f000, 0x0, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xffff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_221[] = {0x8000b, 0xf00, 0xf000, 0x0, 0xff0000ff, 0xff0000ff, 0xff00ff0, 0xff00ff0, 0xffff00, 0xff000, 0xff000, 0xff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_222[] = {0x60008, 0xff000000, 0xfffff000, 0xff00ff00, 0xff00ff00, 0xff00ff00, 0xfffff000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_223[] = {0x50008, 0xfff0000, 0xff00f000, 0xff00f000, 0xff0f0000, 0xff00f000, 0xff00f000, 0xff00f000, 0xff0f0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_224[] = {0x60009, 0xf00000, 0xf0000, 0x0, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_225[] = {0x60009, 0xf0000, 0xf00000, 0x0, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_226[] = {0x60009, 0xf00000, 0xf0f0000, 0x0, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_227[] = {0x60009, 0xf0f000, 0xf0f0000, 0x0, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_228[] = {0x60008, 0xf0f0000, 0x0, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_229[] = {0x60009, 0xf00000, 0xf0f0000, 0xf00000, 0xfff0000, 0xf00ff000, 0xffff000, 0xff0ff000, 0xff0ff000, 0xff0ff00, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_230[] = {0x80006, 0xffffff0, 0xf00ff0ff, 0xfffffff, 0xff0ff000, 0xff0ff0ff, 0xff0fff0, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_231[] = {0x40008, 0xfff0000, 0xff0f0000, 0xff000000, 0xff000000, 0xff0f0000, 0xfff0000, 0xf00000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_232[] = {0x50009, 0xf000000, 0xf00000, 0x0, 0xfff0000, 0xff0ff000, 0xfffff000, 0xff000000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_233[] = {0x50009, 0xf0000, 0xf00000, 0x0, 0xfff0000, 0xff0ff000, 0xfffff000, 0xff000000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_234[] = {0x50009, 0xf00000, 0xf0f0000, 0x0, 0xfff0000, 0xff0ff000, 0xfffff000, 0xff000000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_235[] = {0x50008, 0xf0f0000, 0x0, 0xfff0000, 0xff0ff000, 0xfffff000, 0xff000000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_236[] = {0x20009, 0xf0000000, 0xf000000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_237[] = {0x20009, 0xf000000, 0xf0000000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_238[] = {0x30009, 0xf000000, 0xf0f00000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_239[] = {0x30008, 0xf0f00000, 0x0, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_240[] = {0x50009, 0xf0f0000, 0xff00000, 0xf0f00000, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_241[] = {0x50009, 0xf0f0000, 0xf0f00000, 0x0, 0xf0ff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_242[] = {0x50009, 0xf000000, 0xf00000, 0x0, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_243[] = {0x50009, 0xf0000, 0xf00000, 0x0, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_244[] = {0x50009, 0xf00000, 0xf0f0000, 0x0, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_245[] = {0x50009, 0xf0f0000, 0xf0f00000, 0x0, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_246[] = {0x50008, 0xf0f0000, 0x0, 0xfff0000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xfff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_247[] = {0x60005, 0xff0000, 0x0, 0xffffff00, 0x0, 0xff0000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_248[] = {0x70006, 0xfff0f0, 0xff0ff00, 0xfffff00, 0xff0ff00, 0xff0ff00, 0xf0fff000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_249[] = {0x50009, 0xf000000, 0xf00000, 0x0, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0f000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_250[] = {0x50009, 0xf0000, 0xf00000, 0x0, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0f000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_251[] = {0x50009, 0xf00000, 0xf0f0000, 0x0, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0f000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_252[] = {0x50008, 0xf0f0000, 0x0, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0f000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_253[] = {0x5000b, 0xf0000, 0xf00000, 0x0, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0xff0000, 0xff0000, 0xff00000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_254[] = {0x5000a, 0xff000000, 0xff000000, 0xffff0000, 0xff0ff000, 0xff00f000, 0xff00f000, 0xff0ff000, 0xffff0000, 0xff000000, 0xff000000, 0x0};
+static const uint32_t GLYPH_FNT_HELVETICA_BOLD8_255[] = {0x5000a, 0xf0f0000, 0x0, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xff0ff000, 0xffff000, 0xff0000, 0xff0000, 0xff00000, 0x0};
+
+const mgl_glyph_t FNT_HELVETICA_BOLD8[] = {
+    { NULL, 0, 0, 7, 208 },
+    { GLYPH_FNT_HELVETICA_BOLD8_1, 0, 1, 7, 1 },
+    { GLYPH_FNT_HELVETICA_BOLD8_2, 0, 1, 10, 2 },
+    { GLYPH_FNT_HELVETICA_BOLD8_3, 0, 1, 7, 3 },
+    { GLYPH_FNT_HELVETICA_BOLD8_4, -1, 1, 7, 4 },
+    { GLYPH_FNT_HELVETICA_BOLD8_5, 0, 1, 10, 5 },
+    { GLYPH_FNT_HELVETICA_BOLD8_6, 0, 1, 10, 6 },
+    { GLYPH_FNT_HELVETICA_BOLD8_7, 0, 1, 10, 7 },
+    { GLYPH_FNT_HELVETICA_BOLD8_8, 0, 1, 10, 8 },
+    { GLYPH_FNT_HELVETICA_BOLD8_9, 0, 1, 10, 9 },
+    { GLYPH_FNT_HELVETICA_BOLD8_17, 0, 0, 5, 17 },
+    { GLYPH_FNT_HELVETICA_BOLD8_18, 0, 0, 8, 18 },
+    { GLYPH_FNT_HELVETICA_BOLD8_19, 0, 1, 5, 19 },
+    { GLYPH_FNT_HELVETICA_BOLD8_20, -1, 1, 7, 20 },
+    { GLYPH_FNT_HELVETICA_BOLD8_21, 0, 1, 8, 21 },
+    { GLYPH_FNT_HELVETICA_BOLD8_22, 0, 1, 8, 22 },
+    { GLYPH_FNT_HELVETICA_BOLD8_23, 0, 1, 8, 23 },
+    { GLYPH_FNT_HELVETICA_BOLD8_24, 0, 1, 8, 24 },
+    { GLYPH_FNT_HELVETICA_BOLD8_25, 0, 1, 8, 25 },
+    { GLYPH_FNT_HELVETICA_BOLD8_32, 0, 2, 0, 32 },
+    { GLYPH_FNT_HELVETICA_BOLD8_33, 1, 1, 7, 33 },
+    { GLYPH_FNT_HELVETICA_BOLD8_34, 1, 1, 7, 34 },
+    { GLYPH_FNT_HELVETICA_BOLD8_35, -1, 1, 6, 35 },
+    { GLYPH_FNT_HELVETICA_BOLD8_36, 0, 1, 8, 36 },
+    { GLYPH_FNT_HELVETICA_BOLD8_37, 0, 1, 7, 37 },
+    { GLYPH_FNT_HELVETICA_BOLD8_38, 0, 1, 7, 38 },
+    { GLYPH_FNT_HELVETICA_BOLD8_39, 1, 1, 7, 39 },
+    { GLYPH_FNT_HELVETICA_BOLD8_40, 0, 1, 7, 40 },
+    { GLYPH_FNT_HELVETICA_BOLD8_41, 0, 1, 7, 41 },
+    { GLYPH_FNT_HELVETICA_BOLD8_42, 0, 1, 7, 42 },
+    { GLYPH_FNT_HELVETICA_BOLD8_43, 0, 1, 5, 43 },
+    { GLYPH_FNT_HELVETICA_BOLD8_44, 0, 1, 1, 44 },
+    { GLYPH_FNT_HELVETICA_BOLD8_45, 0, 1, 3, 45 },
+    { GLYPH_FNT_HELVETICA_BOLD8_46, 0, 1, 1, 46 },
+    { GLYPH_FNT_HELVETICA_BOLD8_47, 0, 1, 7, 47 },
+    { GLYPH_FNT_HELVETICA_BOLD8_48, 0, 1, 7, 48 },
+    { GLYPH_FNT_HELVETICA_BOLD8_49, 1, 1, 7, 49 },
+    { GLYPH_FNT_HELVETICA_BOLD8_50, 0, 1, 7, 50 },
+    { GLYPH_FNT_HELVETICA_BOLD8_51, 0, 1, 7, 51 },
+    { GLYPH_FNT_HELVETICA_BOLD8_52, 0, 1, 7, 52 },
+    { GLYPH_FNT_HELVETICA_BOLD8_53, 0, 1, 7, 53 },
+    { GLYPH_FNT_HELVETICA_BOLD8_54, 0, 1, 7, 54 },
+    { GLYPH_FNT_HELVETICA_BOLD8_55, 0, 1, 7, 55 },
+    { GLYPH_FNT_HELVETICA_BOLD8_56, 0, 1, 7, 56 },
+    { GLYPH_FNT_HELVETICA_BOLD8_57, 0, 1, 7, 57 },
+    { GLYPH_FNT_HELVETICA_BOLD8_58, 0, 1, 5, 58 },
+    { GLYPH_FNT_HELVETICA_BOLD8_59, 0, 1, 5, 59 },
+    { GLYPH_FNT_HELVETICA_BOLD8_60, 0, 1, 5, 60 },
+    { GLYPH_FNT_HELVETICA_BOLD8_61, 0, 1, 4, 61 },
+    { GLYPH_FNT_HELVETICA_BOLD8_62, 0, 1, 5, 62 },
+    { GLYPH_FNT_HELVETICA_BOLD8_63, 0, 1, 7, 63 },
+    { GLYPH_FNT_HELVETICA_BOLD8_64, 0, 1, 7, 64 },
+    { GLYPH_FNT_HELVETICA_BOLD8_65, 0, 1, 7, 65 },
+    { GLYPH_FNT_HELVETICA_BOLD8_66, 0, 1, 7, 66 },
+    { GLYPH_FNT_HELVETICA_BOLD8_67, 0, 1, 7, 67 },
+    { GLYPH_FNT_HELVETICA_BOLD8_68, 0, 1, 7, 68 },
+    { GLYPH_FNT_HELVETICA_BOLD8_69, 0, 1, 7, 69 },
+    { GLYPH_FNT_HELVETICA_BOLD8_70, 0, 1, 7, 70 },
+    { GLYPH_FNT_HELVETICA_BOLD8_71, 0, 1, 7, 71 },
+    { GLYPH_FNT_HELVETICA_BOLD8_72, 0, 1, 7, 72 },
+    { GLYPH_FNT_HELVETICA_BOLD8_73, 0, 1, 7, 73 },
+    { GLYPH_FNT_HELVETICA_BOLD8_74, 0, 1, 7, 74 },
+    { GLYPH_FNT_HELVETICA_BOLD8_75, 0, 1, 7, 75 },
+    { GLYPH_FNT_HELVETICA_BOLD8_76, 0, 1, 7, 76 },
+    { GLYPH_FNT_HELVETICA_BOLD8_77, 0, 1, 7, 77 },
+    { GLYPH_FNT_HELVETICA_BOLD8_78, 0, 1, 7, 78 },
+    { GLYPH_FNT_HELVETICA_BOLD8_79, 0, 1, 7, 79 },
+    { GLYPH_FNT_HELVETICA_BOLD8_80, 0, 1, 7, 80 },
+    { GLYPH_FNT_HELVETICA_BOLD8_81, 0, 1, 7, 81 },
+    { GLYPH_FNT_HELVETICA_BOLD8_82, 0, 1, 7, 82 },
+    { GLYPH_FNT_HELVETICA_BOLD8_83, 0, 1, 7, 83 },
+    { GLYPH_FNT_HELVETICA_BOLD8_84, 0, 1, 7, 84 },
+    { GLYPH_FNT_HELVETICA_BOLD8_85, 0, 1, 7, 85 },
+    { GLYPH_FNT_HELVETICA_BOLD8_86, 0, 1, 7, 86 },
+    { GLYPH_FNT_HELVETICA_BOLD8_87, 0, 1, 7, 87 },
+    { GLYPH_FNT_HELVETICA_BOLD8_88, 0, 1, 7, 88 },
+    { GLYPH_FNT_HELVETICA_BOLD8_89, 0, 1, 7, 89 },
+    { GLYPH_FNT_HELVETICA_BOLD8_90, 0, 1, 7, 90 },
+    { GLYPH_FNT_HELVETICA_BOLD8_91, 0, 1, 7, 91 },
+    { GLYPH_FNT_HELVETICA_BOLD8_92, 0, 1, 7, 92 },
+    { GLYPH_FNT_HELVETICA_BOLD8_93, 0, 1, 7, 93 },
+    { GLYPH_FNT_HELVETICA_BOLD8_94, 0, 1, 7, 94 },
+    { GLYPH_FNT_HELVETICA_BOLD8_95, 0, 1, -2, 95 },
+    { GLYPH_FNT_HELVETICA_BOLD8_96, 0, 1, 8, 96 },
+    { GLYPH_FNT_HELVETICA_BOLD8_97, 0, 0, 5, 97 },
+    { GLYPH_FNT_HELVETICA_BOLD8_98, 0, 1, 7, 98 },
+    { GLYPH_FNT_HELVETICA_BOLD8_99, 0, 1, 5, 99 },
+    { GLYPH_FNT_HELVETICA_BOLD8_100, 0, 1, 7, 100 },
+    { GLYPH_FNT_HELVETICA_BOLD8_101, 0, 1, 5, 101 },
+    { GLYPH_FNT_HELVETICA_BOLD8_102, -1, 1, 7, 102 },
+    { GLYPH_FNT_HELVETICA_BOLD8_103, 0, 1, 5, 103 },
+    { GLYPH_FNT_HELVETICA_BOLD8_104, 0, 1, 7, 104 },
+    { GLYPH_FNT_HELVETICA_BOLD8_105, 0, 1, 7, 105 },
+    { GLYPH_FNT_HELVETICA_BOLD8_106, -1, 1, 7, 106 },
+    { GLYPH_FNT_HELVETICA_BOLD8_107, 0, 1, 7, 107 },
+    { GLYPH_FNT_HELVETICA_BOLD8_108, 0, 1, 7, 108 },
+    { GLYPH_FNT_HELVETICA_BOLD8_109, 0, 1, 5, 109 },
+    { GLYPH_FNT_HELVETICA_BOLD8_110, 0, 1, 5, 110 },
+    { GLYPH_FNT_HELVETICA_BOLD8_111, 0, 1, 5, 111 },
+    { GLYPH_FNT_HELVETICA_BOLD8_112, 0, 1, 5, 112 },
+    { GLYPH_FNT_HELVETICA_BOLD8_113, 0, 1, 5, 113 },
+    { GLYPH_FNT_HELVETICA_BOLD8_114, 0, 0, 5, 114 },
+    { GLYPH_FNT_HELVETICA_BOLD8_115, 0, 1, 5, 115 },
+    { GLYPH_FNT_HELVETICA_BOLD8_116, -1, 1, 7, 116 },
+    { GLYPH_FNT_HELVETICA_BOLD8_117, 0, 1, 5, 117 },
+    { GLYPH_FNT_HELVETICA_BOLD8_118, 0, 1, 5, 118 },
+    { GLYPH_FNT_HELVETICA_BOLD8_119, 0, 1, 5, 119 },
+    { GLYPH_FNT_HELVETICA_BOLD8_120, 0, 1, 5, 120 },
+    { GLYPH_FNT_HELVETICA_BOLD8_121, 0, 1, 5, 121 },
+    { GLYPH_FNT_HELVETICA_BOLD8_122, 0, 1, 5, 122 },
+    { GLYPH_FNT_HELVETICA_BOLD8_123, 0, 1, 7, 123 },
+    { GLYPH_FNT_HELVETICA_BOLD8_124, 1, 1, 7, 124 },
+    { GLYPH_FNT_HELVETICA_BOLD8_125, 0, 1, 7, 125 },
+    { GLYPH_FNT_HELVETICA_BOLD8_126, 0, 1, 4, 126 },
+    { GLYPH_FNT_HELVETICA_BOLD8_161, 1, 1, 5, 161 },
+    { GLYPH_FNT_HELVETICA_BOLD8_162, 0, 1, 6, 162 },
+    { GLYPH_FNT_HELVETICA_BOLD8_163, 0, 1, 7, 163 },
+    { GLYPH_FNT_HELVETICA_BOLD8_164, 0, 1, 6, 164 },
+    { GLYPH_FNT_HELVETICA_BOLD8_165, 0, 1, 7, 165 },
+    { GLYPH_FNT_HELVETICA_BOLD8_166, 1, 1, 7, 166 },
+    { GLYPH_FNT_HELVETICA_BOLD8_167, 0, 1, 7, 167 },
+    { GLYPH_FNT_HELVETICA_BOLD8_168, 0, 1, 7, 168 },
+    { GLYPH_FNT_HELVETICA_BOLD8_169, 1, 1, 7, 169 },
+    { GLYPH_FNT_HELVETICA_BOLD8_170, 1, 1, 7, 170 },
+    { GLYPH_FNT_HELVETICA_BOLD8_171, 0, 1, 3, 171 },
+    { GLYPH_FNT_HELVETICA_BOLD8_172, 1, 1, 4, 172 },
+    { GLYPH_FNT_HELVETICA_BOLD8_173, 0, 1, 3, 173 },
+    { GLYPH_FNT_HELVETICA_BOLD8_174, 1, 1, 7, 174 },
+    { GLYPH_FNT_HELVETICA_BOLD8_175, 0, 1, 7, 175 },
+    { GLYPH_FNT_HELVETICA_BOLD8_176, 0, 1, 7, 176 },
+    { GLYPH_FNT_HELVETICA_BOLD8_177, 0, 1, 6, 177 },
+    { GLYPH_FNT_HELVETICA_BOLD8_178, 0, 1, 7, 178 },
+    { GLYPH_FNT_HELVETICA_BOLD8_179, 0, 1, 7, 179 },
+    { GLYPH_FNT_HELVETICA_BOLD8_180, 0, 1, 8, 180 },
+    { GLYPH_FNT_HELVETICA_BOLD8_181, 0, 1, 5, 181 },
+    { GLYPH_FNT_HELVETICA_BOLD8_182, 0, 1, 7, 182 },
+    { GLYPH_FNT_HELVETICA_BOLD8_183, 0, 1, 3, 183 },
+    { GLYPH_FNT_HELVETICA_BOLD8_184, 0, 1, -1, 184 },
+    { GLYPH_FNT_HELVETICA_BOLD8_185, 0, 1, 7, 185 },
+    { GLYPH_FNT_HELVETICA_BOLD8_186, 1, 1, 7, 186 },
+    { GLYPH_FNT_HELVETICA_BOLD8_187, 0, 1, 3, 187 },
+    { GLYPH_FNT_HELVETICA_BOLD8_188, 0, 1, 7, 188 },
+    { GLYPH_FNT_HELVETICA_BOLD8_189, 0, 1, 7, 189 },
+    { GLYPH_FNT_HELVETICA_BOLD8_190, 0, 1, 7, 190 },
+    { GLYPH_FNT_HELVETICA_BOLD8_191, 0, 1, 5, 191 },
+    { GLYPH_FNT_HELVETICA_BOLD8_192, 0, 1, 10, 192 },
+    { GLYPH_FNT_HELVETICA_BOLD8_193, 0, 1, 10, 193 },
+    { GLYPH_FNT_HELVETICA_BOLD8_194, 0, 1, 10, 194 },
+    { GLYPH_FNT_HELVETICA_BOLD8_195, 0, 1, 10, 195 },
+    { GLYPH_FNT_HELVETICA_BOLD8_196, 0, 1, 9, 196 },
+    { GLYPH_FNT_HELVETICA_BOLD8_197, 0, 1, 10, 197 },
+    { GLYPH_FNT_HELVETICA_BOLD8_198, 0, 1, 7, 198 },
+    { GLYPH_FNT_HELVETICA_BOLD8_199, 0, 1, 7, 199 },
+    { GLYPH_FNT_HELVETICA_BOLD8_200, 0, 1, 10, 200 },
+    { GLYPH_FNT_HELVETICA_BOLD8_201, 0, 1, 10, 201 },
+    { GLYPH_FNT_HELVETICA_BOLD8_202, 0, 1, 10, 202 },
+    { GLYPH_FNT_HELVETICA_BOLD8_203, 0, 1, 9, 203 },
+    { GLYPH_FNT_HELVETICA_BOLD8_204, 0, 1, 10, 204 },
+    { GLYPH_FNT_HELVETICA_BOLD8_205, 0, 1, 10, 205 },
+    { GLYPH_FNT_HELVETICA_BOLD8_206, -1, 1, 10, 206 },
+    { GLYPH_FNT_HELVETICA_BOLD8_207, -1, 1, 9, 207 },
+    { GLYPH_FNT_HELVETICA_BOLD8_208, -1, 1, 7, 208 },
+    { GLYPH_FNT_HELVETICA_BOLD8_209, 0, 1, 10, 209 },
+    { GLYPH_FNT_HELVETICA_BOLD8_210, 0, 1, 10, 210 },
+    { GLYPH_FNT_HELVETICA_BOLD8_211, 0, 1, 10, 211 },
+    { GLYPH_FNT_HELVETICA_BOLD8_212, 0, 1, 10, 212 },
+    { GLYPH_FNT_HELVETICA_BOLD8_213, 0, 1, 10, 213 },
+    { GLYPH_FNT_HELVETICA_BOLD8_214, 0, 1, 9, 214 },
+    { GLYPH_FNT_HELVETICA_BOLD8_215, 0, 1, 5, 215 },
+    { GLYPH_FNT_HELVETICA_BOLD8_216, 0, 1, 7, 216 },
+    { GLYPH_FNT_HELVETICA_BOLD8_217, 0, 1, 10, 217 },
+    { GLYPH_FNT_HELVETICA_BOLD8_218, 0, 1, 10, 218 },
+    { GLYPH_FNT_HELVETICA_BOLD8_219, 0, 1, 10, 219 },
+    { GLYPH_FNT_HELVETICA_BOLD8_220, 0, 1, 9, 220 },
+    { GLYPH_FNT_HELVETICA_BOLD8_221, 0, 1, 10, 221 },
+    { GLYPH_FNT_HELVETICA_BOLD8_222, 0, 1, 7, 222 },
+    { GLYPH_FNT_HELVETICA_BOLD8_223, 0, 1, 7, 223 },
+    { GLYPH_FNT_HELVETICA_BOLD8_224, 0, 1, 8, 224 },
+    { GLYPH_FNT_HELVETICA_BOLD8_225, 0, 1, 8, 225 },
+    { GLYPH_FNT_HELVETICA_BOLD8_226, 0, 1, 8, 226 },
+    { GLYPH_FNT_HELVETICA_BOLD8_227, 0, 1, 8, 227 },
+    { GLYPH_FNT_HELVETICA_BOLD8_228, 0, 1, 7, 228 },
+    { GLYPH_FNT_HELVETICA_BOLD8_229, 0, 1, 8, 229 },
+    { GLYPH_FNT_HELVETICA_BOLD8_230, 0, 1, 5, 230 },
+    { GLYPH_FNT_HELVETICA_BOLD8_231, 0, 1, 5, 231 },
+    { GLYPH_FNT_HELVETICA_BOLD8_232, 0, 1, 8, 232 },
+    { GLYPH_FNT_HELVETICA_BOLD8_233, 0, 1, 8, 233 },
+    { GLYPH_FNT_HELVETICA_BOLD8_234, 0, 1, 8, 234 },
+    { GLYPH_FNT_HELVETICA_BOLD8_235, 0, 1, 7, 235 },
+    { GLYPH_FNT_HELVETICA_BOLD8_236, 0, 1, 8, 236 },
+    { GLYPH_FNT_HELVETICA_BOLD8_237, 0, 1, 8, 237 },
+    { GLYPH_FNT_HELVETICA_BOLD8_238, 0, 1, 8, 238 },
+    { GLYPH_FNT_HELVETICA_BOLD8_239, 0, 1, 7, 239 },
+    { GLYPH_FNT_HELVETICA_BOLD8_240, 0, 1, 8, 240 },
+    { GLYPH_FNT_HELVETICA_BOLD8_241, 0, 1, 8, 241 },
+    { GLYPH_FNT_HELVETICA_BOLD8_242, 0, 1, 8, 242 },
+    { GLYPH_FNT_HELVETICA_BOLD8_243, 0, 1, 8, 243 },
+    { GLYPH_FNT_HELVETICA_BOLD8_244, 0, 1, 8, 244 },
+    { GLYPH_FNT_HELVETICA_BOLD8_245, 0, 1, 8, 245 },
+    { GLYPH_FNT_HELVETICA_BOLD8_246, 0, 1, 7, 246 },
+    { GLYPH_FNT_HELVETICA_BOLD8_247, 0, 1, 5, 247 },
+    { GLYPH_FNT_HELVETICA_BOLD8_248, -1, 1, 5, 248 },
+    { GLYPH_FNT_HELVETICA_BOLD8_249, 0, 1, 8, 249 },
+    { GLYPH_FNT_HELVETICA_BOLD8_250, 0, 1, 8, 250 },
+    { GLYPH_FNT_HELVETICA_BOLD8_251, 0, 1, 8, 251 },
+    { GLYPH_FNT_HELVETICA_BOLD8_252, 0, 1, 7, 252 },
+    { GLYPH_FNT_HELVETICA_BOLD8_253, 0, 1, 8, 253 },
+    { GLYPH_FNT_HELVETICA_BOLD8_254, 0, 1, 7, 254 },
+    { GLYPH_FNT_HELVETICA_BOLD8_255, 0, 1, 7, 255 },
 };
 
 // FONT speedo //

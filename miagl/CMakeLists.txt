@@ -13,6 +13,7 @@ add_subdirectory(lib)
 set(C_SOURCES
     "src/miaui.c"
     "src/miaui-gauge.c"
+    "src/miaui-popup.c"
     "src/miaui-resources.c"
     "src/miaui-test.c"
     "src/miaui-utils.c"

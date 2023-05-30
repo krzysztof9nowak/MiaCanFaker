@@ -3,6 +3,7 @@
 #include <miagl-bitmap.h>
 #include <miagl-gfx.h>
 #include <miaui-gauge.h>
+#include <miaui-popup.h>
 #include <miaui-resources.h>
 #include <miaui-utils.h>
 
@@ -88,6 +89,7 @@ void mui_InitInternalState(mui_state_ptr instance)
 void mui_Update(mui_state_ptr instance, uint32_t delta_ms)
 {
     instance->__internal.elapsed_time_ms += delta_ms;
+    mui_PopupUpdate(instance, delta_ms);
 }
 
 void mui_Draw(mui_state_ptr instance, miagl_ptr gl)
@@ -211,6 +213,17 @@ void mui_Draw(mui_state_ptr instance, miagl_ptr gl)
     mgl_DrawTextRight(gl, buffer, FNT_DIGITS, 213, 43, 32);
 
     // Draw odometer
-    mui_UFixedPointToStr(buffer, instance->odometer, 0);
+    mui_UFixedPointToStr(buffer, (instance->odometer > 999999) ? 999999 : instance->odometer, 0);
     mgl_DrawTextRight(gl, buffer, FNT_DIGITS, 208, 54, 48);
+
+    // Draw popup
+    mui_PopupDraw(instance, gl);
+
+    // Draw debug
+    if (instance->debug_text) {
+        mgl_SetColor(gl, MIAGL_COLOR_BLACK);
+        mgl_FillRect(gl, 0, 0, 255, 13);
+        mgl_SetColor(gl, MIAGL_COLOR_WHITE);
+        mgl_DrawText(gl, instance->debug_text, FNT_HELVETICA_BOLD8, 0, 2);
+    }
 }

@@ -5,6 +5,7 @@
 #include <miagl.h>
 #include <miagl-driver.h>
 #include <miaui.h>
+#include <miaui-popup.h>
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -82,6 +83,8 @@ void driver_flush_part_screen(void* buffer, uint16_t size,
 #define DISPLAY_HEIGHT 64
 
 DEFINE_MIAGL_STRUCT(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
+const char TEXT_DEBUG[] = "example debug text!";
 
 miagl_t gl;
 miagl_driver_t driver = {
@@ -234,6 +237,7 @@ void process_event(SDL_Event* event)
         case SDLK_k: --ui_state.odometer; break;
         case SDLK_o: ++ui_state.trip_meter; break;
         case SDLK_l: --ui_state.trip_meter; break;
+        case SDLK_F1: mui_ShowPopup(&ui_state, MUI_POPUP_RELEASE_PBRAKE, MUI_POPUP_TIME_DEFAULT); break;
         }
     }
 }

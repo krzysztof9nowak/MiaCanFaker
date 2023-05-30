@@ -31,3 +31,4 @@ Programowy renderer różnych rzeczy
 |**LAlt** | Otwórz/zamknij drzwi lewe               |
 |**RAlt** | Otwórz/zamknij drzwi prawe              |
 |**Space**| Przełącz wentylator chłodzący silnika   |
+| **F1**  | Popup: zwolnij hamulec ręczny           |

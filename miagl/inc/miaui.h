@@ -37,6 +37,10 @@ typedef struct mui_state {
 
     struct {
         uint32_t elapsed_time_ms;
+        uint8_t selected_popup;
+        uint8_t popup_animation_stage;
+        int32_t popup_time_left_ms;
+        uint16_t popup_height;
     } __internal;
 
 } mui_state_t, *mui_state_ptr;

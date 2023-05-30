@@ -12,6 +12,7 @@ static uint32_t mgl_BinSearchGlyphIndex(uint8_t glyph, const mgl_glyph_t* font)
         uint8_t current_glyph = font[center].glyph;
 
         if (current_glyph == glyph) return center;
+        else if (start + 1 == end) break;
         else if (current_glyph > glyph) end = center; // left half
         else start = center; // right half
     }

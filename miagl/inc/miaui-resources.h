@@ -20,12 +20,14 @@ extern const uint32_t IMG_LIGHT_BLINKER_R[];
 extern const uint32_t IMG_LIGHT_DOOR_L[];
 extern const uint32_t IMG_LIGHT_DOOR_R[];
 extern const uint32_t IMG_LIGHT_MOTOR_FAN[];
+extern const uint32_t IMG_LIGHT_PBRAKE[];
 extern const uint32_t IMG_SCALE_VOLTS[];
 extern const uint32_t IMG_SMALL[];
 extern const uint32_t IMG_TEST[];
 
 extern const mgl_glyph_t FNT_DIGITS[];
 extern const mgl_glyph_t FNT_DIGITS_4X7[];
+extern const mgl_glyph_t FNT_HELVETICA_BOLD8[];
 extern const mgl_glyph_t FNT_SPEEDO[];
 
 #endif
