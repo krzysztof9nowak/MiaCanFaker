@@ -8,6 +8,9 @@
 
 void mui_RenderGlTest(miagl_ptr gl)
 {
+    static uint8_t xoff = 0;
+    xoff++;
+
     // Test direct access to pixels
     for (int y = 0; y < 16; y++) {
         for (int x = 0; x < 16; x++) {
@@ -102,14 +105,23 @@ void mui_RenderGlTest(miagl_ptr gl)
 
     mgl_DrawBitmap(gl, 160, -4, IMG_TEST);
     mgl_DrawBitmap(gl, 160, 50, IMG_TEST);
-    static uint8_t xoff = 0;
-    xoff++;
     mgl_DrawBitmap(gl, 161 + (xoff >> 4), 30, IMG_SMALL);
 
     mgl_SetColor(gl, 3);
     mgl_FillRect(gl, 200, 0, 255, 63);
     mgl_DrawBitmap(gl, 200, 0, IMG_GLPATTERN);
     mgl_DrawBitmap(gl, 220, 16, IMG_GLPATTERN);
+    mgl_SetColor(gl, 2);
+    mgl_DrawTintedBitmap(gl, 200, 32, IMG_ABS);
+    mgl_SetColor(gl, (xoff & 0x20) ? MIAGL_COLOR_WHITE : 2);
+    mgl_DrawTintedBitmap(gl, 220, 32, IMG_ABS);
+
+    mgl_SetColor(gl, xoff & 0xF);
+    mgl_FillRect(gl, 180, 0, 199, xoff >> 3);
+    mgl_DrawXorBitmap(gl, 180, 0, IMG_ABS);
+
+    mgl_SetColor(gl, MIAGL_COLOR_WHITE);
+    mgl_FillXorRect(gl, 155, 45, 168, 58);
 
     mgl_FlushScreen(gl);
 }

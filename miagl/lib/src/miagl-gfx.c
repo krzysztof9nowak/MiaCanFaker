@@ -1,6 +1,7 @@
 #include <miagl-gfx.h>
 
 #include <miagl.h>
+#include <miagl-helpers.h>
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -29,7 +30,8 @@ static const uint8_t GAMMA_LUT[] = {0, 18, 25, 31, 35, 39, 43, 46, 49,
     254, 254, 255, 255
 };
 
-static inline void mgl_SetPixelUnchecked(miagl_ptr instance, uint16_t x, uint16_t y, uint8_t brightness)
+static inline ALWAYS_INLINE void mgl_SetPixelUnchecked(miagl_ptr instance, uint16_t x, 
+                                                       uint16_t y, uint8_t brightness)
 {
     if (x % 2 == 1) {
         instance->current_buffer[PIX(instance, x, y)] &= HIMSK;
@@ -40,23 +42,18 @@ static inline void mgl_SetPixelUnchecked(miagl_ptr instance, uint16_t x, uint16_
     }
 }
 
-static inline uint32_t mgl_ColorNibbleToWord(miagl_ptr instance)
+static inline ALWAYS_INLINE void mgl_XorPixelUnchecked(miagl_ptr instance, uint16_t x, 
+                                                       uint16_t y, uint8_t brightness)
 {
-    uint32_t colorWord = instance->color & LOMSK;
-
-    return (
-        colorWord << 0 |
-        colorWord << 4 |
-        colorWord << 8 | 
-        colorWord << 12 | 
-        colorWord << 16 | 
-        colorWord << 20 |
-        colorWord << 24 |
-        colorWord << 28
-    );
+    if (x % 2 == 1) {
+        instance->current_buffer[PIX(instance, x, y)] ^= brightness;
+    } else {
+        instance->current_buffer[PIX(instance, x, y)] ^= (brightness << 4);
+    }
 }
 
-static inline void mgl_BlendPixel(miagl_ptr instance, uint16_t x, uint16_t y, uint8_t brightness, uint8_t alpha)
+static inline ALWAYS_INLINE void mgl_BlendPixel(miagl_ptr instance, uint16_t x, uint16_t y, 
+                                                uint8_t brightness, uint8_t alpha)
 {
     if (x >= instance->display_x || y >= instance->display_y) return;
 
@@ -77,7 +74,8 @@ static inline void mgl_BlendPixel(miagl_ptr instance, uint16_t x, uint16_t y, ui
     }
 }
 
-static inline void mgl_UpdateTriangleBuffer(miagl_ptr instance, uint16_t xmin, uint16_t xmax, uint16_t y)
+static inline ALWAYS_INLINE void mgl_UpdateTriangleBuffer(miagl_ptr instance, uint16_t xmin, 
+                                                         uint16_t xmax, uint16_t y)
 {
     if (y < instance->display_y) {
         uint32_t value = instance->triangle_buffer[y];
@@ -265,7 +263,8 @@ static void mgl_DrawLineAAImpl(miagl_ptr instance, uint16_t x1, uint16_t y1,
     }
 }
 
-void mgl_DrawHLine(miagl_ptr instance, uint16_t x1, uint16_t x2, uint16_t y)
+static inline ALWAYS_INLINE void mgl_DrawHLineImpl(miagl_ptr instance, uint16_t x1, 
+                                                   uint16_t x2, uint16_t y, bool xor)
 {
     if (x1 > x2) {
         uint16_t temp = x2;
@@ -283,21 +282,49 @@ void mgl_DrawHLine(miagl_ptr instance, uint16_t x1, uint16_t x2, uint16_t y)
     if (firstCell == lastCell) { 
         // This is a short line, no need to do aligned word optimization
         for (uint16_t x = x1; x <= x2; ++x) {
-            mgl_SetPixelUnchecked(instance, x, y, brightness);
+            if (xor) {
+                mgl_XorPixelUnchecked(instance, x, y, brightness);
+            } else {
+                mgl_SetPixelUnchecked(instance, x, y, brightness);
+            }
         }
     } else {
         uint32_t* buffer = (uint32_t*)instance->current_buffer;
-        uint32_t colorData = mgl_ColorNibbleToWord(instance);
+        uint32_t colorData = mgl_ColorNibbleToWord(instance->color);
         uint8_t remainder1 = x1 & 7;
         uint8_t remainder2 = (x2 & 7) + 1;
 
-        buffer[firstCell] = (buffer[firstCell] & (MASKS[remainder1])) | (colorData & (~MASKS[remainder1]));
-        ++firstCell;
-        while (firstCell < lastCell) {
-            buffer[firstCell++] = colorData;
+        if (xor) {
+            buffer[firstCell] ^= colorData & (~MASKS[remainder1]);
+        } else {
+            buffer[firstCell] = (buffer[firstCell] & (MASKS[remainder1])) | (colorData & (~MASKS[remainder1]));
         }
-        buffer[lastCell] = (colorData & MASKS[remainder2]) | (buffer[lastCell] & (~MASKS[remainder2]));
+        ++firstCell;
+
+        while (firstCell < lastCell) {
+            if (xor) {
+                buffer[firstCell++] ^= colorData;
+            } else {
+                buffer[firstCell++] = colorData;
+            }
+        }
+
+        if (xor) {
+            buffer[lastCell] ^= colorData & MASKS[remainder2];
+        } else {
+            buffer[lastCell] = (colorData & MASKS[remainder2]) | (buffer[lastCell] & (~MASKS[remainder2]));
+        }
     }
+}
+
+void mgl_DrawHLine(miagl_ptr instance, uint16_t x1, uint16_t x2, uint16_t y)
+{
+    mgl_DrawHLineImpl(instance, x1, x2, y, false);
+}
+
+void mgl_DrawXorHLine(miagl_ptr instance, uint16_t x1, uint16_t x2, uint16_t y)
+{
+    mgl_DrawHLineImpl(instance, x1, x2, y, true);
 }
 
 void mgl_DrawVLine(miagl_ptr instance, uint16_t x, uint16_t y1, uint16_t y2)
@@ -329,6 +356,13 @@ void mgl_FillRect(miagl_ptr instance, uint16_t x1, uint16_t y1, uint16_t x2, uin
 {
     while (y1 <= y2) {
         mgl_DrawHLine(instance, x1, x2, y1++);
+    }
+}
+
+void mgl_FillXorRect(miagl_ptr instance, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+{
+    while (y1 <= y2) {
+        mgl_DrawXorHLine(instance, x1, x2, y1++);
     }
 }
 
