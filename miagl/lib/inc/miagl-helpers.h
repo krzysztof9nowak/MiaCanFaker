@@ -18,7 +18,20 @@
 
 #endif
 
-#if __BYTE_ORDER == __BIG_ENDIAN
+
+#if defined(__arm__)
+
+inline uint32_t mgl_FixEndianess(uint32_t in)
+{
+    /*__asm__(
+        "rev %w[word], %w[word]"
+        : [word] "+r" (in)
+    );
+    return in;*/
+    return __builtin_bswap32(in);
+}
+
+#elif __BYTE_ORDER == __BIG_ENDIAN
 
 inline uint32_t mgl_FixEndianess(uint32_t in) { return in; }
 
@@ -28,17 +41,6 @@ inline uint32_t mgl_FixEndianess(uint32_t in)
 {
     __asm__(
         "bswap %[word]"
-        : [word] "+r" (in)
-    );
-    return in;
-}
-
-#elif defined(__arm__)
-
-inline uint32_t mgl_FixEndianess(uint32_t in)
-{
-    __asm__(
-        "rev %w[word], %w[word]"
         : [word] "+r" (in)
     );
     return in;

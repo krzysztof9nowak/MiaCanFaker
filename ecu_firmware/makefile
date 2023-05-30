@@ -56,7 +56,6 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
-$(shell ls Drivers/u8g2/csrc/*.c) \
 Middlewares/Third_Party/FreeRTOS/Source/croutine.c \
 Middlewares/Third_Party/FreeRTOS/Source/event_groups.c \
 Middlewares/Third_Party/FreeRTOS/Source/list.c \
@@ -137,7 +136,9 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 \
 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
--IDrivers/CMSIS/Include
+-IDrivers/CMSIS/Include \
+-I../miagl/inc \
+-I../miagl/lib/inc
 
 
 # compile gcc flags
@@ -161,8 +162,8 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = STM32F103VETx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys
-LIBDIR =
+LIBS = -lc -lm -lnosys -lmiaui -lmiagl
+LIBDIR = -L../miagl/armbuild -L../miagl/armbuild/lib
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all

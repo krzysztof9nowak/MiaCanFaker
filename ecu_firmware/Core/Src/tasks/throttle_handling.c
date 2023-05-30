@@ -84,8 +84,6 @@ void throttle_task(void *argument)
             can_send_egv_sync_all(&egv_sync);
         }
 
-        egv_accel_var.DS1 = 1;
-        egv_accel_var.DS2 = 1;
         if(inverter.status == INVERTER_STATUS_RUN){
             egv_accel_var.accelerator_set_point = inverter.throttle;
             egv_accel_var.footswitch = inverter.throttle > 0;
