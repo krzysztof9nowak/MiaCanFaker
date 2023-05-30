@@ -19,7 +19,7 @@ static void mgl_SwapBuffers(miagl_ptr instance)
     instance->previous_buffer = temp;
 }
 
-static void mgl_CallMemcpy(miagl_ptr instance, void* dst, void* src, uint16_t size)
+static void mgl_CallMemcpy(miagl_ptr instance, void* dst, const void* src, uint16_t size)
 {
     if (instance->driver_data->fn_dma_memcpy) {
         instance->driver_data->fn_dma_memcpy(dst, src, size);
@@ -187,7 +187,7 @@ void mgl_FlushScreen(miagl_ptr instance)
     mgl_ClearBuffer(instance, instance->current_buffer);
 }
 
-bool mgl_SetBackgroundBitmap(miagl_ptr instance, void* bitmap, uint16_t size) 
+bool mgl_SetBackgroundBitmap(miagl_ptr instance, const void* bitmap, uint16_t size) 
 {
     if (instance->stride * instance->display_y > size) {
         return false;
@@ -197,7 +197,7 @@ bool mgl_SetBackgroundBitmap(miagl_ptr instance, void* bitmap, uint16_t size)
     return true;
 }
 
-void* mgl_GetBackgroundBitmap(miagl_ptr instance)
+const void* mgl_GetBackgroundBitmap(miagl_ptr instance)
 {
     return instance->frame_bg;
 }

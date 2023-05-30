@@ -1,3 +1,4 @@
+from itertools import count
 import json
 from os import listdir, path
 from PIL import Image
@@ -30,7 +31,11 @@ print('====== PROCESSING IMAGES ======')
 for file in sorted(listdir(IMAGES_DIR)):
     try:
         print(f'Processing {file}...')
-        var_name = 'IMG_' + file[0:file.rfind('.')].upper()
+        background = file.lower().startswith('bg_')
+        if background:
+            var_name = 'BG_' + file[3:file.rfind('.')].upper()
+        else:
+            var_name = 'IMG_' + file[0:file.rfind('.')].upper()
 
         out_inc.write(f'extern const uint32_t {var_name}[];\n')
 
@@ -41,14 +46,22 @@ for file in sorted(listdir(IMAGES_DIR)):
         c_array = f'const uint32_t {var_name}[] = '
         c_array_content = [ hex(width * 65536 + height) ]
 
+        if background:
+            c_array_content = []
+
+        BG_ORDER = [1, 0, 3, 2, 5, 4, 7, 6]
+
         for y in range(height):
             word = 0
             counter = 0
             for x in range(width):
                 brightness = img.getpixel((x, y))
                 truncated = brightness // 16
-                word <<= 4
-                word += truncated
+                if not background:
+                    word <<= 4
+                    word += truncated
+                else:
+                    word |= truncated * (1 << BG_ORDER[counter] * 4)
                 counter += 1
                 if counter == 8:
                     c_array_content.append(hex(word))

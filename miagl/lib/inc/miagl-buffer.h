@@ -20,7 +20,7 @@
         uint8_t bgcolor; \
         uint8_t color; \
         miagl_driver_ptr driver_data; \
-        void* frame_bg; \
+        const void* frame_bg; \
         uint8_t static_buffer[(width) * (height) / 2 * 3 + height * sizeof(uint16_t) * 2]; \
     } miagl_t
 

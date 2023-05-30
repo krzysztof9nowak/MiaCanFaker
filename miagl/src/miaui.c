@@ -44,6 +44,8 @@ void mui_Update(mui_state_ptr instance, uint32_t delta_ms)
 
 void mui_Draw(mui_state_ptr instance, miagl_ptr gl)
 {
+    mgl_SetBackgroundBitmap(gl, BG_BACKGROUND, 256 * 64 / 2);
+    
     static char buffer[64];
 
     // Draw cell voltage

@@ -39,7 +39,7 @@ typedef struct miagl_driver {
     void (*fn_dma_memset)(void* block, uint8_t value, uint16_t size);
 
     /** \brief Copy the entire block of memory using DMA */
-    void (*fn_dma_memcpy)(void* dst, void* src, uint16_t size);
+    void (*fn_dma_memcpy)(void* dst, const void* src, uint16_t size);
 
 } miagl_driver_t, *miagl_driver_ptr;
 
