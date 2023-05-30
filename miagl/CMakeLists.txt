@@ -15,6 +15,7 @@ set(C_SOURCES
     "src/miaui-gauge.c"
     "src/miaui-resources.c"
     "src/miaui-test.c"
+    "src/miaui-utils.c"
 )
 
 if ((CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64") AND NOT NO_X86_TARGET)

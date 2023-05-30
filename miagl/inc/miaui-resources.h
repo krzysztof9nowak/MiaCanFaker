@@ -20,5 +20,6 @@ extern const uint32_t IMG_TEST[];
 
 extern const mgl_glyph_t FNT_DIGITS[];
 extern const mgl_glyph_t FNT_DIGITS_4X7[];
+extern const mgl_glyph_t FNT_SPEEDO[];
 
 #endif

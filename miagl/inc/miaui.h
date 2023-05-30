@@ -17,7 +17,8 @@ typedef struct mui_state {
     uint16_t capacitor_voltage; //!< in 0.1v, e.g. 762 = 76.2 V
     uint8_t cell_count; //!< capacitor_voltage / cell_count = cell voltage
     int16_t motor_current; //!< motor current in Amps (signed)
-    mui_gear gear;
+    mui_gear gear; //!< DRIVE, NEUTRAL or REVERSE
+    uint16_t vehicle_speed; //!< absolute value of vehicle speed in kmph
     
     struct {
         uint32_t elapsed_time_ms;

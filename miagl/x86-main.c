@@ -96,6 +96,7 @@ mui_state_t ui_state = {
     .cell_count = 22,
     .motor_current = 0,
     .gear = MUI_NEUTRAL,
+    .vehicle_speed = 0,
 };
 
 static uint64_t get_diff(struct timespec t1, struct timespec t2)
@@ -207,6 +208,8 @@ void process_event(SDL_Event* event)
         case SDLK_s: ui_state.motor_current -= 5; break;
         case SDLK_UP: if (ui_state.gear > MUI_DRIVE) --ui_state.gear; break;
         case SDLK_DOWN: if (ui_state.gear < MUI_REVERSE) ++ui_state.gear; break;
+        case SDLK_r: ++ui_state.vehicle_speed; break;
+        case SDLK_f: --ui_state.vehicle_speed; break;
         }
     }
 }
