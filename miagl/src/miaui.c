@@ -91,4 +91,7 @@ void mui_Draw(mui_state_ptr instance, miagl_ptr gl)
     mui_DrawVGauge(gl, &VOLTS_GAUGE, instance->capacitor_voltage);
     mui_DrawVGauge(gl, &AMPS_GAUGE, instance->motor_current);
 
+    // Draw gear selection
+    static const uint32_t* GEAR_BITMAPS[] = { IMG_GEARBOX_D, IMG_GEARBOX_N, IMG_GEARBOX_R };
+    mgl_DrawBitmap(gl, 57, 0, GEAR_BITMAPS[instance->gear]);
 }

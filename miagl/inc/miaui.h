@@ -5,12 +5,19 @@
 
 #include <stdint.h>
 
+typedef enum {
+    MUI_DRIVE,
+    MUI_NEUTRAL,
+    MUI_REVERSE,
+} mui_gear;
+
 typedef struct mui_state {
 
     const char* debug_text; //!< any debug text to draw, may be NULL
     uint16_t capacitor_voltage; //!< in 0.1v, e.g. 762 = 76.2 V
     uint8_t cell_count; //!< capacitor_voltage / cell_count = cell voltage
     int16_t motor_current; //!< motor current in Amps (signed)
+    mui_gear gear;
     
     struct {
         uint32_t elapsed_time_ms;
