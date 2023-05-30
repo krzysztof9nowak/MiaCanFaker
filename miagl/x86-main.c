@@ -2,6 +2,8 @@
 
 #include <SDL.h>
 
+#include <miagl-driver.h>
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +29,55 @@ uint8_t PALETTE[16][3] = {
     {13 * 255 / 15, 13 * 200 / 15, 0},
     {14 * 255 / 15, 14 * 200 / 15, 0},
     {15 * 255 / 15, 15 * 200 / 15, 0},
+};
+
+void driver_init_driver()
+{
+    printf("Init driver has been called!\n");
+}
+
+bool driver_is_buffer_ready()
+{
+    return true;
+}
+
+void driver_flush_full_screen(void* buffer, uint16_t size)
+{
+    if (size != sizeof(screen)) {
+        fprintf(stderr, 
+            "Error: invalid buffer size passed to flush_full_screen. Got %d, expected %d!\n", 
+            (int)size, (int)sizeof(screen));
+    }
+
+    uint8_t* buf = buffer;
+    memcpy(screen, buf, size);
+}
+
+void driver_flush_part_screen(void* buffer, uint16_t size, 
+                             uint8_t start_x, uint8_t end_x, uint8_t start_y,
+                             uint8_t end_y)
+{
+    uint8_t* buf = buffer;
+    int expectedSize = (end_x - start_x + 1) * (end_y - start_y + 1);
+    if (size != sizeof(screen)) {
+        fprintf(stderr, 
+            "Error: invalid buffer size passed to flush_part_screen. Got %d, expected %d!\n", 
+            (int)size, expectedSize);
+    }
+
+    int index = 0;
+    for (int y = start_y; y <= end_y; y++) {
+        for (int x = start_x; x <= end_x; x += 2) {
+            screen[y][x / 2] = buf[index++];
+        }
+    }
+}
+
+miagl_driver_t driver = {
+    .fn_init_driver = driver_init_driver,
+    .fn_is_buffer_ready = driver_is_buffer_ready,
+    .fn_flush_full_screen = driver_flush_full_screen,
+    .fn_flush_part_screen = driver_flush_part_screen
 };
 
 int main(int argc, char **argv) 
@@ -68,6 +119,7 @@ int main(int argc, char **argv)
         return 3;
     }
 
+    printf("Entering main loop...\n");
     bool running = true;
     while (running) {
         SDL_Event event;
