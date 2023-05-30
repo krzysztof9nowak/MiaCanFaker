@@ -11,6 +11,7 @@ add_compile_options(-Wall -O2)
 add_subdirectory(lib)
 
 set(C_SOURCES
+    "src/miaui-resources.c"
     "src/miaui-test.c"
 )
 

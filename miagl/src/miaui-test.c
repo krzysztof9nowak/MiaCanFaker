@@ -1,6 +1,8 @@
 #include <miaui-test.h>
 
+#include <miagl-bitmap.h>
 #include <miagl-gfx.h>
+#include <miaui-resources.h>
 
 #include <stdlib.h>
 
@@ -97,6 +99,11 @@ void mui_RenderGlTest(miagl_ptr gl)
 
     mgl_SetColor(gl, MIAGL_COLOR_WHITE);
     mgl_FillTriangleAA(gl, 118, 56, 140, 40, 125, 20);
+
+    mgl_DrawBitmap(gl, 200, 32, IMG_KOT);
+    mgl_DrawBitmap(gl, 190, -5, IMG_TEST);
+    mgl_DrawBitmap(gl, 190, 12, IMG_TEST);
+    mgl_DrawBitmap(gl, 190, 56, IMG_TEST);
 
     mgl_FlushScreen(gl);
 }
