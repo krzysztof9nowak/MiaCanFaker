@@ -1,12 +1,12 @@
 [
     { "font_height": 9 },
-    { "glyph": "1", "x": 0, "y": 0, "w": 4, "h": 9, "left": 1, "right": 2, "baseline": 8 },
+    { "glyph": "1", "x": 0, "y": 0, "w": 4, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "2", "x": 5, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
-    { "glyph": "3", "x": 12, "y": 0, "w": 5, "h": 9, "left": 1, "right": 1, "baseline": 8 },
+    { "glyph": "3", "x": 12, "y": 0, "w": 5, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "4", "x": 18, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "5", "x": 25, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "6", "x": 31, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
-    { "glyph": "7", "x": 38, "y": 0, "w": 5, "h": 9, "left": 1, "right": 1, "baseline": 8 },
+    { "glyph": "7", "x": 38, "y": 0, "w": 5, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "8", "x": 44, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "9", "x": 51, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 },
     { "glyph": "0", "x": 58, "y": 0, "w": 6, "h": 9, "left": 0, "right": 1, "baseline": 8 }

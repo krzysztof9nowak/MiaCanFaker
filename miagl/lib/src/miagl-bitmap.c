@@ -39,7 +39,7 @@ static inline ALWAYS_INLINE void mgl_DrawBitmapImpl(miagl_ptr instance, uint16_t
                 register uint32_t left_mask = MASKS_BE[mod_offset];
                 register uint32_t right_mask = MASKS_BE[(mod_offset + width > 8) ? (8) : (mod_offset + width)];
                 buffer[firstCell] = mgl_FixEndianess(
-                    (left_mask & (~right_mask) & mgl_FixEndianess(buffer[firstCell]))
+                    (~((~left_mask) & right_mask) & mgl_FixEndianess(buffer[firstCell]))
                     | ((*bitmap >> mod_shift) & (~left_mask) & right_mask & tint)
                 );
             }

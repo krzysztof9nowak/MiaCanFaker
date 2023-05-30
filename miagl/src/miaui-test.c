@@ -4,6 +4,7 @@
 #include <miagl-gfx.h>
 #include <miaui-resources.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 
 void mui_RenderGlTest(miagl_ptr gl)
@@ -105,6 +106,9 @@ void mui_RenderGlTest(miagl_ptr gl)
 
     mgl_DrawBitmap(gl, 160, -4, IMG_TEST);
     mgl_DrawBitmap(gl, 160, 50, IMG_TEST);
+
+    mgl_SetColor(gl, 4);
+    mgl_FillRect(gl, 160, 28, 180, 35);
     mgl_DrawBitmap(gl, 161 + (xoff >> 4), 30, IMG_SMALL);
 
     mgl_SetColor(gl, 3);
@@ -122,6 +126,13 @@ void mui_RenderGlTest(miagl_ptr gl)
 
     mgl_SetColor(gl, MIAGL_COLOR_WHITE);
     mgl_FillXorRect(gl, 155, 45, 168, 58);
+    
+    static uint32_t frame_counter = 3243282;
+    ++frame_counter;
+    char buffer[16];
+    sprintf(buffer, "%u", frame_counter >> 6);
+    mgl_SetColor(gl, MIAGL_COLOR_WHITE);
+    mgl_DrawTextRight(gl, buffer, FNT_DIGITS, 200, 55, 56);
 
     mgl_FlushScreen(gl);
 }

@@ -25,13 +25,13 @@ static const uint32_t GLYPH_FNT_DIGITS_57[] = {0x60009, 0xffff000, 0xff00ff00, 0
 const mgl_glyph_t FNT_DIGITS[] = {
     { NULL, 0, 0, 8, 10 },
     { GLYPH_FNT_DIGITS_48, 0, 1, 8, 48 },
-    { GLYPH_FNT_DIGITS_49, 1, 2, 8, 49 },
+    { GLYPH_FNT_DIGITS_49, 0, 1, 8, 49 },
     { GLYPH_FNT_DIGITS_50, 0, 1, 8, 50 },
-    { GLYPH_FNT_DIGITS_51, 1, 1, 8, 51 },
+    { GLYPH_FNT_DIGITS_51, 0, 1, 8, 51 },
     { GLYPH_FNT_DIGITS_52, 0, 1, 8, 52 },
     { GLYPH_FNT_DIGITS_53, 0, 1, 8, 53 },
     { GLYPH_FNT_DIGITS_54, 0, 1, 8, 54 },
-    { GLYPH_FNT_DIGITS_55, 1, 1, 8, 55 },
+    { GLYPH_FNT_DIGITS_55, 0, 1, 8, 55 },
     { GLYPH_FNT_DIGITS_56, 0, 1, 8, 56 },
     { GLYPH_FNT_DIGITS_57, 0, 1, 8, 57 },
 };
