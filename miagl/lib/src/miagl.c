@@ -40,8 +40,12 @@ static void mgl_CallMemset(miagl_ptr instance, void* block, uint8_t value, uint1
 
 static void mgl_ClearBuffer(miagl_ptr instance, void* buffer)
 {
-    uint8_t value = (instance->bgcolor << 4) | instance->bgcolor;
-    mgl_CallMemset(instance, buffer, value, instance->display_y * instance->stride);
+    if (instance->frame_bg) {
+        mgl_CallMemcpy(instance, buffer, instance->frame_bg, instance->display_y * instance->stride);
+    } else {
+        uint8_t value = (instance->bgcolor << 4) | instance->bgcolor;
+        mgl_CallMemset(instance, buffer, value, instance->display_y * instance->stride);
+    }
 }
 
 static void mgl_SendBuffer(miagl_ptr instance, uint16_t start_x, uint16_t end_x,
@@ -87,6 +91,7 @@ bool mgl_InitLibrary(miagl_ptr instance, uint16_t display_width,
     instance->previous_buffer = instance->frame_buffer2;
     instance->bgcolor = MIAGL_COLOR_BLACK;
     instance->color = MIAGL_COLOR_WHITE;
+    instance->frame_bg = NULL;
 
     memset(instance->frame_buffer1, 0, fboSize);
     memset(instance->frame_buffer2, 0, fboSize);
@@ -179,4 +184,19 @@ void mgl_FlushScreen(miagl_ptr instance)
     mgl_SendBuffer(instance, start_x, end_x, start_y, end_y);
     mgl_SwapBuffers(instance);
     mgl_ClearBuffer(instance, instance->current_buffer);
+}
+
+bool mgl_SetBackgroundBitmap(miagl_ptr instance, void* bitmap, uint16_t size) 
+{
+    if (instance->stride * instance->display_y > size) {
+        return false;
+    }
+
+    instance->frame_bg = bitmap;
+    return true;
+}
+
+void* mgl_GetBackgroundBitmap(miagl_ptr instance)
+{
+    return instance->frame_bg;
 }
