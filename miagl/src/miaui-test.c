@@ -54,5 +54,43 @@ void mui_RenderGlTest(miagl_ptr gl)
         mgl_DrawLine(gl, 32, i * 3, 42, i * 4);
     }
 
+    mgl_SetColor(gl, 3);
+    mgl_DrawLineAA(gl, 80, 30, 80, 0);
+    mgl_DrawLineAA(gl, 80, 30, 90, 0);
+    mgl_SetColor(gl, 4);
+    mgl_DrawLineAA(gl, 80, 30, 100, 0);
+    mgl_DrawLineAA(gl, 80, 30, 110, 0);
+    mgl_SetColor(gl, 5);
+    mgl_DrawLineAA(gl, 80, 30, 110, 10);
+    mgl_DrawLineAA(gl, 80, 30, 110, 20);
+    mgl_SetColor(gl, 6);
+    mgl_DrawLineAA(gl, 80, 30, 110, 30);
+    mgl_DrawLineAA(gl, 80, 30, 110, 40);
+    mgl_SetColor(gl, 7);
+    mgl_DrawLineAA(gl, 80, 30, 110, 50);
+    mgl_DrawLineAA(gl, 80, 30, 110, 60);
+    mgl_SetColor(gl, 8);
+    mgl_DrawLineAA(gl, 80, 30, 100, 60);
+    mgl_DrawLineAA(gl, 80, 30, 90, 60);
+    mgl_SetColor(gl, 9);
+    mgl_DrawLineAA(gl, 80, 30, 80, 60);
+    mgl_DrawLineAA(gl, 80, 30, 70, 60);
+    mgl_SetColor(gl, 10);
+    mgl_DrawLineAA(gl, 80, 30, 60, 60);
+    mgl_DrawLineAA(gl, 80, 30, 50, 60);
+    mgl_SetColor(gl, 11);
+    mgl_DrawLineAA(gl, 80, 30, 50, 50);
+    mgl_DrawLineAA(gl, 80, 30, 50, 40);
+    mgl_SetColor(gl, 12);
+    mgl_DrawLineAA(gl, 80, 30, 50, 30);
+    mgl_DrawLineAA(gl, 80, 30, 50, 20);
+    mgl_SetColor(gl, 13);
+    mgl_DrawLineAA(gl, 80, 30, 50, 10);
+    mgl_DrawLineAA(gl, 80, 30, 50, 0);
+    mgl_SetColor(gl, 14);
+    mgl_DrawLineAA(gl, 80, 30, 60, 0);
+    mgl_SetColor(gl, 15);
+    mgl_DrawLineAA(gl, 80, 30, 70, 0);
+
     mgl_FlushScreen(gl);
 }
