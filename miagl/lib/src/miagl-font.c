@@ -23,7 +23,22 @@ static uint32_t mgl_BinSearchGlyphIndex(uint8_t glyph, const mgl_glyph_t* font)
     return 0;
 }
 
-int16_t mgl_CalcTextWidth(const char* text, const mgl_glyph_t* font)
+void mgl_SetExtraSpacing(miagl_ptr instance, int16_t spacing)
+{
+    instance->extra_font_spacing = spacing;
+}
+
+uint16_t mgl_GetExtraSpacing(miagl_ptr instance)
+{
+    return instance->extra_font_spacing;
+}
+
+void mgl_ClearExtraSpacing(miagl_ptr instance)
+{
+    instance->extra_font_spacing = 0;
+}
+
+int16_t mgl_CalcTextWidth(miagl_ptr instance, const char* text, const mgl_glyph_t* font)
 {
     int16_t total_width = 0;
 
@@ -31,9 +46,11 @@ int16_t mgl_CalcTextWidth(const char* text, const mgl_glyph_t* font)
         uint32_t index = mgl_BinSearchGlyphIndex(*text, font);
 
         if (index) {
+            total_width += instance->extra_font_spacing;
             total_width += font[index].left_spacing;
             total_width += mgl_GetBitmapWidth(font[index].bitmap);
             total_width += font[index].right_spacing;
+            total_width += instance->extra_font_spacing;
         }
 
         ++text;
@@ -52,9 +69,11 @@ void mgl_DrawText(miagl_ptr instance, const char* text,
         if (index) {
             register const uint32_t* current_bitmap = font[index].bitmap;
 
+            x += instance->extra_font_spacing;
             x += font[index].left_spacing;
             mgl_DrawTintedBitmap(instance, x, y - font[index].baseline, current_bitmap);
             x += mgl_GetBitmapWidth(current_bitmap) + font[index].right_spacing;
+            x += instance->extra_font_spacing;
         }
 
         ++text;
@@ -64,14 +83,14 @@ void mgl_DrawText(miagl_ptr instance, const char* text,
 void mgl_DrawTextCenter(miagl_ptr instance, const char* text, const mgl_glyph_t* font, 
                         uint16_t x, uint16_t y, int16_t width)
 {
-    int16_t real_width = mgl_CalcTextWidth(text, font);
+    int16_t real_width = mgl_CalcTextWidth(instance, text, font);
     mgl_DrawText(instance, text, font, x + (width - real_width) / 2, y);
 }
 
 void mgl_DrawTextRight(miagl_ptr instance, const char* text, const mgl_glyph_t* font, 
                        uint16_t x, uint16_t y, int16_t width)
 {
-    int16_t real_width = mgl_CalcTextWidth(text, font);
+    int16_t real_width = mgl_CalcTextWidth(instance, text, font);
     mgl_DrawText(instance, text, font, x + (width - real_width), y);
 }
 
@@ -85,9 +104,11 @@ void mgl_DrawXorText(miagl_ptr instance, const char* text,
         if (index) {
             register const uint32_t* current_bitmap = font[index].bitmap;
 
+            x += instance->extra_font_spacing;
             x += font[index].left_spacing;
             mgl_DrawXorTintedBitmap(instance, x, y - font[index].baseline, current_bitmap);
             x += mgl_GetBitmapWidth(current_bitmap) + font[index].right_spacing;
+            x += instance->extra_font_spacing;
         }
 
         ++text;
@@ -97,13 +118,13 @@ void mgl_DrawXorText(miagl_ptr instance, const char* text,
 void mgl_DrawXorTextCenter(miagl_ptr instance, const char* text, const mgl_glyph_t* font, 
                            uint16_t x, uint16_t y, int16_t width)
 {
-    int16_t real_width = mgl_CalcTextWidth(text, font);
+    int16_t real_width = mgl_CalcTextWidth(instance, text, font);
     mgl_DrawXorText(instance, text, font, x + (width - real_width) / 2, y);
 }
 
 void mgl_DrawXorTextRight(miagl_ptr instance, const char* text, const mgl_glyph_t* font, 
                           uint16_t x, uint16_t y, int16_t width)
 {
-    int16_t real_width = mgl_CalcTextWidth(text, font);
+    int16_t real_width = mgl_CalcTextWidth(instance, text, font);
     mgl_DrawXorText(instance, text, font, x + (width - real_width), y);
 }

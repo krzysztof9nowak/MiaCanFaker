@@ -1,7 +1,7 @@
 [
     { "font_height": 7 },
     { "glyph": "0", "x": 0, "y": 0, "w": 4, "h": 7, "left": 0, "right": 1, "baseline": 6 },
-    { "glyph": "1", "x": 5, "y": 0, "w": 4, "h": 7, "left": 0, "right": 1, "baseline": 6 },
+    { "glyph": "1", "x": 6, "y": 0, "w": 3, "h": 7, "left": 1, "right": 1, "baseline": 6 },
     { "glyph": "2", "x": 10, "y": 0, "w": 4, "h": 7, "left": 0, "right": 1, "baseline": 6 },
     { "glyph": "3", "x": 15, "y": 0, "w": 4, "h": 7, "left": 0, "right": 1, "baseline": 6 },
     { "glyph": "4", "x": 20, "y": 0, "w": 4, "h": 7, "left": 0, "right": 1, "baseline": 6 },

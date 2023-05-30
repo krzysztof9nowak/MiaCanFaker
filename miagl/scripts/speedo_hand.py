@@ -10,8 +10,8 @@ def normalize(v):
 
 if __name__ == '__main__':
     MAX_SPEED = 120
-    OUTER = (83, 1, 89, 45)
-    INNER = (96.5, 14, 61, 32)
+    OUTER = (83, 1, 88, 44)
+    INNER = (96.5, 14, 61, 31)
     SCALE = 2
     LENGTH = 13
 

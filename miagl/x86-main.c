@@ -97,6 +97,13 @@ mui_state_t ui_state = {
     .motor_current = 0,
     .gear = MUI_NEUTRAL,
     .vehicle_speed = 0,
+    .light_status = 0,
+    .battery_level = 72,
+    .estimated_range = 0,
+    .motor_temp = 60,
+    .inverter_temp = 50,
+    .odometer = 41853,
+    .trip_meter = 0,
 };
 
 static uint64_t get_diff(struct timespec t1, struct timespec t2)
@@ -210,6 +217,23 @@ void process_event(SDL_Event* event)
         case SDLK_DOWN: if (ui_state.gear < MUI_REVERSE) ++ui_state.gear; break;
         case SDLK_r: ++ui_state.vehicle_speed; break;
         case SDLK_f: --ui_state.vehicle_speed; break;
+        case SDLK_LEFT: ui_state.light_status ^= MUI_STATUS_LEFT_BLINKER_ON; break;
+        case SDLK_RIGHT: ui_state.light_status ^= MUI_STATUS_RIGHT_BLINKER_ON; break;
+        case SDLK_LALT: ui_state.light_status ^= MUI_STATUS_LEFT_DOOR_OPEN; break;
+        case SDLK_RALT: ui_state.light_status ^= MUI_STATUS_RIGHT_DOOR_OPEN; break;
+        case SDLK_SPACE: ui_state.light_status ^= MUI_STATUS_MOTOR_FAN_RUNNING; break;
+        case SDLK_e: ++ui_state.battery_level; break;
+        case SDLK_d: --ui_state.battery_level; break;
+        case SDLK_t: ++ui_state.estimated_range; break;
+        case SDLK_g: --ui_state.estimated_range; break;
+        case SDLK_y: ++ui_state.motor_temp; break;
+        case SDLK_h: --ui_state.motor_temp; break;
+        case SDLK_u: ++ui_state.inverter_temp; break;
+        case SDLK_j: --ui_state.inverter_temp; break;
+        case SDLK_i: ++ui_state.odometer; break;
+        case SDLK_k: --ui_state.odometer; break;
+        case SDLK_o: ++ui_state.trip_meter; break;
+        case SDLK_l: --ui_state.trip_meter; break;
         }
     }
 }

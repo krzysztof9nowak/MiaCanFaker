@@ -21,7 +21,12 @@ typedef struct mgl_glyph {
  * algorithm
  */
 
-int16_t mgl_CalcTextWidth(const char* text, const mgl_glyph_t* font);
+void mgl_SetExtraSpacing(miagl_ptr instance, int16_t spacing);
+uint16_t mgl_GetExtraSpacing(miagl_ptr instance);
+void mgl_ClearExtraSpacing(miagl_ptr instance);
+
+int16_t mgl_CalcTextWidth(miagl_ptr instance, const char* text, const mgl_glyph_t* font);
+
 void mgl_DrawText(miagl_ptr instance, const char* text, const mgl_glyph_t* font, 
                   uint16_t x, uint16_t y);
 void mgl_DrawTextCenter(miagl_ptr instance, const char* text, const mgl_glyph_t* font, 

@@ -17,6 +17,7 @@
         uint8_t* current_buffer; \
         uint8_t* previous_buffer; \
         uint32_t* triangle_buffer; \
+        int16_t extra_font_spacing; \
         uint8_t bgcolor; \
         uint8_t color; \
         miagl_driver_ptr driver_data; \
