@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define INDICATOR_DELAY (500)
+#define INDICATOR_DELAY (400)
 
 void blinkenTask(void *arg){
     while(1){

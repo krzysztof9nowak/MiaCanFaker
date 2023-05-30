@@ -69,6 +69,7 @@ Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c \
 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c\
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c\
+Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_iwdg.c\
 
 
 # ASM sources

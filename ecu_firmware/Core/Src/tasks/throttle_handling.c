@@ -67,6 +67,9 @@ void throttle_task(void *argument)
 
     static int count = 0;
 
+    can_send_egv_sync_all(&egv_sync);
+    can_send_egv_cmd_var(&egv_cmd_var);
+
     while (1)
     {
         HAL_ADC_Start(&hadc1);
@@ -77,10 +80,12 @@ void throttle_task(void *argument)
         if(throttle > 255) throttle = 255;
         inverter.throttle = throttle;
 
-        if(count % 5 == 0){
+        if(count % 1 == 0){
             can_send_egv_sync_all(&egv_sync);
         }
 
+        egv_accel_var.DS1 = 1;
+        egv_accel_var.DS2 = 1;
         if(inverter.status == INVERTER_STATUS_RUN){
             egv_accel_var.accelerator_set_point = inverter.throttle;
             egv_accel_var.footswitch = inverter.throttle > 0;
@@ -92,23 +97,47 @@ void throttle_task(void *argument)
             egv_accel_var.forward = 0;
             egv_accel_var.reverse = 0;
         }
+        osDelay(1);
         can_send_egv_accel_var(&egv_accel_var);
 
         if(inverter.status == INVERTER_STATUS_RUN){
-            egv_cmd_var.current_limit = 400; // 2640
-            egv_cmd_var.regen_limit = -20;
+            egv_cmd_var.current_limit = 500; // 2640
+            egv_cmd_var.regen_limit = -250;
             egv_cmd_var.max_torque_ratio = 1000;
             egv_cmd_var.motor_command = 6000;
+
         } else {
             egv_cmd_var.current_limit = 0;
             egv_cmd_var.regen_limit = 0;
             egv_cmd_var.max_torque_ratio = 0;
-            egv_cmd_var.motor_command = 6000;
+            egv_cmd_var.motor_command = 0;
 
         }
-        if(count % 20 == 0){
+        if(inverter.fan_enabled)
+        {
+            if(inverter.motor_temp < 60)
+            {
+                inverter.fan_enabled = 0;
+            } else
+            {
+                egv_cmd_var.motor_command = 6000;            }
+        } else
+        {
+            if(inverter.motor_temp > 65)
+            {
+                inverter.fan_enabled = 1;
+                egv_cmd_var.motor_command = 6000;
+
+            } else
+            {
+                egv_cmd_var.motor_command = 0;
+            }
+
+        }
+
+        if(count % 1 == 0){        //zmien na kazdy obrot petli
             // printf("Can error count: %d\r\n", can_error_count);
-            osDelay(1);
+            //        osDelay(3);
             can_send_egv_cmd_var(&egv_cmd_var);
         }
 

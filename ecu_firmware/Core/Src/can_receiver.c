@@ -20,6 +20,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan){
     {
         inverter.status = INVERTER_STATUS_RUN;
     }
+    else
+    {
+        //inverter.status = INVERTER_STATUS_ERROR;
+    }
     inverter.speed = stat->motor_speed;
     inverter.status_word = stat->status_word;
   }

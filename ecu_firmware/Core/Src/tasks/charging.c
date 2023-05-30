@@ -55,7 +55,7 @@ void can_egv_cmd_cha(uint8_t msg){
 void chargingTask(void *arg){
         #define SWAP_UINT16(x) (((x) >> 8) | ((x) << 8))
         static CAN_BMS_CHA_t bms_cha = {
-            .max_voltage = SWAP_UINT16(9200),
+            .max_voltage = SWAP_UINT16(8800),
             .charging_current = SWAP_UINT16(350),
             .status = 0,
         };
@@ -63,6 +63,8 @@ void chargingTask(void *arg){
 
     while(true){
         osDelay(1000);
+
+        HAL_GPIO_WritePin(LED_CHARGING_GPIO_Port,LED_CHARGING_Pin, charger.status == CHG_CHARGING);
 
         printf("CHG Status %2d Error %2x Presence %2x\r\n", charger.status, charger.error, charger.presence);
         printf("CHG state %d\r\n", chg_state);

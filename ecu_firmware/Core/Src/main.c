@@ -52,6 +52,8 @@ CAN_HandleTypeDef hcan;
 
 I2C_HandleTypeDef hi2c1;
 
+IWDG_HandleTypeDef hiwdg;
+
 SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart1;
@@ -67,7 +69,7 @@ const osThreadAttr_t defaultTask_attributes = {
 osThreadId_t dashboardTaskHandle;
 const osThreadAttr_t dashboardTask_attributes = {
   .name = "dashboardTask",
-  .stack_size = 128 * 4,
+  .stack_size = 2048 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for Throttle */
@@ -120,6 +122,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_IWDG_Init(void);
 void StartDefaultTask(void *argument);
 extern void DashboardTask(void *argument);
 extern void throttle_task(void *argument);
@@ -169,6 +172,7 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI1_Init();
   MX_ADC1_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
   CAN_FilterTypeDef sFilterConfig;
 
@@ -186,6 +190,9 @@ int main(void)
 //
     HAL_CAN_Start(&hcan);
     HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
+
+    HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, 0);
+    HAL_Delay(1000);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -265,10 +272,11 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV2;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
@@ -412,6 +420,34 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief IWDG Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_IWDG_Init(void)
+{
+
+  /* USER CODE BEGIN IWDG_Init 0 */
+
+  /* USER CODE END IWDG_Init 0 */
+
+  /* USER CODE BEGIN IWDG_Init 1 */
+
+  /* USER CODE END IWDG_Init 1 */
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
+  hiwdg.Init.Reload = 500;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN IWDG_Init 2 */
+
+  /* USER CODE END IWDG_Init 2 */
 
 }
 
@@ -587,9 +623,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : IN_BRAKE_1_Pin IN_INDICATOR_RIGHT_Pin IN_WINDSHIELD_JET_Pin IN_DRIVE_DIR_2_Pin
-                           IN_DF_CONV_Pin IN_PARK_Pin IN_AIRBAG_Pin IN_KEY2_Pin */
+                           IN_DF_CONV_Pin IN_AIRBAG_Pin IN_KEY2_Pin */
   GPIO_InitStruct.Pin = IN_BRAKE_1_Pin|IN_INDICATOR_RIGHT_Pin|IN_WINDSHIELD_JET_Pin|IN_DRIVE_DIR_2_Pin
-                          |IN_DF_CONV_Pin|IN_PARK_Pin|IN_AIRBAG_Pin|IN_KEY2_Pin;
+                          |IN_DF_CONV_Pin|IN_AIRBAG_Pin|IN_KEY2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
@@ -600,6 +636,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : IN_PARK_Pin */
+  GPIO_InitStruct.Pin = IN_PARK_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(IN_PARK_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 5, 0);
@@ -631,15 +673,26 @@ void StartDefaultTask(void *argument)
     //HAL_CAN_AddTxMHAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);essage()
 
   printf("Witaj Mio!\r\n");
-  for(;;)
+
+    for(;;)
   {
     run = HAL_GPIO_ReadPin(IN_KEY1_GPIO_Port, IN_KEY1_Pin);
     HAL_GPIO_WritePin(APC_GPIO_Port, APC_Pin, run);
     HAL_GPIO_WritePin(HEATING_GPIO_Port, HEATING_Pin, run);
     HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, run);
     HAL_GPIO_WritePin(BMS_GPIO_Port, BMS_Pin, run || charger.request_battery);
+    HAL_GPIO_WritePin(LIGHT_STOP_GPIO_Port,LIGHT_STOP_Pin, inverter.throttle==0 && !inverter.speed==0);
+    HAL_GPIO_WritePin(LED_BRAKE_GPIO_Port,LED_BRAKE_Pin,HAL_GPIO_ReadPin(IN_PARK_GPIO_Port,IN_PARK_Pin));
+    HAL_GPIO_WritePin(LED_HEADLIGHT_GPIO_Port,LED_HEADLIGHT_Pin, HAL_GPIO_ReadPin(IN_HIGHBEAM_GPIO_Port,IN_HIGHBEAM_Pin));
+    HAL_GPIO_WritePin(LED_SIDELIGHTS_GPIO_Port,LED_SIDELIGHTS_Pin, HAL_GPIO_ReadPin(IN_SIDELIGHT_GPIO_Port,IN_SIDELIGHT_Pin));
+    HAL_GPIO_WritePin(LED_FOG_GPIO_Port,LED_FOG_Pin, HAL_GPIO_ReadPin(IN_FOG_LIGHT_GPIO_Port,IN_FOG_LIGHT_Pin));
+
+    HAL_GPIO_WritePin(LED_TEMP_GPIO_Port,LED_TEMP_Pin,inverter.voltage < 66.0);
+    uint8_t read;
+//      HAL_I2C_Mem_Read(&hi2c1,0b10100001,0,1,&read,);
 
     osDelay(100);
+      HAL_IWDG_Refresh(&hiwdg);
   }
   /* USER CODE END 5 */
 }
@@ -653,6 +706,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+    HAL_GPIO_WritePin(GPIOB, BMS_Pin|INDIC_LEFT_Pin|INDIC_RIGHT_Pin|LED_HEATER_Pin, GPIO_PIN_SET);
   while (1)
   {
   }

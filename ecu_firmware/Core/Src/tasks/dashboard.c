@@ -2,11 +2,19 @@
 #include "main.h"
 #include "u8g2.h"
 #include "cmsis_os.h"
-
+#include <task.h>
 
 u8g2_t u8g2;
 extern SPI_HandleTypeDef hspi1;
+extern I2C_HandleTypeDef hi2c1;
 extern volatile inverter_t inverter;
+extern volatile bool run;
+
+
+uint32_t odometer = 0;
+
+float meters_in_pontiff = 0;
+float trip = 0;
 
 int16_t abs(int16_t x){
 	if(x < 0) return -x;
@@ -88,48 +96,70 @@ void DashboardTask(void *argument){
     u8g2_DrawStr(&u8g2, 40, 40, "Wilczyckie zaklady przemyslowe");
     u8g2_SendBuffer(&u8g2);
 
+    // Read odometer
+    HAL_I2C_Mem_Read(&hi2c1,0b10100001,0,2,&odometer,sizeof(uint32_t),10000);
+
     osDelay(1000);
 
     char buf[64];
 
     while(1){
         u8g2_ClearBuffer(&u8g2);
-        u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
-		const float kmh_per_rpm = 24.0 / 2000.0;
-		float kmh = abs((int16_t)inverter.speed) * kmh_per_rpm;
-        snprintf(buf, sizeof(buf), "%hd",  (int16_t)kmh);
-        u8g2_DrawStr(&u8g2, 100, 50, buf);
+        const float kmh_per_rpm = 24.0 / 2000.0;
+        float kmh = abs((int16_t) inverter.speed) * kmh_per_rpm;
+        if (run) {
+            u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
+            snprintf(buf, sizeof(buf), "%hd", (int16_t) kmh);
+            u8g2_DrawStr(&u8g2, 100, 50, buf);
 
 
-
-		snprintf(buf, sizeof(buf), "%d.%dV", (int)(inverter.voltage), (int)(inverter.voltage * 10) % 10);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 50, buf);
-
-
-		snprintf(buf, sizeof(buf), "%dA", (int)(inverter.current));
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 40, buf);
-
-		snprintf(buf, sizeof(buf), "M %dA", (int)(inverter.motor_current));
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 30, buf);
-
-		uint32_t odometer = 40163400;
-
-		snprintf(buf, sizeof(buf), "%d.%dkm", odometer / 1000, (odometer / 100)%10);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 0, 10, buf);
-
-		snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 200, 30, buf);
-
-		snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
-		u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-		u8g2_DrawStr(&u8g2, 200, 40, buf);
+            snprintf(buf, sizeof(buf), "%d.%dV", (int) (inverter.voltage), (int) (inverter.voltage * 10) % 10);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 50, buf);
 
 
+            snprintf(buf, sizeof(buf), "%dA", (int) (inverter.current));
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 40, buf);
+
+            snprintf(buf, sizeof(buf), "M %dA", (int) (inverter.motor_current));
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 30, buf);
+
+
+            snprintf(buf, sizeof(buf), "%d.%dkm", odometer / 1000, (odometer / 100) % 10);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 10, buf);
+
+            snprintf(buf, sizeof(buf), "%dm", (int)trip);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 0, 20, buf);
+
+            snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp&0xFF);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 200, 30, buf);
+
+            snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 200, 40, buf);
+            snprintf(buf, sizeof(buf), "Bat %d.%dV", (int) (inverter.voltage)/22,(int) (inverter.voltage)*100/22%100 );
+            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
+            u8g2_DrawStr(&u8g2, 190, 50, buf);
+        } else {
+            trip = 0;
+        }
+    static TickType_t time = 0;
+        time;
+        TickType_t new_time = xTaskGetTickCount();
+        meters_in_pontiff+= kmh/3.6f*(new_time-time)/1000;
+        trip += kmh/3.6f*(new_time-time)/1000;
+
+        if(meters_in_pontiff > 100.f) {
+            meters_in_pontiff -= 100;
+            odometer += 100;
+            HAL_I2C_Mem_Write(&hi2c1,0b10100000,0,2, (uint8_t*)&odometer,sizeof(uint32_t),100);
+        }
+        time = new_time;
         u8g2_SendBuffer(&u8g2);
         osDelay(75);
     }
