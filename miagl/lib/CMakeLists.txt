@@ -7,5 +7,7 @@ add_compile_options(-Wall -O2)
 
 add_library(${PROJECT_NAME} STATIC
     src/miagl.c
+    src/miagl-gfx.c
 )
+target_compile_definitions(${PROJECT_NAME} PRIVATE MIAGL_IMPL)
 target_include_directories(${PROJECT_NAME} PUBLIC inc)

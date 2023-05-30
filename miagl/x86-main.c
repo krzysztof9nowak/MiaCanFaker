@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include <miagl.h>
 #include <miagl-driver.h>
 #include <miaui-test.h>
 
@@ -76,6 +77,11 @@ void driver_flush_part_screen(void* buffer, uint16_t size,
     }
 }
 
+#define DISPLAY_WIDTH 256
+#define DISPLAY_HEIGHT 64
+
+DEFINE_MIAGL_STRUCT(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
 miagl_t gl;
 miagl_driver_t driver = {
     .fn_init_driver = driver_init_driver,
@@ -94,8 +100,8 @@ int main(int argc, char **argv)
         if (scale > 8) scale = 8;
     }
 
-    const int SCREEN_WIDTH = 256 * scale;
-    const int SCREEN_HEIGHT = 64 * scale;
+    const int SCREEN_WIDTH = DISPLAY_WIDTH * scale;
+    const int SCREEN_HEIGHT = DISPLAY_HEIGHT * scale;
 
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
@@ -123,8 +129,10 @@ int main(int argc, char **argv)
         return 3;
     }
 
+    printf("Size of the static buffer is %d.\n", (int)sizeof(gl));
+
     printf("Initializing gfx library...\n");
-    mgl_InitLibrary(&gl, 256, 64, &driver);
+    mgl_InitLibrary(&gl, DISPLAY_WIDTH, DISPLAY_HEIGHT, &driver);
 
     printf("Entering main loop...\n");
     bool running = true;
@@ -147,7 +155,6 @@ int main(int argc, char **argv)
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    mgl_FreeLibrary(&gl);
     printf("Exiting...\n");
     return 0;
 }

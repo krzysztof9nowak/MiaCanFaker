@@ -1,12 +1,15 @@
 #include <miagl.h>
 
+#include <endian.h>
 #include <memory.h>
 #include <stdlib.h>
 
-#define PIX(ins, x, y) ((y) * (ins)->strobe + (x >> 1))
-#define HIMSK 0xF0
-#define LOMSK 0x0F
-
+/* Helper table for faster horizontal line drawing */
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+uint32_t MASKS[] = { 0x00000000, 0x000000F0, 0x000000FF, 0x0000F0FF, 0x0000FFFF, 0x00F0FFFF, 0x00FFFFFF, 0xF0FFFFFF, 0xFFFFFFFF };
+#elif __BYTE_ORDER == __BIG_ENDIAN
+uint32_t MASKS[] = { 0x00000000, 0xF0000000, 0xFF000000, 0xFFF00000, 0xFFFF0000, 0xFFFFF000, 0xFFFFFF00, 0xFFFFFFF0, 0xFFFFFFFF };
+#endif
 
 static void mgl_SwapBuffers(miagl_ptr instance)
 {
@@ -38,7 +41,7 @@ static void mgl_CallMemset(miagl_ptr instance, void* block, uint8_t value, uint1
 static void mgl_ClearBuffer(miagl_ptr instance, void* buffer)
 {
     uint8_t value = (instance->bgcolor << 4) | instance->bgcolor;
-    mgl_CallMemset(instance, buffer, value, instance->display_y * instance->strobe);
+    mgl_CallMemset(instance, buffer, value, instance->display_y * instance->stride);
 }
 
 static void mgl_SendBuffer(miagl_ptr instance, uint16_t start_x, uint16_t end_x,
@@ -52,11 +55,10 @@ static void mgl_SendBuffer(miagl_ptr instance, uint16_t start_x, uint16_t end_x,
     }
 
     uint32_t* current = (uint32_t*)instance->current_buffer;
-    uint32_t strobe = instance->strobe / 4;
     uint32_t index = 0;
     for (uint32_t y = start_y; y <= end_y; y++) {
         for (uint32_t x = start_x; x <= end_x; x += 8) {
-            instance->dma_buffer[index++] = current[y * strobe + (x / 8)];
+            instance->dma_buffer[index++] = current[y * instance->stride32 + (x / 8)];
         }
     }
 
@@ -74,11 +76,12 @@ bool mgl_InitLibrary(miagl_ptr instance, uint16_t display_width,
 
     instance->display_x = display_width;
     instance->display_y = display_height;
-    instance->strobe = display_width / 2;
+    instance->stride = display_width / 2;
+    instance->stride32 = display_width / 8;
     instance->driver_data = driver_impl;
-    instance->frame_buffer1 = malloc(fboSize);
-    instance->frame_buffer2 = malloc(fboSize);
-    instance->dma_buffer = malloc(fboSize);
+    instance->frame_buffer1 = instance->static_buffer;
+    instance->frame_buffer2 = instance->static_buffer + fboSize;
+    instance->dma_buffer = (uint32_t*)(instance->static_buffer + fboSize * 2);
     instance->current_buffer = instance->frame_buffer1;
     instance->previous_buffer = instance->frame_buffer2;
     instance->bgcolor = MIAGL_COLOR_BLACK;
@@ -96,15 +99,6 @@ bool mgl_InitLibrary(miagl_ptr instance, uint16_t display_width,
     }
 
     return instance->frame_buffer1 && instance->frame_buffer2;
-}
-
-void mgl_FreeLibrary(miagl_ptr instance)
-{
-    if (instance->frame_buffer1) free(instance->frame_buffer1);
-    if (instance->frame_buffer2) free(instance->frame_buffer2);
-    if (instance->dma_buffer) free(instance->dma_buffer);
-
-    memset(instance, 0, sizeof(miagl_t));
 }
 
 void mgl_SetPixel(miagl_ptr instance, uint16_t x, uint16_t y, uint8_t brightness)
@@ -154,7 +148,7 @@ uint8_t mgl_GetColor(miagl_ptr instance)
 void mgl_FillScreen(miagl_ptr instance)
 {
     uint8_t value = (instance->color << 4) | instance->color;
-    mgl_CallMemset(instance, instance->current_buffer, value, instance->display_y * instance->strobe);
+    mgl_CallMemset(instance, instance->current_buffer, value, instance->display_y * instance->stride);
 }
 
 void mgl_FlushScreen(miagl_ptr instance)
