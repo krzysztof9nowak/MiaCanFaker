@@ -52,7 +52,7 @@ static void mgl_SendBuffer(miagl_ptr instance, uint16_t start_x, uint16_t end_x,
     }
 
     uint32_t* current = (uint32_t*)instance->current_buffer;
-    uint32_t strobe = instance->strobe / 8;
+    uint32_t strobe = instance->strobe / 4;
     uint32_t index = 0;
     for (uint32_t y = start_y; y <= end_y; y++) {
         for (uint32_t x = start_x; x <= end_x; x += 8) {
@@ -62,7 +62,7 @@ static void mgl_SendBuffer(miagl_ptr instance, uint16_t start_x, uint16_t end_x,
 
     if (instance->driver_data->fn_flush_part_screen) {
         instance->driver_data->fn_flush_part_screen(
-            instance->dma_buffer, index * sizeof(uint32_t), start_x, end_x + 3, start_y, end_y);
+            instance->dma_buffer, index * sizeof(uint32_t), start_x, end_x + 7, start_y, end_y);
     }
 }
 
@@ -113,11 +113,11 @@ void mgl_SetPixel(miagl_ptr instance, uint16_t x, uint16_t y, uint8_t brightness
     brightness &= LOMSK;
 
     if (x % 2 == 1) {
-        instance->current_buffer[PIX(instance, x, y)] &= LOMSK;
-        instance->current_buffer[PIX(instance, x, y)] |= (brightness << 4);
-    } else {
         instance->current_buffer[PIX(instance, x, y)] &= HIMSK;
         instance->current_buffer[PIX(instance, x, y)] |= brightness;
+    } else {
+        instance->current_buffer[PIX(instance, x, y)] &= LOMSK;
+        instance->current_buffer[PIX(instance, x, y)] |= (brightness << 4);
     }
 }
 

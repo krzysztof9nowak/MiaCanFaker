@@ -8,4 +8,4 @@ add_compile_options(-Wall -O2)
 add_library(${PROJECT_NAME} STATIC
     src/miagl.c
 )
-target_include_directories(${PROJECT_NAME} PUBLIC inc/)
+target_include_directories(${PROJECT_NAME} PUBLIC inc)

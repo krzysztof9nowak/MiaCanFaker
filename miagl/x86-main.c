@@ -3,12 +3,14 @@
 #include <SDL.h>
 
 #include <miagl-driver.h>
+#include <miaui-test.h>
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void process_event(SDL_Event* event);
+void lib_task();
 void draw_screen(SDL_Renderer* renderer, int pixelSize);
 
 uint8_t screen[64][128];
@@ -57,9 +59,10 @@ void driver_flush_part_screen(void* buffer, uint16_t size,
                              uint8_t start_x, uint8_t end_x, uint8_t start_y,
                              uint8_t end_y)
 {
+    // printf("flush_part_screen: start_x = %d end_x = %d start_y = %d end_y = %d\n", (int)start_x, (int)end_x, (int)start_y, (int)end_y);
     uint8_t* buf = buffer;
-    int expectedSize = (end_x - start_x + 1) * (end_y - start_y + 1);
-    if (size != sizeof(screen)) {
+    int expectedSize = (end_x - start_x + 1) * (end_y - start_y + 1) / 2;
+    if (size != expectedSize) {
         fprintf(stderr, 
             "Error: invalid buffer size passed to flush_part_screen. Got %d, expected %d!\n", 
             (int)size, expectedSize);
@@ -73,6 +76,7 @@ void driver_flush_part_screen(void* buffer, uint16_t size,
     }
 }
 
+miagl_t gl;
 miagl_driver_t driver = {
     .fn_init_driver = driver_init_driver,
     .fn_is_buffer_ready = driver_is_buffer_ready,
@@ -119,6 +123,9 @@ int main(int argc, char **argv)
         return 3;
     }
 
+    printf("Initializing gfx library...\n");
+    mgl_InitLibrary(&gl, 256, 64, &driver);
+
     printf("Entering main loop...\n");
     bool running = true;
     while (running) {
@@ -132,17 +139,26 @@ int main(int argc, char **argv)
             process_event(&event);
         }
         
+        lib_task();
         draw_screen(renderer, scale);
     }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+
+    mgl_FreeLibrary(&gl);
+    printf("Exiting...\n");
     return 0;
 }
 
 void process_event(SDL_Event* event)
 {
+}
+
+void lib_task()
+{
+    mui_RenderGlTest(&gl);
 }
 
 void draw_screen(SDL_Renderer* renderer, int pixelSize)
