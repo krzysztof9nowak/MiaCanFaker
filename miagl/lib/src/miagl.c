@@ -1,6 +1,10 @@
 #include <miagl.h>
 
+#ifdef __arm__
+#include <machine/endian.h>
+#else
 #include <endian.h>
+#endif
 #include <memory.h>
 #include <stdlib.h>
 

@@ -1,7 +1,11 @@
 #ifndef _MIAGL_HELPERS_H_
 #define _MIAGL_HELPERS_H_
 
+#ifdef __arm__
+#include <machine/endian.h>
+#else
 #include <endian.h>
+#endif
 #include <stdint.h>
 
 #if defined(__clang__) || defined(__gcc__)
