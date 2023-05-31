@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project("miaui")
+project("miaui" C)
 set(X86_NAME "x86-miagl-tests")
 
 option(NO_X86_TARGET "Explicitly disable x86 target" OFF)
