@@ -86,13 +86,6 @@ const osThreadAttr_t Inverter_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for BlinkenLights */
-osThreadId_t BlinkenLightsHandle;
-const osThreadAttr_t BlinkenLights_attributes = {
-  .name = "BlinkenLights",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
 /* Definitions for ChargingTask */
 osThreadId_t ChargingTaskHandle;
 const osThreadAttr_t ChargingTask_attributes = {
@@ -127,7 +120,6 @@ void StartDefaultTask(void *argument);
 extern void DashboardTask(void *argument);
 extern void throttle_task(void *argument);
 extern void inverter_task(void *argument);
-extern void blinkenTask(void *argument);
 extern void chargingTask(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -230,9 +222,6 @@ int main(void)
 
   /* creation of Inverter */
   InverterHandle = osThreadNew(inverter_task, NULL, &Inverter_attributes);
-
-  /* creation of BlinkenLights */
-  BlinkenLightsHandle = osThreadNew(blinkenTask, NULL, &BlinkenLights_attributes);
 
   /* creation of ChargingTask */
   ChargingTaskHandle = osThreadNew(chargingTask, NULL, &ChargingTask_attributes);

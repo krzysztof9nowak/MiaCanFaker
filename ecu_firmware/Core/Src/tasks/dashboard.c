@@ -9,6 +9,8 @@
 #include <miagl.h>
 #include <miaui.h>
 
+#define INDICATOR_DELAY (400)
+
 DEFINE_MIAGL_STRUCT(256, 64);
 
 miagl_t miagl;
@@ -23,10 +25,53 @@ uint32_t odometer = 0;
 
 float meters_in_pontiff = 0;
 float trip = 0;
+bool left_blinker_lit = false;
+bool right_blinker_lit = false;
 
 static inline int16_t abs(int16_t x){
 	if(x < 0) return -x;
 	return x;
+}
+
+void handle_blinkers(TickType_t elapsed_time) 
+{
+    static TickType_t left_enable_time = 0;
+    static TickType_t right_enable_time = 0;
+
+    bool left_enabled = HAL_GPIO_ReadPin(IN_DRIVE_DIR_1_GPIO_Port, IN_DRIVE_DIR_1_Pin);
+    bool right_enabled = HAL_GPIO_ReadPin(IN_INDICATOR_RIGHT_GPIO_Port, IN_INDICATOR_RIGHT_Pin);
+
+    if (!left_enabled) {
+        left_enable_time = 0;
+        left_blinker_lit = false;
+    } else {
+        if (!left_enable_time) left_enable_time = elapsed_time;
+        uint32_t diff = elapsed_time - left_enable_time;
+        while (diff > 2 * INDICATOR_DELAY) { 
+            diff -= 2 * INDICATOR_DELAY;
+            left_enable_time += 2 * INDICATOR_DELAY;
+        }
+        
+        left_blinker_lit = diff < INDICATOR_DELAY;
+    }
+
+    if (!right_enabled) {
+        right_enable_time = 0;
+        right_blinker_lit = false;
+    } else {
+        if (!right_enable_time) right_enable_time = elapsed_time;
+        uint32_t diff = elapsed_time - right_enable_time;
+        while (diff > 2 * INDICATOR_DELAY) { 
+            diff -= 2 * INDICATOR_DELAY;
+            right_enable_time += 2 * INDICATOR_DELAY;
+        }
+        
+        right_blinker_lit = diff < INDICATOR_DELAY;
+    }
+
+    HAL_GPIO_WritePin(INDIC_LEFT_GPIO_Port, INDIC_LEFT_Pin, left_blinker_lit);
+    HAL_GPIO_WritePin(INDIC_RIGHT_GPIO_Port, INDIC_RIGHT_Pin, right_blinker_lit);
+    HAL_GPIO_WritePin(LED_INDICATOR_GPIO_Port, LED_INDICATOR_Pin, left_blinker_lit || right_blinker_lit);
 }
 
 void miagl_driver_init()
@@ -75,8 +120,14 @@ void DashboardTask(void *argument){
     static uint8_t test = 0;
 
     while (1) {
+        static TickType_t time = 0;
+        TickType_t new_time = xTaskGetTickCount();
+
+        handle_blinkers(new_time);
+
         const float kmh_per_rpm = 24.0 / 2000.0;
         float kmh = abs((int16_t) inverter.speed) * kmh_per_rpm;
+
         if (run) {
             miaui.estimated_range = -1;
             miaui.cell_count = 20;
@@ -87,19 +138,25 @@ void DashboardTask(void *argument){
             if (inverter.fan_enabled) {
                 miaui.light_status |= MUI_STATUS_MOTOR_FAN_RUNNING;
             }
+            if (left_blinker_lit) {
+                miaui.light_status |= MUI_STATUS_LEFT_BLINKER_ON;
+            }
+            if (right_blinker_lit) {
+                miaui.light_status |= MUI_STATUS_RIGHT_BLINKER_ON;
+            }
             miaui.motor_current = inverter.current;
             miaui.motor_temp = inverter.motor_temp;
             miaui.odometer = odometer / 1000;
             miaui.trip_meter = trip / 10;
             miaui.vehicle_speed = kmh;
 
+            mui_Update(&miaui, new_time - time);
             mui_Draw(&miaui, &miagl);            
         } else {
+            mgl_SetBackgroundBitmap(&miagl, NULL, NULL);
             trip = 0;
         }
 
-        static TickType_t time = 0;
-        TickType_t new_time = xTaskGetTickCount();
         meters_in_pontiff+= kmh/3.6f*(new_time-time)/1000;
         trip += kmh/3.6f*(new_time-time)/1000;
 
@@ -111,7 +168,7 @@ void DashboardTask(void *argument){
         time = new_time;
 
         mgl_FlushScreen(&miagl);
-        osDelay(75);
+        osDelay(50);
     }
 }
 

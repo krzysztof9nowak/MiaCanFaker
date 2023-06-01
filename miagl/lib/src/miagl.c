@@ -193,7 +193,7 @@ void mgl_FlushScreen(miagl_ptr instance)
 
 bool mgl_SetBackgroundBitmap(miagl_ptr instance, const void* bitmap, uint16_t size) 
 {
-    if (instance->stride * instance->display_y > size) {
+    if (bitmap && instance->stride * instance->display_y > size) {
         return false;
     }
 
