@@ -119,6 +119,10 @@ void DashboardTask(void *argument){
     char buf[64];
     static uint8_t test = 0;
 
+    float last_kmh = 0;
+    float kmh_history[5];
+    int kmh_index = 0;
+
     while (1) {
         static TickType_t time = 0;
         TickType_t new_time = xTaskGetTickCount();
@@ -127,6 +131,12 @@ void DashboardTask(void *argument){
 
         const float kmh_per_rpm = 24.0 / 2000.0;
         float kmh = abs((int16_t) inverter.speed) * kmh_per_rpm;
+
+        kmh_history[kmh_index++] = kmh;
+        if (kmh_index == 5) {
+          kmh_index = 0;
+          last_kmh = (kmh_history[0] + kmh_history[1] + kmh_history[2] + kmh_history[3] + kmh_history[4]) / 5.f;
+        }
 
         if (run) {
             miaui.estimated_range = -1;
@@ -148,7 +158,7 @@ void DashboardTask(void *argument){
             miaui.motor_temp = inverter.motor_temp;
             miaui.odometer = odometer / 1000;
             miaui.trip_meter = trip / 10;
-            miaui.vehicle_speed = kmh;
+            miaui.vehicle_speed = last_kmh;
 
             mui_Update(&miaui, new_time - time);
             mui_Draw(&miaui, &miagl);            

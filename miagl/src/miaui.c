@@ -51,8 +51,8 @@ static const mui_gauge_def_t VOLTS_GAUGE = {
     .width = 3,
     .height = 50,
     .center_pt = 60,
-    .min = 700,
-    .max = 920,
+    .min = 600,
+    .max = 900,
     .reverse = true,
     .colors = {13, 12, 11},
 };
