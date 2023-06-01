@@ -23,12 +23,11 @@
 
 inline uint32_t mgl_FixEndianess(uint32_t in)
 {
-    /*__asm__(
-        "rev %w[word], %w[word]"
-        : [word] "+r" (in)
+    __asm__(
+        "rev %[word], %[word]"
+        : [word] "+l" (in)
     );
-    return in;*/
-    return __builtin_bswap32(in);
+    return in;
 }
 
 #elif __BYTE_ORDER == __BIG_ENDIAN
