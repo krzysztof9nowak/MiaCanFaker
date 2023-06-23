@@ -662,10 +662,16 @@ void StartDefaultTask(void *argument)
     //HAL_CAN_AddTxMHAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);essage()
 
   printf("Witaj Mio!\r\n");
+  bool last_run_value = false;
 
-    for(;;)
+  for(;;)
   {
     run = HAL_GPIO_ReadPin(IN_KEY1_GPIO_Port, IN_KEY1_Pin);
+    if(run && !last_run_value){
+      inverter.mute_can = !inverter.forward;
+    }
+    last_run_value = run;
+
     HAL_GPIO_WritePin(APC_GPIO_Port, APC_Pin, run);
     HAL_GPIO_WritePin(HEATING_GPIO_Port, HEATING_Pin, run);
     HAL_GPIO_WritePin(INVERTER_GPIO_Port, INVERTER_Pin, run);
@@ -677,6 +683,11 @@ void StartDefaultTask(void *argument)
     HAL_GPIO_WritePin(LED_FOG_GPIO_Port,LED_FOG_Pin, HAL_GPIO_ReadPin(IN_FOG_LIGHT_GPIO_Port,IN_FOG_LIGHT_Pin));
 
     HAL_GPIO_WritePin(LED_TEMP_GPIO_Port,LED_TEMP_Pin,inverter.voltage < 66.0);
+
+    if(inverter.mute_can){
+      HAL_GPIO_TogglePin(LED_ABS_GPIO_Port, LED_ABS_Pin);
+    }
+
     uint8_t read;
 //      HAL_I2C_Mem_Read(&hi2c1,0b10100001,0,1,&read,);
 

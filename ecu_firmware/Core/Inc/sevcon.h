@@ -32,6 +32,7 @@ typedef struct{
     int16_t motor_temp;
     int16_t controller_temp;
     bool fan_enabled;
+    bool mute_can; // dont tx on can, used only for reprograming the inverter
 } inverter_t;
 
 typedef struct __attribute__((__packed__))

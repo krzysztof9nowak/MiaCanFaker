@@ -25,38 +25,40 @@ void can_send_egv_sync_all(CAN_EGV_SYNC_ALL_t *frame)
     carrier.DLC = sizeof(CAN_EGV_SYNC_ALL_t);
     uint32_t mailbox;
     osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
-    // if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
-    //     can_error_count++;
-    // } 
+    if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
+        can_error_count++;
+    } 
     osSemaphoreRelease(canSemaphoreHandle);
 }
 
 void can_send_egv_accel_var(CAN_EGV_Accel_VAR_t *frame)
 {
+    if(inverter.mute_can) return;
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_ACCEL_VAR_ID;
     carrier.DLC = sizeof(CAN_EGV_Accel_VAR_t);
     uint32_t mailbox;
     osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
 
-    // if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
-    //     can_error_count++;
-    // } 
+    if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
+        can_error_count++;
+    } 
     osSemaphoreRelease(canSemaphoreHandle);
 
 }
 
 void can_send_egv_cmd_var(CAN_EGV_Cmd_VAR_t *frame)
 {
+    if(inverter.mute_can) return;
     CAN_TxHeaderTypeDef carrier = {0};
     carrier.StdId = CAN_EGV_CMD_VAR_ID;
     carrier.DLC = sizeof(CAN_EGV_Cmd_VAR_t);
     uint32_t mailbox;
     osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
 
-    // if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
-    //     can_error_count++;
-    // }
+    if(HAL_CAN_AddTxMessage(&hcan, &carrier, (char *)frame, &mailbox) != HAL_OK){
+        can_error_count++;
+    }
     osSemaphoreRelease(canSemaphoreHandle);
 }
 
@@ -64,8 +66,7 @@ extern bool run;
 
 void throttle_task(void *argument)
 {
-
-    static int count = 0;
+   static int count = 0;
 
     can_send_egv_sync_all(&egv_sync);
     can_send_egv_cmd_var(&egv_cmd_var);

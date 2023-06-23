@@ -154,7 +154,7 @@ void DashboardTask(void *argument){
             if (right_blinker_lit) {
                 miaui.light_status |= MUI_STATUS_RIGHT_BLINKER_ON;
             }
-            miaui.motor_current = inverter.current;
+            miaui.motor_current = inverter.motor_current;
             miaui.motor_temp = inverter.motor_temp;
             miaui.odometer = odometer / 1000;
             miaui.trip_meter = trip / 10;
