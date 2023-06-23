@@ -34,7 +34,7 @@ void can_bms_cha(CAN_BMS_CHA_t * frame)
     uint32_t mailbox;
     osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
 
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(uint8_t *)frame, &mailbox);
+    // HAL_CAN_AddTxMessage(&hcan,&carrier,(uint8_t *)frame, &mailbox);
     osSemaphoreRelease(canSemaphoreHandle);
 
 }
@@ -48,7 +48,7 @@ void can_egv_cmd_cha(uint8_t msg){
     uint32_t mailbox;
     osSemaphoreAcquire(canSemaphoreHandle, osWaitForever);
 
-    HAL_CAN_AddTxMessage(&hcan,&carrier,(uint8_t *)&msg, &mailbox);
+    // HAL_CAN_AddTxMessage(&hcan,&carrier,(uint8_t *)&msg, &mailbox);
     osSemaphoreRelease(canSemaphoreHandle);
 }
 
