@@ -140,7 +140,7 @@ void DashboardTask(void *argument){
 
         if (run) {
             miaui.estimated_range = -1;
-            miaui.cell_count = 20;
+            miaui.cell_count = 22;
             miaui.capacitor_voltage = inverter.voltage * 10;
             miaui.gear = inverter.forward ? MUI_DRIVE : MUI_REVERSE;
             miaui.inverter_temp = inverter.controller_temp;
