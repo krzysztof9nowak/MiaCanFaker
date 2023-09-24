@@ -29,11 +29,6 @@ float trip = 0;
 bool left_blinker_lit = false;
 bool right_blinker_lit = false;
 
-// static inline int16_t abs(int16_t x){
-// 	if(x < 0) return -x;
-// 	return x;
-// }
-
 void handle_blinkers(TickType_t elapsed_time) 
 {
     static TickType_t enable_time = 0;
