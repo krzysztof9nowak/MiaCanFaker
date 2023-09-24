@@ -8,6 +8,7 @@
 #include <miagl-buffer.h>
 #include <miagl.h>
 #include <miaui.h>
+#include <stdlib.h>
 
 #define INDICATOR_DELAY (400)
 
@@ -28,46 +29,33 @@ float trip = 0;
 bool left_blinker_lit = false;
 bool right_blinker_lit = false;
 
-static inline int16_t abs(int16_t x){
-	if(x < 0) return -x;
-	return x;
-}
+// static inline int16_t abs(int16_t x){
+// 	if(x < 0) return -x;
+// 	return x;
+// }
 
 void handle_blinkers(TickType_t elapsed_time) 
 {
-    static TickType_t left_enable_time = 0;
-    static TickType_t right_enable_time = 0;
+    static TickType_t enable_time = 0;
 
     bool left_enabled = HAL_GPIO_ReadPin(IN_DRIVE_DIR_1_GPIO_Port, IN_DRIVE_DIR_1_Pin);
     bool right_enabled = HAL_GPIO_ReadPin(IN_INDICATOR_RIGHT_GPIO_Port, IN_INDICATOR_RIGHT_Pin);
+    bool hazard_enabled = HAL_GPIO_ReadPin(IN_ECO_GPIO_Port, IN_ECO_Pin);
+    bool any_light_enabled = left_enabled || right_enabled || hazard_enabled;
+    bool blink_state = false;
 
-    if (!left_enabled) {
-        left_enable_time = 0;
-        left_blinker_lit = false;
+
+    if (!any_light_enabled) {
+        enable_time = 0;
+        blink_state = false;
     } else {
-        if (!left_enable_time) left_enable_time = elapsed_time;
-        uint32_t diff = elapsed_time - left_enable_time;
-        while (diff > 2 * INDICATOR_DELAY) { 
-            diff -= 2 * INDICATOR_DELAY;
-            left_enable_time += 2 * INDICATOR_DELAY;
-        }
-        
-        left_blinker_lit = diff < INDICATOR_DELAY;
+        if (!enable_time) enable_time = elapsed_time;
+        uint32_t diff = elapsed_time - enable_time;
+        blink_state = (diff % (2 * INDICATOR_DELAY)) < INDICATOR_DELAY;
     }
 
-    if (!right_enabled) {
-        right_enable_time = 0;
-        right_blinker_lit = false;
-    } else {
-        if (!right_enable_time) right_enable_time = elapsed_time;
-        uint32_t diff = elapsed_time - right_enable_time;
-        while (diff > 2 * INDICATOR_DELAY) { 
-            diff -= 2 * INDICATOR_DELAY;
-            right_enable_time += 2 * INDICATOR_DELAY;
-        }
-        
-        right_blinker_lit = diff < INDICATOR_DELAY;
-    }
+    left_blinker_lit = blink_state && (hazard_enabled || left_enabled);
+    right_blinker_lit = blink_state && (hazard_enabled || right_enabled); 
 
     HAL_GPIO_WritePin(INDIC_LEFT_GPIO_Port, INDIC_LEFT_Pin, left_blinker_lit);
     HAL_GPIO_WritePin(INDIC_RIGHT_GPIO_Port, INDIC_RIGHT_Pin, right_blinker_lit);
