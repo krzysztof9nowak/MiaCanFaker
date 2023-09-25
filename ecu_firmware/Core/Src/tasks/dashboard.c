@@ -144,6 +144,12 @@ void DashboardTask(void *argument){
             miaui.trip_meter = trip / 10;
             miaui.vehicle_speed = last_kmh;
 
+
+            float bat_percentage = 100 * (inverter.voltage / miaui.cell_count - 3.0) / (4.2 - 3.0);
+            if(bat_percentage < 0) bat_percentage = 0;
+            if(bat_percentage > 100) bat_percentage = 100;
+            miaui.battery_level = bat_percentage;
+
             mui_Update(&miaui, new_time - time);
             mui_Draw(&miaui, &miagl);            
         } else {
