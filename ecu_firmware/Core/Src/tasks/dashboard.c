@@ -49,8 +49,8 @@ void handle_blinkers(TickType_t elapsed_time)
         blink_state = (diff % (2 * INDICATOR_DELAY)) < INDICATOR_DELAY;
     }
 
-    left_blinker_lit = blink_state && (hazard_enabled || left_enabled);
-    right_blinker_lit = blink_state && (hazard_enabled || right_enabled); 
+    left_blinker_lit = blink_state && (hazard_enabled || (left_enabled & run));
+    right_blinker_lit = blink_state && (hazard_enabled || (right_enabled & run)); 
 
     HAL_GPIO_WritePin(INDIC_LEFT_GPIO_Port, INDIC_LEFT_Pin, left_blinker_lit);
     HAL_GPIO_WritePin(INDIC_RIGHT_GPIO_Port, INDIC_RIGHT_Pin, right_blinker_lit);
@@ -114,6 +114,7 @@ void DashboardTask(void *argument){
 
         const float kmh_per_rpm = 24.0 / 2000.0;
         float kmh = abs((int16_t) inverter.speed) * kmh_per_rpm;
+        if(!run) kmh = 0;
 
         kmh_history[kmh_index++] = kmh;
         if (kmh_index == 5) {
