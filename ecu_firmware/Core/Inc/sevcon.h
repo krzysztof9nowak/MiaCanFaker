@@ -25,6 +25,7 @@ typedef struct{
     uint16_t status_word;
     uint16_t speed;
     bool forward;
+    bool neutral;
     bool enabled;
     float voltage;
     float current;
