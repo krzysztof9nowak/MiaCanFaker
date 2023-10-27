@@ -20,6 +20,7 @@ extern SPI_HandleTypeDef hspi1;
 extern I2C_HandleTypeDef hi2c1;
 extern volatile inverter_t inverter;
 extern volatile bool run;
+extern gear;
 
 
 uint32_t odometer = 0;
@@ -126,7 +127,23 @@ void DashboardTask(void *argument){
             miaui.estimated_range = -1;
             miaui.cell_count = 22;
             miaui.capacitor_voltage = inverter.voltage * 10;
-            miaui.gear = inverter.forward ? MUI_DRIVE : MUI_REVERSE;
+//            miaui.gear = inverter.forward ? MUI_DRIVE : MUI_REVERSE;
+            if(!inverter.neutral)
+            {
+                if(inverter.forward)
+                {
+                    miaui.gear = 0;
+                } else
+                {
+                    miaui.gear = 2;
+                }
+
+            } else
+            {
+                miaui.gear = 1;
+            }
+//            miaui.gear = 2;
+
             miaui.inverter_temp = inverter.controller_temp;
             miaui.light_status = 0;
             if (inverter.fan_enabled) {
