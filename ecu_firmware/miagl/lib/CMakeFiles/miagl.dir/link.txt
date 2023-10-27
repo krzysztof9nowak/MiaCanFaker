@@ -1,0 +1,2 @@
+/usr/bin/arm-none-eabi-ar qc libmiagl.a CMakeFiles/miagl.dir/src/miagl.c.obj "CMakeFiles/miagl.dir/src/miagl-bitmap.c.obj" "CMakeFiles/miagl.dir/src/miagl-font.c.obj" "CMakeFiles/miagl.dir/src/miagl-gfx.c.obj"
+/usr/bin/arm-none-eabi-ranlib libmiagl.a

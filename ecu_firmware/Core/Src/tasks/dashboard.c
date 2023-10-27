@@ -1,100 +1,99 @@
 #include "dashboard.h"
 #include "main.h"
-#include "u8g2.h"
 #include "cmsis_os.h"
 #include <task.h>
 
-u8g2_t u8g2;
+#include "../SSD1322_API.h"
+
+#include <miagl-buffer.h>
+#include <miagl.h>
+#include <miaui.h>
+#include <stdlib.h>
+
+#define INDICATOR_DELAY (400)
+
+DEFINE_MIAGL_STRUCT(256, 64);
+
+miagl_t miagl;
+mui_state_t miaui;
 extern SPI_HandleTypeDef hspi1;
 extern I2C_HandleTypeDef hi2c1;
 extern volatile inverter_t inverter;
 extern volatile bool run;
+extern gear;
 
 
 uint32_t odometer = 0;
 
 float meters_in_pontiff = 0;
 float trip = 0;
+bool left_blinker_lit = false;
+bool right_blinker_lit = false;
 
-int16_t abs(int16_t x){
-	if(x < 0) return -x;
-	return x;
-}
-
-uint8_t u8x8_stm32_gpio_and_delay(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+void handle_blinkers(TickType_t elapsed_time) 
 {
-	/* STM32 supports HW SPI, Remove unused cases like U8X8_MSG_DELAY_XXX & U8X8_MSG_GPIO_XXX */
-	switch(msg)
-	{
-	case U8X8_MSG_GPIO_AND_DELAY_INIT:
-		/* Insert codes for initialization */
-		break;
-	case U8X8_MSG_DELAY_MILLI:
-		/* ms Delay */
-		osDelay(arg_int);
-		break;
-	case U8X8_MSG_GPIO_CS:
-		/* Insert codes for SS pin control */
-		HAL_GPIO_WritePin(OLED_CS_GPIO_Port, OLED_CS_Pin, arg_int);
-		break;
-	case U8X8_MSG_GPIO_DC:
-		/* Insert codes for DC pin control */
-		HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, arg_int);
-		break;
-	case U8X8_MSG_GPIO_RESET:
-		/* Insert codes for RST pin control */
-		HAL_GPIO_WritePin(OLED_RES_GPIO_Port, OLED_RES_Pin, arg_int);
-		break;
-	}
-	return 1;
+    static TickType_t enable_time = 0;
+
+    bool left_enabled = HAL_GPIO_ReadPin(IN_DRIVE_DIR_1_GPIO_Port, IN_DRIVE_DIR_1_Pin);
+    bool right_enabled = HAL_GPIO_ReadPin(IN_INDICATOR_RIGHT_GPIO_Port, IN_INDICATOR_RIGHT_Pin);
+    bool hazard_enabled = HAL_GPIO_ReadPin(IN_ECO_GPIO_Port, IN_ECO_Pin);
+    bool any_light_enabled = left_enabled || right_enabled || hazard_enabled;
+    bool blink_state = false;
+
+
+    if (!any_light_enabled) {
+        enable_time = 0;
+        blink_state = false;
+    } else {
+        if (!enable_time) enable_time = elapsed_time;
+        uint32_t diff = elapsed_time - enable_time;
+        blink_state = (diff % (2 * INDICATOR_DELAY)) < INDICATOR_DELAY;
+    }
+
+    left_blinker_lit = blink_state && (hazard_enabled || (left_enabled & run));
+    right_blinker_lit = blink_state && (hazard_enabled || (right_enabled & run)); 
+
+    HAL_GPIO_WritePin(INDIC_LEFT_GPIO_Port, INDIC_LEFT_Pin, left_blinker_lit);
+    HAL_GPIO_WritePin(INDIC_RIGHT_GPIO_Port, INDIC_RIGHT_Pin, right_blinker_lit);
+    HAL_GPIO_WritePin(LED_INDICATOR_GPIO_Port, LED_INDICATOR_Pin, left_blinker_lit || right_blinker_lit);
 }
 
-#define TX_TIMEOUT		100
-uint8_t u8x8_byte_stm32_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
+void miagl_driver_init()
 {
-	switch(msg) {
-	case U8X8_MSG_BYTE_SEND:
-		/* Insert codes to transmit data */
-		if(HAL_SPI_Transmit(&hspi1, arg_ptr, arg_int, TX_TIMEOUT) != HAL_OK) return 0;
-		break;
-	case U8X8_MSG_BYTE_INIT:
-		/* Insert codes to begin SPI transmission */
-		break;
-	case U8X8_MSG_BYTE_SET_DC:
-		/* Control DC pin, U8X8_MSG_GPIO_DC will be called */
-		u8x8_gpio_SetDC(u8x8, arg_int);
-		break;
-	case U8X8_MSG_BYTE_START_TRANSFER:
-		/* Select slave, U8X8_MSG_GPIO_CS will be called */
-		u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);
-		osDelay(1);
-		break;
-	case U8X8_MSG_BYTE_END_TRANSFER:
-		osDelay(1);
-		/* Insert codes to end SPI transmission */
-		u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
-		break;
-	default:
-		return 0;
-	}
-	return 1;
+  SSD1322_API_init();
 }
+
+bool miagl_driver_is_buffer_ready()
+{
+  return true;
+}
+
+void miagl_driver_flush_full_screen(void* buffer, uint16_t size)
+{
+  //SSD1322_API_set_display_mode(SSD1322_MODE_INVERTED);
+  SSD1322_API_set_window(0, 63, 0, 127);
+  SSD1322_API_send_buffer(buffer, size);
+}
+
+void miagl_driver_flush_part_screen(void* buffer, uint16_t size, 
+                                    uint8_t start_x, uint8_t end_x, 
+                                    uint8_t start_y, uint8_t end_y)
+{
+  SSD1322_API_set_window(start_x / 4, end_x / 4, start_y, end_y);
+  SSD1322_API_send_buffer(buffer, size);
+}
+
+static miagl_driver_t miagl_driver = {
+  .fn_init_driver = miagl_driver_init,
+  .fn_is_buffer_ready = miagl_driver_is_buffer_ready,
+  .fn_flush_full_screen = miagl_driver_flush_full_screen,
+  .fn_flush_part_screen = miagl_driver_flush_part_screen,
+};
 
 
 void DashboardTask(void *argument){
     HAL_GPIO_WritePin(OLED_POWER_EN_GPIO_Port, OLED_POWER_EN_Pin, SET);
-
-    u8g2_Setup_ssd1322_nhd_256x64_f(&u8g2, U8G2_R0, u8x8_byte_stm32_hw_spi, u8x8_stm32_gpio_and_delay);
-
-    u8g2_InitDisplay(&u8g2); // send init sequence to the display, display is in sleep mode after this,
-    u8g2_SetPowerSave(&u8g2, 0); // wake up display
-
-    // u8g2_DrawLine(&u8g2, 50,50, 100, 50);
-    u8g2_SetFont(&u8g2, u8g2_font_ncenB14_tr);
-    u8g2_DrawStr(&u8g2, 70,15, "MIA Electric");
-    u8g2_SetFont(&u8g2, u8g2_font_6x13_mr);
-    u8g2_DrawStr(&u8g2, 40, 40, "Wilczyckie zaklady przemyslowe");
-    u8g2_SendBuffer(&u8g2);
+    mgl_InitLibrary(&miagl, 256, 64, &miagl_driver);
 
     // Read odometer
     HAL_I2C_Mem_Read(&hi2c1,0b10100001,0,2,&odometer,sizeof(uint32_t),10000);
@@ -102,55 +101,79 @@ void DashboardTask(void *argument){
     osDelay(1000);
 
     char buf[64];
+    static uint8_t test = 0;
 
-    while(1){
-        u8g2_ClearBuffer(&u8g2);
+    float last_kmh = 0;
+    float kmh_history[5];
+    int kmh_index = 0;
+
+    while (1) {
+        static TickType_t time = 0;
+        TickType_t new_time = xTaskGetTickCount();
+
+        handle_blinkers(new_time);
+
         const float kmh_per_rpm = 24.0 / 2000.0;
         float kmh = abs((int16_t) inverter.speed) * kmh_per_rpm;
+        if(!run) kmh = 0;
+
+        kmh_history[kmh_index++] = kmh;
+        if (kmh_index == 5) {
+          kmh_index = 0;
+          last_kmh = (kmh_history[0] + kmh_history[1] + kmh_history[2] + kmh_history[3] + kmh_history[4]) / 5.f;
+        }
+
         if (run) {
-            u8g2_SetFont(&u8g2, u8g2_font_7Segments_26x42_mn);
-            snprintf(buf, sizeof(buf), "%hd", (int16_t) kmh);
-            u8g2_DrawStr(&u8g2, 100, 50, buf);
+            miaui.estimated_range = -1;
+            miaui.cell_count = 22;
+            miaui.capacitor_voltage = inverter.voltage * 10;
+//            miaui.gear = inverter.forward ? MUI_DRIVE : MUI_REVERSE;
+            if(!inverter.neutral)
+            {
+                if(inverter.forward)
+                {
+                    miaui.gear = 0;
+                } else
+                {
+                    miaui.gear = 2;
+                }
+
+            } else
+            {
+                miaui.gear = 1;
+            }
+//            miaui.gear = 2;
+
+            miaui.inverter_temp = inverter.controller_temp;
+            miaui.light_status = 0;
+            if (inverter.fan_enabled) {
+                miaui.light_status |= MUI_STATUS_MOTOR_FAN_RUNNING;
+            }
+            if (left_blinker_lit) {
+                miaui.light_status |= MUI_STATUS_LEFT_BLINKER_ON;
+            }
+            if (right_blinker_lit) {
+                miaui.light_status |= MUI_STATUS_RIGHT_BLINKER_ON;
+            }
+            miaui.motor_current = inverter.current;
+            miaui.motor_temp = inverter.motor_temp;
+            miaui.odometer = odometer / 1000;
+            miaui.trip_meter = trip / 10;
+            miaui.vehicle_speed = last_kmh;
 
 
-            snprintf(buf, sizeof(buf), "%d.%dV", (int) (inverter.voltage), (int) (inverter.voltage * 10) % 10);
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 0, 50, buf);
+            float bat_percentage = 100 * (inverter.voltage / miaui.cell_count - 3.0) / (4.2 - 3.0);
+            if(bat_percentage < 0) bat_percentage = 0;
+            if(bat_percentage > 100) bat_percentage = 100;
+            miaui.battery_level = bat_percentage;
 
-
-            snprintf(buf, sizeof(buf), "%dA", (int) (inverter.current));
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 0, 40, buf);
-
-            snprintf(buf, sizeof(buf), "M %dA", (int) (inverter.motor_current));
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 0, 30, buf);
-
-
-            snprintf(buf, sizeof(buf), "%d.%dkm", odometer / 1000, (odometer / 100) % 10);
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 0, 10, buf);
-
-            snprintf(buf, sizeof(buf), "%dm", (int)trip);
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 0, 20, buf);
-
-            snprintf(buf, sizeof(buf), "ctr %dC", inverter.controller_temp&0xFF);
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 200, 30, buf);
-
-            snprintf(buf, sizeof(buf), "mot %dC", inverter.motor_temp);
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 200, 40, buf);
-            snprintf(buf, sizeof(buf), "Bat %d.%dV", (int) (inverter.voltage)/22,(int) (inverter.voltage)*100/22%100 );
-            u8g2_SetFont(&u8g2, u8g2_font_6x12_tr);
-            u8g2_DrawStr(&u8g2, 190, 50, buf);
+            mui_Update(&miaui, new_time - time);
+            mui_Draw(&miaui, &miagl);            
         } else {
+            mgl_SetBackgroundBitmap(&miagl, NULL, NULL);
             trip = 0;
         }
-    static TickType_t time = 0;
-        time;
-        TickType_t new_time = xTaskGetTickCount();
+
         meters_in_pontiff+= kmh/3.6f*(new_time-time)/1000;
         trip += kmh/3.6f*(new_time-time)/1000;
 
@@ -160,8 +183,9 @@ void DashboardTask(void *argument){
             HAL_I2C_Mem_Write(&hi2c1,0b10100000,0,2, (uint8_t*)&odometer,sizeof(uint32_t),100);
         }
         time = new_time;
-        u8g2_SendBuffer(&u8g2);
-        osDelay(75);
+
+        mgl_FlushScreen(&miagl);
+        osDelay(50);
     }
 }
 
