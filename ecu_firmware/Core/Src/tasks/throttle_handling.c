@@ -89,6 +89,12 @@ void throttle_task(void *argument)
             egv_accel_var.footswitch = inverter.throttle > 0;
             egv_accel_var.forward = inverter.forward;
             egv_accel_var.reverse = !inverter.forward;
+            if(inverter.neutral)
+            {
+
+                egv_accel_var.forward = false;
+                egv_accel_var.reverse = false;
+            }
         } else {
             egv_accel_var.accelerator_set_point = 0;
             egv_accel_var.footswitch = 0;

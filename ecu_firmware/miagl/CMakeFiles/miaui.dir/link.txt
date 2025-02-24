@@ -1,0 +1,2 @@
+/usr/bin/arm-none-eabi-ar qc libmiaui.a CMakeFiles/miaui.dir/src/miaui.c.obj "CMakeFiles/miaui.dir/src/miaui-gauge.c.obj" "CMakeFiles/miaui.dir/src/miaui-popup.c.obj" "CMakeFiles/miaui.dir/src/miaui-resources.c.obj" "CMakeFiles/miaui.dir/src/miaui-test.c.obj" "CMakeFiles/miaui.dir/src/miaui-utils.c.obj"
+/usr/bin/arm-none-eabi-ranlib libmiaui.a

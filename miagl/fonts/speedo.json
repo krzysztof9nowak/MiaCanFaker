@@ -1,0 +1,13 @@
+[
+    { "font_height": 34 },
+    { "glyph": "0", "x": 0, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "1", "x": 22, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "2", "x": 44, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "3", "x": 66, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "4", "x": 88, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "5", "x": 110, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "6", "x": 132, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "7", "x": 154, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "8", "x": 176, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 },
+    { "glyph": "9", "x": 198, "y": 0, "w": 18, "h": 34, "left": 2, "right": 2, "baseline": 33 }
+]

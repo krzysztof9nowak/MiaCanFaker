@@ -2,5 +2,6 @@
     "files.associations": {
         "dashboard.h": "c",
         "main.h": "c"
-    }
+    },
+    "cmake.configureOnOpen": true
 }
